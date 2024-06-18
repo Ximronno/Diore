@@ -1,0 +1,11 @@
+name: Diore
+version: '${project.version}'
+main: ximronno.diore.Diore
+softdepend: [Vault, PlaceholderAPI]
+api-version: '1.19'
+commands:
+    balance:
+      description: Show your balance and make transactions
+      usage: /balance <func> <target|amount> <amount>
+      aliases:
+      - bal
