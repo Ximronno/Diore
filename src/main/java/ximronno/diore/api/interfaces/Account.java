@@ -1,5 +1,7 @@
 package ximronno.diore.api.interfaces;
 
+import ximronno.diore.impl.Languages;
+
 import java.util.UUID;
 
 public interface Account {
@@ -15,6 +17,11 @@ public interface Account {
     boolean withdraw(double amount);
     boolean deposit(double amount);
     void receive(double amount);
+    Languages getLanguage();
+
+    void setLanguage(Languages language);
+    boolean isPublicBalance();
+    void setPublicBalance(boolean publicBalance);
 
 
 }

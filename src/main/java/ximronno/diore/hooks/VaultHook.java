@@ -40,7 +40,7 @@ public class VaultHook implements Economy {
 
     @Override
     public int fractionalDigits() {
-        return -1;
+        return 1;
     }
 
     @Override
@@ -242,21 +242,25 @@ public class VaultHook implements Economy {
 
     @Override
     public boolean createPlayerAccount(String playerName) {
-        return false;
+        createPlayerAccount(Bukkit.getPlayer(playerName));
+        return true;
     }
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer player) {
-        return false;
+        Diore.getInstance().getAccountManager().createAccount(player);
+        return true;
     }
 
     @Override
     public boolean createPlayerAccount(String playerName, String worldName) {
-        return false;
+        createPlayerAccount(Bukkit.getPlayer(playerName));
+        return true;
     }
 
     @Override
     public boolean createPlayerAccount(OfflinePlayer player, String worldName) {
-        return false;
+        createPlayerAccount(player);
+        return true;
     }
 }

@@ -4,11 +4,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
+import ximronno.diore.Diore;
 import ximronno.diore.api.events.DepositEvent;
 import ximronno.diore.api.events.TransferEvent;
 import ximronno.diore.api.events.WithdrawEvent;
+import ximronno.diore.api.interfaces.Account;
 import ximronno.diore.items.Items;
 
 import java.util.ArrayList;
@@ -16,21 +20,39 @@ import java.util.HashMap;
 
 public class TransactionsListener implements Listener {
 
-    @EventHandler
+    private final Diore plugin;
+
+    public TransactionsListener(Diore plugin) {
+        this.plugin = plugin;
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void onTransfer(TransferEvent e) {
 
-        Player p = Bukkit.getPlayer(e.getFrom().getOwner());
-        Player p2 = Bukkit.getPlayer(e.getTo().getOwner());
+        Account from = e.getFrom();
+        Account to = e.getTo();
 
-        p.sendMessage("You have sent " + e.getAmount() + " to " + p.getName());
-        p2.sendMessage("You have received " + e.getAmount() + " from " + p2.getName());
+        Player p = Bukkit.getPlayer(from.getOwner());
+        Player p2 = Bukkit.getPlayer(to.getOwner());
+
+        String pMessage = plugin.getConfigManager().getFormattedString("sent-amount-to-player", from.getLanguage().getCFG())
+                .replace("<amount>", plugin.getAccountManager().formatBalance(e.getAmount()))
+                .replace("<player>", p2.getDisplayName());
+        String p2Message = plugin.getConfigManager().getFormattedString("received-amount-from-player", to.getLanguage().getCFG())
+                .replace("<amount>", plugin.getAccountManager().formatBalance(e.getAmount()))
+                .replace("<player>", p.getDisplayName());;
+
+        p.sendMessage(pMessage);
+        p2.sendMessage(p2Message);
 
 
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void onWithdraw(WithdrawEvent e) {
 
-        Player p = Bukkit.getPlayer(e.getAccount().getOwner());
+        Account acc = e.getAccount();
+
+        Player p = Bukkit.getPlayer(acc.getOwner());
 
         if(p == null) return;
 
@@ -45,13 +67,17 @@ public class TransactionsListener implements Listener {
 
         p.getInventory().addItem(items.toArray(new ItemStack[0]));
 
-        p.sendMessage("Successfully withdrawn " + e.getAmount() + " from your account.");
+        String message = plugin.getConfigManager().getFormattedString("on-withdraw", acc.getLanguage().getCFG())
+                        .replace("<amount>", plugin.getAccountManager().formatBalance(e.getAmount()));
+
+        p.sendMessage(message);
 
     }
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void onDeposit(DepositEvent e) {
 
-        Player p = Bukkit.getPlayer(e.getAccount().getOwner());
+        Account acc = e.getAccount();
+        Player p = Bukkit.getPlayer(acc.getOwner());
 
         if (p == null) return;
 
@@ -61,61 +87,78 @@ public class TransactionsListener implements Listener {
 
         ArrayList<ItemStack> itemsToRemove = new ArrayList<>();
 
-        if (nuggets > 0) {
-
-            ItemStack nuggetStack = Items.getDiamondOreNugget(nuggets);
-            itemsToRemove.add(nuggetStack);
-
-        }
-
         int diamondOreCount = 0;
         int deepslateDiamondOreCount = 0;
+        int diamondOreNuggetCount = 0;
+
         for (ItemStack item : p.getInventory().getContents()) {
             if (item != null) {
                 if (item.getType() == Material.DIAMOND_ORE) {
                     diamondOreCount += item.getAmount();
                 } else if (item.getType() == Material.DEEPSLATE_DIAMOND_ORE) {
                     deepslateDiamondOreCount += item.getAmount();
+                } else if (item.getType() == Items.getDiamondOreNugget(1).getType()) {
+                    diamondOreNuggetCount += item.getAmount();
                 }
             }
         }
 
-        if (diamondOreCount + deepslateDiamondOreCount >= ores) {
-            if (diamondOreCount > 0) {
+        if (amount < 1) {
+            if (diamondOreNuggetCount < nuggets) {
+                e.setCancelled(true);
+                p.sendMessage(plugin.getConfigManager().getFormattedString("not-enough-ores", acc.getLanguage().getCFG()));
+                return;
+            }
+            ItemStack nuggetStack = Items.getDiamondOreNugget(nuggets);
+            itemsToRemove.add(nuggetStack);
+        } else {
+            int totalDiamondOreCount = diamondOreCount + (diamondOreNuggetCount / 10);
 
+            if (totalDiamondOreCount + deepslateDiamondOreCount < ores || (totalDiamondOreCount + deepslateDiamondOreCount == 0 && nuggets > 0)) {
+                e.setCancelled(true);
+                p.sendMessage(plugin.getConfigManager().getFormattedString("not-enough-ores", acc.getLanguage().getCFG()));
+                return;
+            }
+
+            if (nuggets > 0) {
+                ItemStack nuggetStack = Items.getDiamondOreNugget(nuggets);
+                itemsToRemove.add(nuggetStack);
+            }
+
+            if (diamondOreCount > 0) {
                 itemsToRemove.add(new ItemStack(Material.DIAMOND_ORE, Math.min(diamondOreCount, ores)));
                 ores -= Math.min(diamondOreCount, ores);
-
             }
+
             if (ores > 0 && deepslateDiamondOreCount > 0) {
-
-                itemsToRemove.add(new ItemStack(Material.DEEPSLATE_DIAMOND_ORE, ores));
-
+                itemsToRemove.add(new ItemStack(Material.DEEPSLATE_DIAMOND_ORE, Math.min(deepslateDiamondOreCount, ores)));
+                ores -= Math.min(deepslateDiamondOreCount, ores);
             }
-        } else {
 
-            e.setCancelled(true);
-            p.sendMessage("You don't have enough diamond ore and/or deepslate diamond ore in your inventory to deposit that much.");
-            return;
-
+            if (ores > 0 && diamondOreNuggetCount > 0) {
+                int nuggetsNeeded = ores * 10;
+                itemsToRemove.add(Items.getDiamondOreNugget(Math.min(diamondOreNuggetCount, nuggetsNeeded)));
+            }
         }
 
         ItemStack[] itemsArray = itemsToRemove.toArray(new ItemStack[0]);
-
         HashMap<Integer, ItemStack> remainingItems = p.getInventory().removeItem(itemsArray);
 
         if (remainingItems.isEmpty()) {
-
-            p.sendMessage("You successfully deposited " + amount + " to your account.");
-
+            p.sendMessage(plugin.getConfigManager().getFormattedString("on-deposit", acc.getLanguage().getCFG())
+                    .replace("<amount>", plugin.getAccountManager().formatBalance(e.getAmount())));
         } else {
-
             e.setCancelled(true);
-            p.sendMessage("You don't have enough diamond ore and/or nuggets in your inventory to deposit that much.");
+            p.sendMessage(plugin.getConfigManager().getFormattedString("not-enough-ores", acc.getLanguage().getCFG()));
             p.getInventory().addItem(itemsArray);
+        }
 
+    }
+    @EventHandler
+    private void onBlockPlace(BlockPlaceEvent e) {
+        if(e.getItemInHand().equals(Items.getDiamondOreNugget(e.getItemInHand().getAmount()))) {
+            e.setCancelled(true);
         }
     }
-
 
 }

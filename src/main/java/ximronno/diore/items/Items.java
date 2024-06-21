@@ -1,6 +1,9 @@
 package ximronno.diore.items;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -10,26 +13,28 @@ import ximronno.diore.Diore;
 
 public class Items {
 
-    private static final Material diore_nugget_material = Material.GOLD_NUGGET;
-
-    private static final NamespacedKey diamond_ore_nugget_key = new NamespacedKey(Diore.getInstance(), "diamond_ore_nugget");
+    private static final Material diore_nugget_material = Material.TUBE_CORAL;
+    private static final NamespacedKey diore_items_key = new NamespacedKey(Diore.getInstance(), "diore_items_key");
 
     public static ItemStack getDiamondOreNugget(int amount) {
 
         ItemStack item = new ItemStack(diore_nugget_material, amount);
         ItemMeta meta = item.getItemMeta();
 
-        meta.setDisplayName("Diamond Ore Nugget");
+        meta.setDisplayName(Diore.getInstance().getConfigManager().getFormattedString("diamond-nugget-name"));
 
-        meta.setLore(List.of("A 1/10 of a diamond ore."));
+        List<String> lore = new ArrayList<>();
+        Diore.getInstance().getConfigManager().getMainConfig().getStringList("diamond-nugget-lore")
+                .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)));
 
-        meta.getPersistentDataContainer().set(diamond_ore_nugget_key, PersistentDataType.STRING, "diamond_ore_nugget");
+        meta.setLore(lore);
+
+        meta.getPersistentDataContainer().set(diore_items_key, PersistentDataType.STRING, "diore_nugget");
 
         item.setItemMeta(meta);
 
         return item;
     }
-
 
 
 

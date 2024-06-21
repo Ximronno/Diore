@@ -7,6 +7,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import ximronno.diore.Diore;
 import ximronno.diore.api.interfaces.Account;
 import ximronno.diore.impl.FundAccount;
+import ximronno.diore.impl.Languages;
 import ximronno.diore.impl.TopBalance;
 
 import java.io.File;
@@ -17,11 +18,14 @@ import java.util.*;
 public class AccountManager {
 
     private final List<Account> accounts = Collections.synchronizedList(new ArrayList<>());
-
+    private final Diore plugin;
+    public AccountManager(Diore plugin) {
+        this.plugin = plugin;
+    }
 
     /*
-    Account management
-     */
+        Account management
+         */
     public void addAccount(Account account) {
         synchronized (this.accounts) {
             if(this.accounts.contains(account)) return;
@@ -53,7 +57,11 @@ public class AccountManager {
 
             final List<TopBalance> topBalances = new ArrayList<>();
 
-            this.accounts.forEach(account -> topBalances.add(new TopBalance(account, account.getBalance())));
+            this.accounts.forEach(account -> {
+                if (account.isPublicBalance()) {
+                    topBalances.add(new TopBalance(account, account.getBalance()));
+                }
+            });
 
             topBalances.sort(Comparator.comparingDouble(TopBalance::balance).reversed());
 
@@ -67,24 +75,26 @@ public class AccountManager {
      */
     public void getOrCreateAccount(OfflinePlayer player) {
 
-        String path = Diore.getInstance().getDataFolder().getAbsolutePath() + "/data/" + player.getUniqueId() + ".yml";
+        if(getAccount(player.getUniqueId()).isPresent()) return;
+
+        String path = plugin.getDataFolder().getAbsolutePath() + "/data/" + player.getUniqueId() + ".yml";
         File data = new File(path);
 
         if(!data.exists()) createAccount(player);
 
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(data);
-        createAccount(UUID.fromString(cfg.getString("uuid")), cfg.getString("name"), cfg.getDouble("balance"));
+        createAccount(UUID.fromString(cfg.getString("uuid")), cfg.getString("name"), cfg.getDouble("balance"), Languages.valueOf(cfg.getString("language")), cfg.getBoolean("publicBalance"));
 
     }
     public void getOrCreateAccount(UUID id) {
 
-        String path = Diore.getInstance().getDataFolder().getAbsolutePath() + "/data/" + id.toString() + ".yml";
+        String path = plugin.getDataFolder().getAbsolutePath() + "/data/" + id.toString() + ".yml";
         File data = new File(path);
 
         if(!data.exists()) createAccount(Bukkit.getPlayer(id));
 
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(data);
-        createAccount(UUID.fromString(cfg.getString("uuid")), cfg.getString("name"), cfg.getDouble("balance"));
+        createAccount(UUID.fromString(cfg.getString("uuid")), cfg.getString("name"), cfg.getDouble("balance"), Languages.valueOf(cfg.getString("language")), cfg.getBoolean("publicBalance"));
 
     }
     public void createAccount(OfflinePlayer player) {
@@ -96,16 +106,25 @@ public class AccountManager {
     public void createAccount(UUID id, String name, double balance) {
         addAccount(new FundAccount(id, name, balance));
     }
+    public void createAccount(UUID id, String name, double balance, Languages language, boolean publicBalance) {
+        addAccount(new FundAccount(id, name, balance, language, publicBalance));
+    }
+
 
     public boolean saveAccountData(UUID id) {
 
-        String path = Diore.getInstance().getDataFolder().getAbsolutePath() + "/data/" + id.toString() + ".yml";
+        String path = plugin.getDataFolder().getAbsolutePath() + "/data/" + id.toString() + ".yml";
         File data = new File(path);
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(data);
 
-        cfg.set("uuid", getAccount(id).orElse(null).getOwner().toString());
-        cfg.set("name", getAccount(id).orElse(null).getName());
-        cfg.set("balance", getAccount(id).orElse(null).getBalance());
+        Account account = getAccount(id).orElse(null);
+        if(account == null) return false;
+
+        cfg.set("uuid", account.getOwner().toString());
+        cfg.set("name", account.getName());
+        cfg.set("balance", account.getBalance());
+        cfg.set("language", account.getLanguage().toString());
+        cfg.set("public_balance", account.isPublicBalance());
 
         try {
             cfg.save(data);
@@ -127,7 +146,7 @@ public class AccountManager {
         String pattern = "#,##0.0";
         DecimalFormat decimalFormat = new DecimalFormat(pattern, symbols);
 
-        String formattedNumber = decimalFormat.format(balance) + " ores";
-        return formattedNumber;
+        return plugin.getConfig().getString("currency-format")
+                .replace("<amount>", decimalFormat.format(balance));
     }
 }

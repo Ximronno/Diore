@@ -6,6 +6,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ximronno.diore.Diore;
+import ximronno.diore.impl.TopBalance;
+
+import java.util.List;
 
 public class PlaceholderHook extends PlaceholderExpansion {
     @Override
@@ -31,9 +34,12 @@ public class PlaceholderHook extends PlaceholderExpansion {
         if(params.equalsIgnoreCase("total_accounts")) {
             return String.valueOf(Diore.getInstance().getAccountManager().getAccounts().size());
         }
+        else if(params.equalsIgnoreCase("top_balance")) {
+            List<TopBalance> topBalances = Diore.getInstance().getAccountManager().getTopBalances();
+            if(topBalances.isEmpty()) return null;
+            return topBalances.get(0).account() + " | " + topBalances.get(0).balance();
 
-
-
+        }
         return null;
     }
 

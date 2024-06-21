@@ -25,6 +25,10 @@ public class HookManager {
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) return;
         new PlaceholderHook().register();
     }
+    public void unregisterPlaceholder() {
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) return;
+        new PlaceholderHook().unregister();
+    }
     public static HookManager getInstance() {
         return instance;
     }

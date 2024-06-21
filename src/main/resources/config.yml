@@ -1,0 +1,9 @@
+#Messages
+no-account-found: "&bYou have no account"
+
+#Without ChatColor formatting
+currency-format:  "<amount> ores"
+
+diamond-nugget-name: "&bDiamond Ore Nugget"
+diamond-nugget-lore:
+  - "&bA 1/10 of a diamond ore."

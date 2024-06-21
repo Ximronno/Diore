@@ -9,3 +9,7 @@ commands:
       usage: /balance <func> <target|amount> <amount>
       aliases:
       - bal
+      permission: diore.balance
+permissions:
+  diore.balance:
+    default: true
