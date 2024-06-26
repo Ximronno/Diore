@@ -1,3 +1,5 @@
+name: "&bРусский"
+
 on-balance: "&bВаш баланс: &9<balance>"
 something-went-wrong: "&cТранзакция отменена."
 player-not-found: "&cИгрок не найден"
@@ -13,3 +15,34 @@ language-not-found: "&cЯзык не найден"
 language-set: "&bУспешно установлен язык на <language>"
 public-balance-enabled: "&bВаш баланс теперь публичен"
 public-balance-disabled: "&bВаш баланс теперь приватен"
+top-list-format: "&b<place>. <player> - <balance>"
+
+main-menu-skull: "&b<player>"
+main-menu-top-skull: "&bТоп балансов"
+main-menu-skull-lore:
+  - "&bБаланс: <balance>"
+  - "&bЯзык: <language>"
+  - "&bПубличный баланс: <public>"
+account-menu-balance: "&bВаш баланс: &9<balance>"
+account-menu-balance-lore:
+  - "&bНажмите, чтобы совершить транзакцию"
+account-menu-language: "&bВаш язык: &9<language>"
+account-menu-language-lore:
+  - "&bНажмите, чтобы изменить язык"
+account-menu-public: "&bПубличный баланс: &9<public>"
+account-menu-public-lore:
+  - "&bНажмите, чтобы изменить"
+public-balance-menu-true: "&bУстановить на &aДа"
+public-balance-menu-false: "&bУстановить на &cНет"
+balance-menu-withdraw: "&bВывести"
+balance-menu-withdraw-lore:
+  - "&bНажмите, чтобы вывести"
+balance-menu-deposit: "&bЗачислить"
+balance-menu-deposit-lore:
+  - "&bНажмите, чтобы зачислить"
+balance-menu-transfer: "&bПеревести"
+balance-menu-transfer-lore:
+  - "&bНажмите, чтобы перевести"
+menu-yes: "&aДа"
+menu-no: "&cНет"
+menu-back: "&bНазад"

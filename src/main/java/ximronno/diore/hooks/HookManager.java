@@ -1,10 +1,13 @@
 package ximronno.diore.hooks;
 
 import org.bukkit.Bukkit;
+import ximronno.diore.Diore;
+
+import java.util.logging.Level;
 
 public class HookManager {
 
-    private static HookManager instance = new HookManager();
+    private static final HookManager instance = new HookManager();
 
     private VaultHook vaultHook;
     public void registerVault() {
@@ -23,7 +26,9 @@ public class HookManager {
     }
     public void registerPlaceholder() {
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) return;
+        Diore.getInstance().getLogger().log(Level.INFO,"Hooked into PlaceholderAPI");
         new PlaceholderHook().register();
+
     }
     public void unregisterPlaceholder() {
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) return;

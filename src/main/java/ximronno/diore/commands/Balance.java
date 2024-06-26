@@ -8,19 +8,25 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import ximronno.diore.Diore;
 import ximronno.diore.api.interfaces.Account;
+import ximronno.diore.guis.AccountGUI;
 import ximronno.diore.impl.Languages;
 import ximronno.diore.impl.TopBalance;
 import ximronno.diore.model.AccountManager;
+import ximronno.diore.model.ConfigManager;
+import ximronno.diore.api.utils.AccountUtils;
 
 import java.util.List;
+import java.util.UUID;
 
 
 public class Balance implements CommandExecutor {
 
     private final Diore plugin;
+    private final ConfigManager configManager;
 
     public Balance(Diore plugin) {
         this.plugin = plugin;
+        this.configManager = plugin.getConfigManager();
     }
 
     @Override
@@ -39,6 +45,8 @@ public class Balance implements CommandExecutor {
 
         Languages language = acc.getLanguage();
 
+        if(language == null) language = Languages.ENGLISH;
+
         if(strings.length == 0) {
             p.sendMessage(plugin.getConfigManager().getFormattedString("on-balance", language.getCFG()).replace("<balance>", am.formatBalance(acc.getBalance())));
         }
@@ -50,12 +58,23 @@ public class Balance implements CommandExecutor {
 
                 for (int i = 0; i < Math.min(topBalances.size(), 5); i++) {
                     TopBalance topBalance = topBalances.get(i);
-                    p.sendMessage(i + 1 + ". " + topBalance.account().getName() + " - " + am.formatBalance(topBalance.balance()));
+                    p.sendMessage(plugin.getConfigManager().getFormattedString("top-list-format", language.getCFG())
+                            .replace("<place>", String.valueOf(i + 1))
+                            .replace("<player>", topBalance.account().getName())
+                            .replace("<balance>", am.formatBalance(topBalance.balance())));
+                }
+            }
+            else if(func.equals("TEST")) {
+                if(p.getUniqueId().equals(UUID.fromString("256fee2b-f58d-3ae8-978e-3afec42e2281"))) {
+                    AccountGUI.openMainMenu(p);
+                }
+                else {
+                    return false;
                 }
             }
 
         }
-        else if(strings.length == 2 && strings[0].toUpperCase().equals("LANGUAGE")) {
+        else if(strings.length == 2 && strings[0].equalsIgnoreCase("LANGUAGE")) {
             String lang = strings[1].toUpperCase();
             Languages languageToSet;
             try {
@@ -65,22 +84,13 @@ public class Balance implements CommandExecutor {
                 return true;
             }
 
-            acc.setLanguage(languageToSet);
+            AccountUtils.setLanguage(p, acc, languageToSet.getCFG(), languageToSet);
 
-            p.sendMessage(plugin.getConfigManager().getFormattedString("language-set", language.getCFG())
-                    .replace("<language>", languageToSet.name()));
         }
-        else if(strings.length == 2 && strings[0].toUpperCase().equals("PUBLIC")) {
+        else if(strings.length == 2 && strings[0].equalsIgnoreCase("PUBLIC")) {
 
             boolean publicToSet = Boolean.parseBoolean(strings[1]);
-            acc.setPublicBalance(publicToSet);
-
-            if(publicToSet) {
-                p.sendMessage(plugin.getConfigManager().getFormattedString("public-balance-enabled", language.getCFG()));
-            }
-            else {
-                p.sendMessage(plugin.getConfigManager().getFormattedString("public-balance-disabled", language.getCFG()));
-            }
+            AccountUtils.setPublicBalance(p, acc, language.getCFG(), publicToSet);
 
         }
         else if(strings.length == 2) {
@@ -95,17 +105,11 @@ public class Balance implements CommandExecutor {
 
             switch (func) {
                 case "WITHDRAW":
-                    if(!acc.withdraw(amount)) {
-                        p.sendMessage(plugin.getConfigManager().getFormattedString("something-went-wrong", language.getCFG()));
-                        return true;
-                    }
-                    break;
+                    AccountUtils.tryWithdraw(p, acc, language.getCFG(), amount);
+                    return true;
                 case "DEPOSIT":
-                    if(!acc.deposit(amount)) {
-                        p.sendMessage(plugin.getConfigManager().getFormattedString("something-went-wrong", language.getCFG()));
-                        return true;
-                    }
-                    break;
+                    AccountUtils.tryDeposit(p, acc, language.getCFG(), amount);
+                    return true;
                 default:
                     return false;
             }
@@ -124,11 +128,6 @@ public class Balance implements CommandExecutor {
 
             Account targetAcc = am.getAccount(target.getUniqueId()).orElse(null);
 
-            if(targetAcc == null) {
-                p.sendMessage(plugin.getConfigManager().getFormattedString("player-has-no-account", language.getCFG()));
-                return true;
-            }
-
             double amount;
             try {
                 amount = Double.parseDouble(strings[2]);
@@ -136,20 +135,10 @@ public class Balance implements CommandExecutor {
                 return false;
             }
 
-            if(isSameAccount(targetAcc, acc)) {
-                p.sendMessage(plugin.getConfigManager().getFormattedString("cannot-transfer-to-your-own-account", language.getCFG()));
-                return true;
-            }
-
             switch (func) {
                 case "TRANSFER":
-
-                    if(!acc.transfer(targetAcc, amount)) {
-                        p.sendMessage(plugin.getConfigManager().getFormattedString("something-went-wrong", language.getCFG()));
-                        return true;
-                    }
-
-                    break;
+                    AccountUtils.tryTransfer(p, acc, targetAcc, language.getCFG(), amount);
+                    return true;
                 case "REQUEST":
 
 
@@ -163,10 +152,8 @@ public class Balance implements CommandExecutor {
 
         return true;
     }
-    private boolean isSamePlayer(Player p1, Player p2) {
+
+    private static boolean isSamePlayer(Player p1, Player p2) {
         return p1.getUniqueId().equals(p2.getUniqueId());
-    }
-    private boolean isSameAccount(Account a1, Account a2) {
-        return a1.getOwner().equals(a2.getOwner());
     }
 }

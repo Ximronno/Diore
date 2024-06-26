@@ -8,22 +8,31 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import ximronno.diore.Diore;
 import ximronno.diore.api.events.DepositEvent;
 import ximronno.diore.api.events.TransferEvent;
 import ximronno.diore.api.events.WithdrawEvent;
 import ximronno.diore.api.interfaces.Account;
+import ximronno.diore.guis.AccountGUI;
 import ximronno.diore.items.Items;
+import ximronno.diore.model.AccountManager;
+import ximronno.diore.model.ConfigManager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class TransactionsListener implements Listener {
 
     private final Diore plugin;
+    private final ConfigManager configManager;
+    private final AccountManager accountManager;
 
     public TransactionsListener(Diore plugin) {
         this.plugin = plugin;
+        this.configManager = plugin.getConfigManager();
+        this.accountManager = plugin.getAccountManager();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -35,16 +44,15 @@ public class TransactionsListener implements Listener {
         Player p = Bukkit.getPlayer(from.getOwner());
         Player p2 = Bukkit.getPlayer(to.getOwner());
 
-        String pMessage = plugin.getConfigManager().getFormattedString("sent-amount-to-player", from.getLanguage().getCFG())
-                .replace("<amount>", plugin.getAccountManager().formatBalance(e.getAmount()))
+        String pMessage = configManager.getFormattedString("sent-amount-to-player", from.getLanguage().getCFG())
+                .replace("<amount>", accountManager.formatBalance(e.getAmount()))
                 .replace("<player>", p2.getDisplayName());
-        String p2Message = plugin.getConfigManager().getFormattedString("received-amount-from-player", to.getLanguage().getCFG())
-                .replace("<amount>", plugin.getAccountManager().formatBalance(e.getAmount()))
+        String p2Message = configManager.getFormattedString("received-amount-from-player", to.getLanguage().getCFG())
+                .replace("<amount>", accountManager.formatBalance(e.getAmount()))
                 .replace("<player>", p.getDisplayName());;
 
         p.sendMessage(pMessage);
         p2.sendMessage(p2Message);
-
 
     }
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -67,8 +75,8 @@ public class TransactionsListener implements Listener {
 
         p.getInventory().addItem(items.toArray(new ItemStack[0]));
 
-        String message = plugin.getConfigManager().getFormattedString("on-withdraw", acc.getLanguage().getCFG())
-                        .replace("<amount>", plugin.getAccountManager().formatBalance(e.getAmount()));
+        String message = configManager.getFormattedString("on-withdraw", acc.getLanguage().getCFG())
+                        .replace("<amount>", accountManager.formatBalance(e.getAmount()));
 
         p.sendMessage(message);
 
@@ -97,7 +105,7 @@ public class TransactionsListener implements Listener {
                     diamondOreCount += item.getAmount();
                 } else if (item.getType() == Material.DEEPSLATE_DIAMOND_ORE) {
                     deepslateDiamondOreCount += item.getAmount();
-                } else if (item.getType() == Items.getDiamondOreNugget(1).getType()) {
+                } else if (item.getItemMeta().getPersistentDataContainer().has(Items.getDioreItemsKey(), PersistentDataType.STRING) && item.getItemMeta().getPersistentDataContainer().get(Items.getDioreItemsKey(), PersistentDataType.STRING).equals("diore_nugget")) {
                     diamondOreNuggetCount += item.getAmount();
                 }
             }
@@ -106,7 +114,7 @@ public class TransactionsListener implements Listener {
         if (amount < 1) {
             if (diamondOreNuggetCount < nuggets) {
                 e.setCancelled(true);
-                p.sendMessage(plugin.getConfigManager().getFormattedString("not-enough-ores", acc.getLanguage().getCFG()));
+                p.sendMessage(configManager.getFormattedString("not-enough-ores", acc.getLanguage().getCFG()));
                 return;
             }
             ItemStack nuggetStack = Items.getDiamondOreNugget(nuggets);
@@ -116,7 +124,7 @@ public class TransactionsListener implements Listener {
 
             if (totalDiamondOreCount + deepslateDiamondOreCount < ores || (totalDiamondOreCount + deepslateDiamondOreCount == 0 && nuggets > 0)) {
                 e.setCancelled(true);
-                p.sendMessage(plugin.getConfigManager().getFormattedString("not-enough-ores", acc.getLanguage().getCFG()));
+                p.sendMessage(configManager.getFormattedString("not-enough-ores", acc.getLanguage().getCFG()));
                 return;
             }
 
@@ -145,11 +153,11 @@ public class TransactionsListener implements Listener {
         HashMap<Integer, ItemStack> remainingItems = p.getInventory().removeItem(itemsArray);
 
         if (remainingItems.isEmpty()) {
-            p.sendMessage(plugin.getConfigManager().getFormattedString("on-deposit", acc.getLanguage().getCFG())
-                    .replace("<amount>", plugin.getAccountManager().formatBalance(e.getAmount())));
+            p.sendMessage(configManager.getFormattedString("on-deposit", acc.getLanguage().getCFG())
+                    .replace("<amount>", accountManager.formatBalance(e.getAmount())));
         } else {
             e.setCancelled(true);
-            p.sendMessage(plugin.getConfigManager().getFormattedString("not-enough-ores", acc.getLanguage().getCFG()));
+            p.sendMessage(configManager.getFormattedString("not-enough-ores", acc.getLanguage().getCFG()));
             p.getInventory().addItem(itemsArray);
         }
 
@@ -160,5 +168,6 @@ public class TransactionsListener implements Listener {
             e.setCancelled(true);
         }
     }
+
 
 }

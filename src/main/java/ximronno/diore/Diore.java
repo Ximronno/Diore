@@ -7,6 +7,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import ximronno.diore.commands.Balance;
 import ximronno.diore.hooks.HookManager;
+import ximronno.diore.listeners.InventoryListener;
 import ximronno.diore.listeners.PlayerJoinListener;
 import ximronno.diore.listeners.TransactionsListener;
 import ximronno.diore.model.AccountManager;
@@ -67,6 +68,7 @@ public final class Diore extends JavaPlugin {
     private void setupListeners(PluginManager pM) {
         pM.registerEvents(new PlayerJoinListener(), this);
         pM.registerEvents(new TransactionsListener(this), this);
+        pM.registerEvents(new InventoryListener(this), this);
     }
     private void setupRecipes(Server server) {
 

@@ -1,3 +1,5 @@
+name: "&bEnglish"
+
 on-balance: "&bYour balance: &9<balance>"
 something-went-wrong: "&cTransaction cancelled."
 player-not-found: "&cPlayer not found"
@@ -13,3 +15,34 @@ language-not-found: "&cLanguage not found"
 language-set: "&bSuccessfully set language to <language>"
 public-balance-enabled: "&bYour balance is now public"
 public-balance-disabled: "&bYour balance is now private"
+top-list-format: "&b<place>. <player> - <balance>"
+
+main-menu-skull: "&b<player>"
+main-menu-top-skull: "&bTop balances"
+main-menu-skull-lore:
+  - "&bBalance: <balance>"
+  - "&bLanguage: <language>"
+  - "&bPublic balance: <public>"
+account-menu-balance: "&bYour balance: &9<balance>"
+account-menu-balance-lore:
+  - "&bClick to make a transaction"
+account-menu-language: "&bYour language: &9<language>"
+account-menu-language-lore:
+  - "&bClick to change language"
+account-menu-public: "&bPublic balance: &9<public>"
+account-menu-public-lore:
+  - "&bClick to change"
+public-balance-menu-true: "&bSet to &aTrue"
+public-balance-menu-false: "&bSet to &cFalse"
+balance-menu-withdraw: "&bWithdraw"
+balance-menu-withdraw-lore:
+  - "&bClick to withdraw"
+balance-menu-deposit: "&bDeposit"
+balance-menu-deposit-lore:
+  - "&bClick to deposit"
+balance-menu-transfer: "&bTransfer"
+balance-menu-transfer-lore:
+  - "&bClick to transfer"
+menu-yes: "&aYes"
+menu-no: "&cNo"
+menu-back: "&bBack"

@@ -7,3 +7,9 @@ currency-format:  "<amount> ores"
 diamond-nugget-name: "&bDiamond Ore Nugget"
 diamond-nugget-lore:
   - "&bA 1/10 of a diamond ore."
+
+main-menu-title: "&bMain Menu"
+account-menu-title: "&bAccount Menu"
+public-balance-menu-title: "&bPublic Balance Menu"
+languages-menu-title: "&bLanguages Menu"
+balance-menu-title: "&bBalance Menu"

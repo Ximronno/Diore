@@ -24,7 +24,7 @@ public class Items {
         meta.setDisplayName(Diore.getInstance().getConfigManager().getFormattedString("diamond-nugget-name"));
 
         List<String> lore = new ArrayList<>();
-        Diore.getInstance().getConfigManager().getMainConfig().getStringList("diamond-nugget-lore")
+        Diore.getInstance().getConfig().getStringList("diamond-nugget-lore")
                 .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)));
 
         meta.setLore(lore);
@@ -36,7 +36,9 @@ public class Items {
         return item;
     }
 
-
+    public static NamespacedKey getDioreItemsKey() {
+        return diore_items_key;
+    }
 
 
 

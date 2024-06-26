@@ -29,7 +29,6 @@ public class ConfigManager {
         FileConfiguration config = null;
 
         if(!file.exists()) {
-            file.getParentFile().mkdirs();
             plugin.saveResource("languages/" + language + ".yml", false);
         }
 
@@ -43,14 +42,21 @@ public class ConfigManager {
         return config;
 
     }
-    public FileConfiguration getMainConfig() {
-        return plugin.getConfig();
-    }
     public String getFormattedString(String path) {
-        return ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString(path));
+        String string = plugin.getConfig().getString(path);
+        if(string == null) {
+            string = "&cText not found: " + path;
+            plugin.getLogger().severe(string + " in config.yml");
+        }
+        return ChatColor.translateAlternateColorCodes('&', string);
     }
     public String getFormattedString(String path, FileConfiguration config) {
-        return ChatColor.translateAlternateColorCodes('&', config.getString(path));
+        String string = config.getString(path);
+        if(string == null) {
+            string = "&cText not found: " + path;
+            plugin.getLogger().severe(string + " in custom config");
+        }
+        return ChatColor.translateAlternateColorCodes('&', string);
     }
 
 

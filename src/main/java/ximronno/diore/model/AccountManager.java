@@ -83,7 +83,7 @@ public class AccountManager {
         if(!data.exists()) createAccount(player);
 
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(data);
-        createAccount(UUID.fromString(cfg.getString("uuid")), cfg.getString("name"), cfg.getDouble("balance"), Languages.valueOf(cfg.getString("language")), cfg.getBoolean("publicBalance"));
+        createAccount(UUID.fromString(cfg.getString("uuid")), player.getName(), cfg.getDouble("balance"), Languages.valueOf(cfg.getString("language")), cfg.getBoolean("public_balance"));
 
     }
     public void getOrCreateAccount(UUID id) {
@@ -94,7 +94,7 @@ public class AccountManager {
         if(!data.exists()) createAccount(Bukkit.getPlayer(id));
 
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(data);
-        createAccount(UUID.fromString(cfg.getString("uuid")), cfg.getString("name"), cfg.getDouble("balance"), Languages.valueOf(cfg.getString("language")), cfg.getBoolean("publicBalance"));
+        createAccount(UUID.fromString(cfg.getString("uuid")), cfg.getString("name"), cfg.getDouble("balance"), Languages.valueOf(cfg.getString("language")), cfg.getBoolean("public_balance"));
 
     }
     public void createAccount(OfflinePlayer player) {

@@ -6,7 +6,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ximronno.diore.Diore;
+import ximronno.diore.api.interfaces.Account;
 import ximronno.diore.impl.TopBalance;
+import ximronno.diore.model.AccountManager;
 
 import java.util.List;
 
@@ -30,14 +32,34 @@ public class PlaceholderHook extends PlaceholderExpansion {
         return true;
     }
     @Override
-    public @Nullable String onRequest(OfflinePlayer player, @NotNull String params) {
-        if(params.equalsIgnoreCase("total_accounts")) {
-            return String.valueOf(Diore.getInstance().getAccountManager().getAccounts().size());
+    public @Nullable String onRequest(OfflinePlayer offlinePlayer, @NotNull String params) {
+
+        AccountManager am = Diore.getInstance().getAccountManager();
+
+        if(offlinePlayer != null && offlinePlayer.isOnline()) {
+            Player player = (Player) offlinePlayer;
+
+            if(params.equalsIgnoreCase("balance")) {
+                Account acc = am.getAccount(player.getUniqueId()).orElse(null);
+                if(acc == null || !acc.isPublicBalance()) return null;
+                return String.valueOf(am.formatBalance(acc.getBalance()));
+            }
+            if(params.equalsIgnoreCase("public_balance")) {
+                Account acc = am.getAccount(player.getUniqueId()).orElse(null);
+                if(acc == null) return null;
+                return acc.isPublicBalance() ? "true" : "false";
+            }
+            if(params.equalsIgnoreCase("language")) {
+                Account acc = am.getAccount(player.getUniqueId()).orElse(null);
+                if(acc == null) return null;
+                return acc.getLanguage().name();
+            }
         }
+
         else if(params.equalsIgnoreCase("top_balance")) {
-            List<TopBalance> topBalances = Diore.getInstance().getAccountManager().getTopBalances();
+            List<TopBalance> topBalances = am.getTopBalances();
             if(topBalances.isEmpty()) return null;
-            return topBalances.get(0).account() + " | " + topBalances.get(0).balance();
+            return topBalances.get(0).account().getName() + " | " + am.formatBalance(topBalances.get(0).balance());
 
         }
         return null;
