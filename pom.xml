@@ -6,7 +6,7 @@
 
   <groupId>Ximronno</groupId>
   <artifactId>Diore</artifactId>
-  <version>0.1</version>
+  <version>beta-0.1</version>
   <packaging>jar</packaging>
 
   <name>Diore</name>

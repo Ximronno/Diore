@@ -45,16 +45,16 @@ public class ConfigManager {
     public String getFormattedString(String path) {
         String string = plugin.getConfig().getString(path);
         if(string == null) {
-            string = "&cText not found: " + path;
-            plugin.getLogger().severe(string + " in config.yml");
+            string = "&c" + path;
+            plugin.getLogger().severe("Text not found: " + string + " in config.yml");
         }
         return ChatColor.translateAlternateColorCodes('&', string);
     }
     public String getFormattedString(String path, FileConfiguration config) {
         String string = config.getString(path);
         if(string == null) {
-            string = "&cText not found: " + path;
-            plugin.getLogger().severe(string + " in custom config");
+            string = "&c" + path;
+            plugin.getLogger().severe( "Text not found: " + path + " in custom config");
         }
         return ChatColor.translateAlternateColorCodes('&', string);
     }

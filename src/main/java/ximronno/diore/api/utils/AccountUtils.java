@@ -5,13 +5,11 @@ import org.bukkit.entity.Player;
 import ximronno.diore.Diore;
 import ximronno.diore.api.interfaces.Account;
 import ximronno.diore.impl.Languages;
-import ximronno.diore.model.AccountManager;
 import ximronno.diore.model.ConfigManager;
 
 public class AccountUtils {
 
     private static final Diore plugin = Diore.getInstance();
-    private static final AccountManager accountManager = plugin.getAccountManager();
     private static final ConfigManager configManager = plugin.getConfigManager();
 
     public static boolean tryWithdraw(Player p, Account acc, FileConfiguration config, double amount) {

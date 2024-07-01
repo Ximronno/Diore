@@ -39,10 +39,6 @@ public class InventoryListener implements Listener {
         ));
     }
 
-
-
-
-
     @EventHandler
     private void onInventoryClick(InventoryClickEvent e) {
 
@@ -70,88 +66,7 @@ public class InventoryListener implements Listener {
 
             p.playSound(p.getLocation(), Sound.UI_BUTTON_CLICK, 1, 1);
 
-            if(container.has(AccountGUI.getMainMenuKey(), PersistentDataType.STRING)) {
-
-                if(container.get(AccountGUI.getMainMenuKey(), PersistentDataType.STRING).equals("skull")) {
-
-                    AccountGUI.openAccountMenu(p);
-
-                }
-
-            }
-            else if(container.has(AccountGUI.getAccountMenuKey(), PersistentDataType.STRING)) {
-
-                String func = container.get(AccountGUI.getAccountMenuKey(), PersistentDataType.STRING);
-                if(func == null) return;
-
-                switch(func) {
-
-                    case "balance":
-                        AccountGUI.openBalanceMenu(p);
-                        break;
-                    case "back":
-                        AccountGUI.openMainMenu(p);
-                        break;
-                    case "public":
-                        AccountGUI.openPublicBalanceMenu(p);
-                        break;
-                    case "language":
-                        AccountGUI.openLanguagesMenu(p);
-                        break;
-
-                }
-
-            }
-            else if(container.has(AccountGUI.getBalanceMenuKey(), PersistentDataType.STRING)) {
-
-
-                if(container.get(AccountGUI.getBalanceMenuKey(), PersistentDataType.STRING).equals("back")) {
-
-                    AccountGUI.openAccountMenu(p);
-
-                }
-
-
-            }
-            else if(container.has(AccountGUI.getPublicBalanceMenuKey(), PersistentDataType.STRING)) {
-
-                String func = container.get(AccountGUI.getPublicBalanceMenuKey(), PersistentDataType.STRING);
-                if(func == null) return;
-
-                if(container.get(AccountGUI.getPublicBalanceMenuKey(), PersistentDataType.STRING).equals("back")) {
-
-                    AccountGUI.openAccountMenu(p);
-                    return;
-
-                }
-
-                boolean publicToSet = Boolean.parseBoolean(container.get(AccountGUI.getPublicBalanceMenuKey(), PersistentDataType.STRING));
-                AccountUtils.setPublicBalance(p, acc, language.getCFG(), publicToSet);
-                AccountGUI.openAccountMenu(p);
-
-
-            }
-            else if(container.has(AccountGUI.getLanguageMenuKey(), PersistentDataType.STRING)) {
-
-                if(container.get(AccountGUI.getLanguageMenuKey(), PersistentDataType.STRING).equals("back")) {
-
-                    AccountGUI.openAccountMenu(p);
-                    return;
-
-                }
-
-                Languages languageToSet;
-                try {
-                    languageToSet = Languages.valueOf(container.get(AccountGUI.getLanguageMenuKey(), PersistentDataType.STRING));
-                } catch (Exception ex) {
-                    languageToSet = Languages.ENGLISH;
-                }
-
-                AccountUtils.setLanguage(p, acc, languageToSet.getCFG(), languageToSet);
-
-                AccountGUI.openAccountMenu(p);
-
-            }
+            handleClick(p, container, acc, language);
 
         }
 
@@ -160,6 +75,70 @@ public class InventoryListener implements Listener {
     }
     private boolean isMenuTitle(String title) {
         return menuTitles.contains(title);
+    }
+    private void handleClick(Player p, PersistentDataContainer container, Account acc, Languages language) {
+
+        if(container.has(AccountGUI.getDioreMenuKey(), PersistentDataType.STRING)) {
+
+            String func = container.get(AccountGUI.getDioreMenuKey(), PersistentDataType.STRING);
+
+            if(func == null) return;
+            switch(func) {
+
+                case "back-account-menu":
+                case "skull":
+                    AccountGUI.openAccountMenu(p);
+                    break;
+                case "top":
+                    break;
+                case "balance":
+                    AccountGUI.openBalanceMenu(p);
+                    break;
+                case "language":
+                    AccountGUI.openLanguagesMenu(p);
+                    break;
+                case "public":
+                    AccountGUI.openPublicBalanceMenu(p);
+                    break;
+                case "true":
+                    AccountUtils.setPublicBalance(p, acc, language.getCFG(), true);
+                    AccountGUI.openAccountMenu(p);
+                    break;
+                case "false":
+                    AccountUtils.setPublicBalance(p, acc, language.getCFG(), false);
+                    AccountGUI.openAccountMenu(p);
+                    break;
+                case "back-main-menu":
+                    AccountGUI.openMainMenu(p);
+                    break;
+                default:
+                    System.out.println(func);
+                    break;
+
+            }
+
+
+        }
+        else if(container.has(AccountGUI.getDioreLanguageKey(), PersistentDataType.STRING)) {
+
+            String lang = container.get(AccountGUI.getDioreLanguageKey(), PersistentDataType.STRING);
+            if(lang == null) return;
+
+            Languages languageToSet;
+
+            try {
+                languageToSet = Languages.valueOf(lang);
+            } catch (IllegalArgumentException e) {
+                languageToSet = Languages.ENGLISH;
+            }
+
+            AccountUtils.setLanguage(p, acc, language.getCFG(), languageToSet);
+            AccountGUI.openAccountMenu(p);
+
+
+
+        }
+
     }
 
 }

@@ -23,6 +23,8 @@ public class HookManager {
         this.vaultHook.unregister();
         this.vaultHook = null;
 
+
+
     }
     public void registerPlaceholder() {
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") == null) return;

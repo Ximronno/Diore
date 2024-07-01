@@ -29,11 +29,8 @@ public class AccountGUI {
     private static final Diore plugin = Diore.getInstance();
     private static final ConfigManager configManager = plugin.getConfigManager();
     private static final AccountManager accountManager = plugin.getAccountManager();
-    private static final NamespacedKey mainMenuKey = new NamespacedKey(plugin, "diore-main-menu");
-    private static final NamespacedKey accountMenuKey = new NamespacedKey(plugin, "diore-account-menu");
-    private static final NamespacedKey publicBalanceMenuKey = new NamespacedKey(plugin, "diore-public-balance-menu");
-    private static final NamespacedKey languageMenuKey = new NamespacedKey(plugin, "diore-language-menu");
-    private static final NamespacedKey balanceMenuKey = new NamespacedKey(plugin, "diore-balance-menu");
+    private static final NamespacedKey dioreMenuKey = new NamespacedKey(plugin, "diore-menu-key");
+    private static final NamespacedKey dioreLanguageKey = new NamespacedKey(plugin, "diore-language-key");
 
     public static void openMainMenu(Player p) {
 
@@ -76,7 +73,7 @@ public class AccountGUI {
 
         return item;
     }
-    private static ItemStack getMenuBack(FileConfiguration config, NamespacedKey key) {
+    private static ItemStack getMenuBack(FileConfiguration config, String backTo) {
         PlayerProfile profile = Bukkit.createPlayerProfile(UUID.randomUUID());
         PlayerTextures textures = profile.getTextures();
         URL urlObject;
@@ -97,7 +94,7 @@ public class AccountGUI {
 
         meta.setDisplayName(configManager.getFormattedString("menu-back", config));
 
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "back");
+        meta.getPersistentDataContainer().set(dioreMenuKey, PersistentDataType.STRING, "back-" + backTo);
 
         skull.setItemMeta(meta);
 
@@ -126,7 +123,7 @@ public class AccountGUI {
 
         skullMeta.setLore(lore);
 
-        skullMeta.getPersistentDataContainer().set(mainMenuKey, PersistentDataType.STRING, "skull");
+        skullMeta.getPersistentDataContainer().set(dioreMenuKey, PersistentDataType.STRING, "skull");
 
         skull.setItemMeta(skullMeta);
 
@@ -153,7 +150,7 @@ public class AccountGUI {
 
         meta.setDisplayName(AccountGUI.configManager.getFormattedString("main-menu-top-skull", config));
 
-        meta.getPersistentDataContainer().set(mainMenuKey, PersistentDataType.STRING, "top");
+        meta.getPersistentDataContainer().set(dioreMenuKey, PersistentDataType.STRING, "top");
 
         skull.setItemMeta(meta);
 
@@ -182,7 +179,7 @@ public class AccountGUI {
                     inv.setItem(i, getAccountMenuPublic(acc, language.getCFG()));
                     break;
                 case 26:
-                    inv.setItem(i, getMenuBack(language.getCFG(), accountMenuKey));
+                    inv.setItem(i, getMenuBack(language.getCFG(), "main-menu"));
                     break;
                 default:
                     inv.setItem(i, getMenuBlank());
@@ -209,7 +206,7 @@ public class AccountGUI {
 
         meta.setLore(lore);
 
-        meta.getPersistentDataContainer().set(accountMenuKey, PersistentDataType.STRING, "balance");
+        meta.getPersistentDataContainer().set(dioreMenuKey, PersistentDataType.STRING, "balance");
 
         item.setItemMeta(meta);
 
@@ -234,7 +231,7 @@ public class AccountGUI {
 
         meta.setLore(lore);
 
-        meta.getPersistentDataContainer().set(accountMenuKey, PersistentDataType.STRING, "language");
+        meta.getPersistentDataContainer().set(dioreMenuKey, PersistentDataType.STRING, "language");
 
         skull.setItemMeta(meta);
 
@@ -265,7 +262,7 @@ public class AccountGUI {
 
         meta.setLore(lore);
 
-        meta.getPersistentDataContainer().set(accountMenuKey, PersistentDataType.STRING, "public");
+        meta.getPersistentDataContainer().set(dioreMenuKey, PersistentDataType.STRING, "public");
 
         item.setItemMeta(meta);
 
@@ -291,7 +288,7 @@ public class AccountGUI {
                     inv.setItem(i, getPublicBalanceFalse(language.getCFG()));
                     break;
                 case 26:
-                    inv.setItem(i, getMenuBack(language.getCFG(), publicBalanceMenuKey));
+                    inv.setItem(i, getMenuBack(language.getCFG(), "account-menu"));
                     break;
                 default:
                     inv.setItem(i, getMenuBlank());
@@ -316,7 +313,7 @@ public class AccountGUI {
         config.getStringList("public-balance-menu-true-lore")
                 .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)));
 
-        meta.getPersistentDataContainer().set(publicBalanceMenuKey, PersistentDataType.STRING, "true");
+        meta.getPersistentDataContainer().set(dioreMenuKey, PersistentDataType.STRING, "true");
 
         item.setItemMeta(meta);
 
@@ -335,7 +332,7 @@ public class AccountGUI {
         config.getStringList("public-balance-menu-false-lore")
                 .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)));
 
-        meta.getPersistentDataContainer().set(publicBalanceMenuKey, PersistentDataType.STRING, "false");
+        meta.getPersistentDataContainer().set(dioreMenuKey, PersistentDataType.STRING, "false");
 
         item.setItemMeta(meta);
 
@@ -353,7 +350,7 @@ public class AccountGUI {
 
         for(int i = 0; i < inv.getSize(); i++) {
 
-            if(i == 26) inv.setItem(i, getMenuBack(accLanguage.getCFG(), languageMenuKey));
+            if(i == 26) inv.setItem(i, getMenuBack(accLanguage.getCFG(), "account-menu"));
 
             else inv.setItem(i, getMenuBlank());
         }
@@ -378,7 +375,7 @@ public class AccountGUI {
 
         meta.setDisplayName(language.getName());
 
-        meta.getPersistentDataContainer().set(languageMenuKey, PersistentDataType.STRING, language.name());
+        meta.getPersistentDataContainer().set(dioreLanguageKey, PersistentDataType.STRING, language.name());
 
         item.setItemMeta(meta);
 
@@ -407,7 +404,7 @@ public class AccountGUI {
                     inv.setItem(i, getTransferItem(language.getCFG()));
                     break;
                 case 26:
-                    inv.setItem(i, getMenuBack(language.getCFG(), balanceMenuKey));
+                    inv.setItem(i, getMenuBack(language.getCFG(), "account-menu"));
                     break;
                 default:
                     inv.setItem(i, getMenuBlank());
@@ -432,7 +429,7 @@ public class AccountGUI {
 
         meta.setLore(lore);
 
-        meta.getPersistentDataContainer().set(balanceMenuKey, PersistentDataType.STRING, "withdraw");
+        meta.getPersistentDataContainer().set(dioreMenuKey, PersistentDataType.STRING, "withdraw");
 
         item.setItemMeta(meta);
 
@@ -453,7 +450,7 @@ public class AccountGUI {
 
         meta.setLore(lore);
 
-        meta.getPersistentDataContainer().set(balanceMenuKey, PersistentDataType.STRING, "deposit");
+        meta.getPersistentDataContainer().set(dioreMenuKey, PersistentDataType.STRING, "deposit");
 
         item.setItemMeta(meta);
 
@@ -474,26 +471,41 @@ public class AccountGUI {
 
         meta.setLore(lore);
 
-        meta.getPersistentDataContainer().set(balanceMenuKey, PersistentDataType.STRING, "transfer");
+        meta.getPersistentDataContainer().set(dioreMenuKey, PersistentDataType.STRING, "transfer");
 
         item.setItemMeta(meta);
 
         return item;
     }
-    public static NamespacedKey getMainMenuKey() {
-        return mainMenuKey;
+    public static void OpenTopMenu(Player p) {
+
+        Inventory inv = Bukkit.createInventory(p, 27, configManager.getFormattedString("top-menu-title"));
+
+        Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
+        if(acc == null) return;
+
+        Languages language = acc.getLanguage();
+        if(language == null) language = Languages.ENGLISH;
+
+
+        for(int i = 0; i < inv.getSize(); i++) {
+            switch(i) {
+                case 26:
+                    inv.setItem(i, getMenuBack(language.getCFG(), "main-menu"));
+                    break;
+                default:
+                    inv.setItem(i, getMenuBlank());
+                    break;
+            }
+        }
+
+        p.openInventory(inv);
     }
-    public static NamespacedKey getAccountMenuKey() {
-        return accountMenuKey;
+    public static NamespacedKey getDioreMenuKey() {
+        return dioreMenuKey;
     }
-    public static NamespacedKey getBalanceMenuKey() {
-        return balanceMenuKey;
-    }
-    public static NamespacedKey getPublicBalanceMenuKey() {
-        return publicBalanceMenuKey;
-    }
-    public static NamespacedKey getLanguageMenuKey() {
-        return languageMenuKey;
+    public static NamespacedKey getDioreLanguageKey() {
+        return dioreLanguageKey;
     }
 
 

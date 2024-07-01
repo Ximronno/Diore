@@ -56,12 +56,6 @@ public class PlaceholderHook extends PlaceholderExpansion {
             }
         }
 
-        else if(params.equalsIgnoreCase("top_balance")) {
-            List<TopBalance> topBalances = am.getTopBalances();
-            if(topBalances.isEmpty()) return null;
-            return topBalances.get(0).account().getName() + " | " + am.formatBalance(topBalances.get(0).balance());
-
-        }
         return null;
     }
 

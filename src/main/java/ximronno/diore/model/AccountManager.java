@@ -57,10 +57,21 @@ public class AccountManager {
 
             final List<TopBalance> topBalances = new ArrayList<>();
 
+            this.accounts.forEach(account -> topBalances.add(new TopBalance(account, account.isPublicBalance(), account.getBalance())));
+
+            topBalances.sort(Comparator.comparingDouble(TopBalance::balance).reversed());
+
+            return topBalances;
+
+        }
+    }
+    public List<TopBalance> getPublicTopBalances() {
+        synchronized (this.accounts) {
+
+            final List<TopBalance> topBalances = new ArrayList<>();
+
             this.accounts.forEach(account -> {
-                if (account.isPublicBalance()) {
-                    topBalances.add(new TopBalance(account, account.getBalance()));
-                }
+                if(account.isPublicBalance()) topBalances.add(new TopBalance(account, account.isPublicBalance(), account.getBalance()));
             });
 
             topBalances.sort(Comparator.comparingDouble(TopBalance::balance).reversed());
