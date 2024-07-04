@@ -1,10 +1,10 @@
 package ximronno.diore.impl;
 
 import ximronno.diore.Diore;
-import ximronno.diore.api.events.DepositEvent;
-import ximronno.diore.api.events.TransferEvent;
-import ximronno.diore.api.events.WithdrawEvent;
-import ximronno.diore.api.interfaces.Account;
+import ximronno.api.events.DepositEvent;
+import ximronno.api.events.TransferEvent;
+import ximronno.api.events.WithdrawEvent;
+import ximronno.api.interfaces.Account;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;

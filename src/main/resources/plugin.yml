@@ -5,8 +5,8 @@ softdepend: [Vault, PlaceholderAPI]
 api-version: '1.19'
 commands:
     balance:
-      description: Show your balance and make transactions
-      usage: /balance <func> <target|amount> <amount>
+      description: Show your balance and make transactions, use /balance help to get subcommands
+      usage: /balance
       aliases:
       - bal
       permission: diore.balance

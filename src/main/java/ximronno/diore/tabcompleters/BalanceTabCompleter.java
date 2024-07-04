@@ -6,6 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ximronno.api.command.SubCommand;
+import ximronno.diore.commands.managers.BalanceNew;
 import ximronno.diore.impl.Languages;
 
 import java.util.ArrayList;
@@ -19,32 +21,13 @@ public class BalanceTabCompleter implements TabCompleter {
         List<String> completions = new ArrayList<>();
 
         if(strings.length == 1) {
-            completions.add("withdraw");
-            completions.add("deposit");
-            completions.add("transfer");
-            completions.add("top");
-            completions.add("language");
-            completions.add("public");
-        }
-        if(strings.length == 2 && strings[0].equals("transfer")) {
 
-            Bukkit.getOnlinePlayers().forEach(player -> completions.add(player.getName()));
+            for(SubCommand subCommand : BalanceNew.getSubCommands()) {
+                completions.add(subCommand.getName());
+            }
 
         }
-        else if(strings.length == 2 && strings[0].equals("language")) {
 
-            Arrays.stream(Languages.values())
-                    .map(Enum::name)
-                    .map(String::toUpperCase)
-                    .forEach(completions::add);
-
-        }
-        else if(strings.length == 2 && strings[0].equals("public")) {
-
-            completions.add("true");
-            completions.add("false");
-
-        }
 
 
         return completions;

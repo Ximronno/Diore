@@ -12,13 +12,11 @@ import org.bukkit.persistence.PersistentDataType;
 import ximronno.diore.Diore;
 
 public class Items {
-
-    private static final Material diore_nugget_material = Material.TUBE_CORAL;
     private static final NamespacedKey diore_items_key = new NamespacedKey(Diore.getInstance(), "diore_items_key");
 
     public static ItemStack getDiamondOreNugget(int amount) {
 
-        ItemStack item = new ItemStack(diore_nugget_material, amount);
+        ItemStack item = new ItemStack(Material.TUBE_CORAL, amount);
         ItemMeta meta = item.getItemMeta();
 
         meta.setDisplayName(Diore.getInstance().getConfigManager().getFormattedString("diamond-nugget-name"));

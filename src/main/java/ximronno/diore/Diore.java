@@ -5,7 +5,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import ximronno.diore.commands.Balance;
+import ximronno.diore.commands.managers.BalanceNew;
 import ximronno.diore.hooks.HookManager;
 import ximronno.diore.listeners.InventoryListener;
 import ximronno.diore.listeners.PlayerJoinListener;
@@ -20,6 +20,7 @@ public final class Diore extends JavaPlugin {
     private static Diore instance;
     private AccountManager accountManager;
     private ConfigManager configManager;
+    private NamespacedKey menuKey;
     @Override
     public void onEnable() {
 
@@ -28,6 +29,8 @@ public final class Diore extends JavaPlugin {
         accountManager = new AccountManager(this);
 
         configManager = new ConfigManager(this);
+
+        menuKey = new NamespacedKey(this, "diore-menu-key");
 
         setupCommands();
 
@@ -60,15 +63,15 @@ public final class Diore extends JavaPlugin {
 
     }
     private void setupCommands() {
-        getCommand("balance").setExecutor(new Balance(this));
+        getCommand("balance").setExecutor(new BalanceNew(this));
     }
     private void setupTabCompleters() {
         getCommand("balance").setTabCompleter(new BalanceTabCompleter());
     }
     private void setupListeners(PluginManager pM) {
-        pM.registerEvents(new PlayerJoinListener(), this);
+        pM.registerEvents(new PlayerJoinListener(this), this);
         pM.registerEvents(new TransactionsListener(this), this);
-        pM.registerEvents(new InventoryListener(this), this);
+        pM.registerEvents(new InventoryListener(), this);
     }
     private void setupRecipes(Server server) {
 
@@ -82,8 +85,13 @@ public final class Diore extends JavaPlugin {
     public ConfigManager getConfigManager() {
         return configManager;
     }
+    public NamespacedKey getMenuKey() {
+        return menuKey;
+    }
 
     public static Diore getInstance() {
         return instance;
     }
+
+
 }

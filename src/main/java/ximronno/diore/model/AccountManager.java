@@ -5,7 +5,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import ximronno.diore.Diore;
-import ximronno.diore.api.interfaces.Account;
+import ximronno.api.interfaces.Account;
 import ximronno.diore.impl.FundAccount;
 import ximronno.diore.impl.Languages;
 import ximronno.diore.impl.TopBalance;
@@ -57,21 +57,9 @@ public class AccountManager {
 
             final List<TopBalance> topBalances = new ArrayList<>();
 
-            this.accounts.forEach(account -> topBalances.add(new TopBalance(account, account.isPublicBalance(), account.getBalance())));
-
-            topBalances.sort(Comparator.comparingDouble(TopBalance::balance).reversed());
-
-            return topBalances;
-
-        }
-    }
-    public List<TopBalance> getPublicTopBalances() {
-        synchronized (this.accounts) {
-
-            final List<TopBalance> topBalances = new ArrayList<>();
-
             this.accounts.forEach(account -> {
-                if(account.isPublicBalance()) topBalances.add(new TopBalance(account, account.isPublicBalance(), account.getBalance()));
+                double balance = account.isPublicBalance() ? account.getBalance() : 0.0;
+                topBalances.add(new TopBalance(account, account.isPublicBalance(), balance));
             });
 
             topBalances.sort(Comparator.comparingDouble(TopBalance::balance).reversed());

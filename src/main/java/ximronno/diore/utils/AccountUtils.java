@@ -1,9 +1,9 @@
-package ximronno.diore.api.utils;
+package ximronno.diore.utils;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import ximronno.diore.Diore;
-import ximronno.diore.api.interfaces.Account;
+import ximronno.api.interfaces.Account;
 import ximronno.diore.impl.Languages;
 import ximronno.diore.model.ConfigManager;
 
@@ -43,11 +43,11 @@ public class AccountUtils {
         }
         return true;
     }
-    public static void setLanguage(Player p, Account acc, FileConfiguration config, Languages languageToSet) {
+    public static void setLanguage(Player p, Account acc, Languages languageToSet) {
 
         acc.setLanguage(languageToSet);
 
-        p.sendMessage(configManager.getFormattedString("language-set", config)
+        p.sendMessage(configManager.getFormattedString("language-set", languageToSet.getCFG())
                 .replace("<language>", languageToSet.getName()));
     }
     public static void setPublicBalance(Player p, Account acc, FileConfiguration config, boolean publicToSet) {

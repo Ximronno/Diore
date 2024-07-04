@@ -6,11 +6,8 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ximronno.diore.Diore;
-import ximronno.diore.api.interfaces.Account;
-import ximronno.diore.impl.TopBalance;
+import ximronno.api.interfaces.Account;
 import ximronno.diore.model.AccountManager;
-
-import java.util.List;
 
 public class PlaceholderHook extends PlaceholderExpansion {
     @Override
@@ -43,11 +40,6 @@ public class PlaceholderHook extends PlaceholderExpansion {
                 Account acc = am.getAccount(player.getUniqueId()).orElse(null);
                 if(acc == null || !acc.isPublicBalance()) return null;
                 return String.valueOf(am.formatBalance(acc.getBalance()));
-            }
-            if(params.equalsIgnoreCase("public_balance")) {
-                Account acc = am.getAccount(player.getUniqueId()).orElse(null);
-                if(acc == null) return null;
-                return acc.isPublicBalance() ? "true" : "false";
             }
             if(params.equalsIgnoreCase("language")) {
                 Account acc = am.getAccount(player.getUniqueId()).orElse(null);

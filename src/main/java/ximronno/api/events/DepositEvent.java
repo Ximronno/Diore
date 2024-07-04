@@ -1,10 +1,10 @@
-package ximronno.diore.api.events;
+package ximronno.api.events;
 
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
-import ximronno.diore.api.interfaces.Account;
+import ximronno.api.interfaces.Account;
 
 public class DepositEvent extends Event implements Cancellable {
     private static final HandlerList handlers = new HandlerList();

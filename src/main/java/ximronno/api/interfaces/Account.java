@@ -1,4 +1,4 @@
-package ximronno.diore.api.interfaces;
+package ximronno.api.interfaces;
 
 import ximronno.diore.impl.Languages;
 

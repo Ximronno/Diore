@@ -1,6 +1,10 @@
 #Messages
 no-account-found: "&bYou have no account"
 
+#Gui
+enable-gui: true
+open-gui-on-commands: true
+
 #Without ChatColor formatting
 currency-format:  "<amount> ores"
 

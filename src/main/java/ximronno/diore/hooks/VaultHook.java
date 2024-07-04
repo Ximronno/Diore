@@ -4,10 +4,9 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.Particle;
 import org.bukkit.plugin.ServicePriority;
 import ximronno.diore.Diore;
-import ximronno.diore.api.interfaces.Account;
+import ximronno.api.interfaces.Account;
 
 import java.util.Collections;
 import java.util.List;
