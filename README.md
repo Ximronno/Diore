@@ -7,7 +7,7 @@ Diamond-based economy plugin with Vault.
 ## About
 
 
-Diore is a economy plugin for Spigot, using diamond ore as currency, allows players to create accounts, deposit, transfer, and withdraw diamond ore, with Vault Hook integration for enhanced compatibility and security.
+Diore is a standalone economy plugin for Spigot, using diamond ore as currency, allows players to create accounts, deposit, transfer, and withdraw diamond ore, with Vault Hook integration for enhanced compatibility and security.
 
 ## API
 
