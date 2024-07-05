@@ -8,6 +8,7 @@ import ximronno.api.interfaces.Account;
 import ximronno.diore.Diore;
 import ximronno.diore.commands.DioreSubCommand;
 import ximronno.diore.guis.menus.AccountMenu;
+import ximronno.diore.guis.menus.MainMenu;
 import ximronno.diore.impl.Languages;
 
 public class BalanceShow extends DioreSubCommand {
@@ -48,7 +49,7 @@ public class BalanceShow extends DioreSubCommand {
         p.sendMessage(configManager.getFormattedString("on-balance", language.getCFG()).replace("<balance>", accountManager.formatBalance(acc.getBalance())));
 
         if(plugin.getConfig().getBoolean("open-gui-on-commands")) {
-            new AccountMenu(plugin.getMenuKey()).open(p);
+            new MainMenu(plugin.getMenuKey()).open(p);
         }
 
     }

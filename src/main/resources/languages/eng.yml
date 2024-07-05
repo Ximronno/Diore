@@ -61,6 +61,26 @@ balance-menu-deposit-lore:
 balance-menu-transfer: "&bTransfer"
 balance-menu-transfer-lore:
   - "&bClick to transfer"
+withdraw-menu-all: "&bEverything in the account"
+withdraw-menu-half: "&bHalf the account"
+withdraw-menu-quarter: "&bQuarter of the account"
+withdraw-menu-lore-format:
+  - "&bCurrent balance: <balance>"
+  - "&bAmount to withdraw: <amount>"
+deposit-menu-all: "&bEverything in the inventory"
+deposit-menu-lore-format:
+  - "&bCurrent balance: <balance>"
+  - "&bAmount to deposit: <amount>"
+transfer-menu-sending-to: "&bSend to <player>"
+transfer-menu-lore-format:
+  - "&bCurrent balance: <balance>"
+  - "&bAmount to send: <amount>"
+transfer-selector-menu-skull: "&b<player>"
+transfer-selector-menu-lore-format:
+  - "&bBalance: <balance>"
+  - "&bClick to transfer"
 menu-yes: "&aYes"
 menu-no: "&cNo"
 menu-back: "&bBack"
+paginated-menu-button-right: "&bForward"
+paginated-menu-button-left: "&bBack"

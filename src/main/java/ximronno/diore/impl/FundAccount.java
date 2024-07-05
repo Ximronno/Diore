@@ -84,7 +84,7 @@ public class FundAccount implements Account {
     public boolean withdraw(double amount) {
 
         BigDecimal bd = new BigDecimal(Double.toString(amount));
-        bd = bd.setScale(1, RoundingMode.HALF_UP);
+        bd = bd.setScale(1, RoundingMode.FLOOR);
 
         amount = bd.doubleValue();
 
@@ -104,7 +104,7 @@ public class FundAccount implements Account {
     public boolean deposit(double amount) {
 
         BigDecimal bd = new BigDecimal(Double.toString(amount));
-        bd = bd.setScale(1, RoundingMode.HALF_UP);
+        bd = bd.setScale(1, RoundingMode.FLOOR);
 
         amount = bd.doubleValue();
 

@@ -11,6 +11,8 @@ import ximronno.diore.impl.Languages;
 import ximronno.diore.impl.TopBalance;
 
 import java.io.File;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
@@ -145,7 +147,13 @@ public class AccountManager {
         String pattern = "#,##0.0";
         DecimalFormat decimalFormat = new DecimalFormat(pattern, symbols);
 
+        BigDecimal bd = new BigDecimal(Double.toString(balance));
+        bd = bd.setScale(1, RoundingMode.FLOOR);
+
+        balance = bd.doubleValue();
+
         return plugin.getConfig().getString("currency-format")
                 .replace("<amount>", decimalFormat.format(balance));
     }
+
 }

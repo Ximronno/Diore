@@ -13,6 +13,9 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import ximronno.api.interfaces.Account;
 import ximronno.diore.guis.DioreMenu;
+import ximronno.diore.guis.menus.transactions.DepositAmountMenu;
+import ximronno.diore.guis.menus.transactions.TransferPlayerSelectorMenu;
+import ximronno.diore.guis.menus.transactions.WithdrawAmountMenu;
 import ximronno.diore.impl.Languages;
 
 import java.util.ArrayList;
@@ -55,14 +58,17 @@ public class BalanceMenu extends DioreMenu {
         if(container.has(key, PersistentDataType.STRING)) {
 
             String func = container.get(key, PersistentDataType.STRING);
+            if(func == null) return;
 
             switch(func) {
-
                 case "withdraw":
+                    new WithdrawAmountMenu(key).open(p);
                     break;
                 case "deposit":
+                    new DepositAmountMenu(key).open(p);
                     break;
                 case "transfer":
+                    new TransferPlayerSelectorMenu(key).open(p);
                     break;
                 case "back":
                     new AccountMenu(key).open(p);
