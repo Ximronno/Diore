@@ -64,8 +64,6 @@ public class TransferPlayerSelectorMenu extends DiorePaginatedMenu {
 
             String func = container.get(key, PersistentDataType.STRING);
 
-            System.out.println(index);
-
             switch(func) {
                 case "left":
                     if(currentPage > 0) {
