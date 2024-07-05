@@ -4,6 +4,8 @@
 Diamond-based economy plugin with Vault.
 </p>
 
+![Spiget Raiting](https://img.shields.io/spiget/stars/117800?style=for-the-badge)
+
 ## For now, top menu and custom amounts in transactions menu is disabled
 
 ## About
