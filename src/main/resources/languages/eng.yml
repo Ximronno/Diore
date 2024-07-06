@@ -64,13 +64,23 @@ balance-menu-transfer-lore:
 withdraw-menu-all: "&bEverything in the account"
 withdraw-menu-half: "&bHalf the account"
 withdraw-menu-quarter: "&bQuarter of the account"
+withdraw-menu-custom: "&bCustom amount"
 withdraw-menu-lore-format:
   - "&bCurrent balance: <balance>"
   - "&bAmount to withdraw: <amount>"
+withdraw-menu-sign: #No more than 3 lines!
+  - "&bSelect amount"
+  - "&bto withdraw"
 deposit-menu-all: "&bEverything in the inventory"
+deposit-menu-half: "&bHalf of your inventory"
+deposit-menu-quarter: "&bQuarter of your inventory"
+deposit-menu-custom: "&bCustom amount"
 deposit-menu-lore-format:
   - "&bCurrent balance: <balance>"
   - "&bAmount to deposit: <amount>"
+deposit-menu-sign: #No more than 3 lines!
+  - "&bSelect amount"
+  - "&bto deposit"
 transfer-menu-sending-to: "&bSend to <player>"
 transfer-menu-lore-format:
   - "&bCurrent balance: <balance>"
@@ -79,8 +89,12 @@ transfer-selector-menu-skull: "&b<player>"
 transfer-selector-menu-lore-format:
   - "&bBalance: <balance>"
   - "&bClick to transfer"
+top-menu-user-skull: "&b<player>"
+top-menu-public-lore:
+  - "&bBalance: <balance>"
+  - "&bPlace: <place>"
 menu-yes: "&aYes"
 menu-no: "&cNo"
 menu-back: "&bBack"
-paginated-menu-button-right: "&bForward"
-paginated-menu-button-left: "&bBack"
+paginated-menu-button-right: "&bPrevious page"
+paginated-menu-button-left: "&bNext page"

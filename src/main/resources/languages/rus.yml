@@ -64,13 +64,23 @@ balance-menu-transfer-lore:
 withdraw-menu-all: "&bВесь счет"
 withdraw-menu-half: "&bПоловина счета"
 withdraw-menu-quarter: "&bЧетверть счета"
+withdraw-menu-custom: "&bСвое число"
 withdraw-menu-lore-format:
   - "&bТекущий баланс: <balance>"
   - "&bСумма для вывода: <amount>"
+withdraw-menu-sign: #Не больше 3 строк!
+  - "&bВведите сумму"
+  - "&bдля вывода"
 deposit-menu-all: "&bВесь инвентарь"
+deposit-menu-half: "&bПоловина инвентаря"
+deposit-menu-quarter: "&bЧетверть инвентаря"
+deposit-menu-custom: "&bСвое число"
 deposit-menu-lore-format:
   - "&bТекущий баланс: <balance>"
   - "&bСумма для зачисления: <amount>"
+deposit-menu-sign: #Не больше 3 строк!
+  - "&bВведите сумму"
+  - "&bдля зачисления"
 transfer-menu-sending-to: "&bОтправить к <player>"
 transfer-menu-lore-format:
   - "&bТекущий баланс: <balance>"
@@ -82,5 +92,5 @@ transfer-selector-menu-lore-format:
 menu-yes: "&aДа"
 menu-no: "&cНет"
 menu-back: "&bНазад"
-paginated-menu-button-right: "&bВперед"
-paginated-menu-button-left: "&bНазад"
+paginated-menu-button-right: "&bПредыдущая страница"
+paginated-menu-button-left: "&bСледующая страница"

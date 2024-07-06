@@ -1,5 +1,7 @@
 package ximronno.diore.guis.menus.transactions;
 
+import de.rapha149.signgui.SignGUI;
+import de.rapha149.signgui.SignGUIAction;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -18,6 +20,7 @@ import ximronno.diore.items.Items;
 import ximronno.diore.utils.AccountUtils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class DepositAmountMenu extends DioreMenu {
@@ -57,11 +60,54 @@ public class DepositAmountMenu extends DioreMenu {
         if(container.has(key, PersistentDataType.STRING)) {
 
             String func = container.get(key, PersistentDataType.STRING);
+            if(func == null) return;
+
 
             switch(func) {
-
                 case "back":
                     new BalanceMenu(key).open(p);
+                    break;
+                case "custom":
+                    FileConfiguration config = language.getCFG();
+
+                    List<String> lines = new ArrayList<>();
+
+                    config.getStringList("deposit-menu-sign")
+                            .forEach(loreLine -> lines.add(ChatColor.translateAlternateColorCodes('&', loreLine)));
+
+                    lines.add(0, "");
+
+                    SignGUI gui = SignGUI.builder()
+
+                            .setLines(lines.toArray(new String[0]))
+
+                            .setType(Material.OAK_SIGN)
+
+                            .setHandler((player, result) -> {
+
+                                String line0 = result.getLine(0);
+
+                                if(line0.isEmpty() || line0.isBlank()) {
+
+                                    return List.of(SignGUIAction.openInventory(plugin, getInventory()));
+
+                                }
+                                else {
+
+                                    double amount = Math.floor(Double.parseDouble(line0)) ;
+                                    new BalanceMenu(key).open(p);
+                                    AccountUtils.tryDeposit(p, acc, config, amount);
+                                    return Collections.EMPTY_LIST;
+
+                                }
+
+                            })
+
+                            .callHandlerSynchronously(plugin)
+
+                            .build();
+
+                    gui.open(p);
                     break;
                 default:
                     double amount = Double.parseDouble(func);
@@ -84,7 +130,6 @@ public class DepositAmountMenu extends DioreMenu {
         Languages language = acc.getLanguage();
         if(language == null) language = Languages.ENGLISH;
 
-
         for(int i = 0; i < getSize(); i++) {
 
             switch (i) {
@@ -96,6 +141,9 @@ public class DepositAmountMenu extends DioreMenu {
                     break;
                 case 14:
                     inventory.setItem(i, getDepositQuarter(p, language.getCFG(), acc.getBalance()));
+                    break;
+                case 16:
+                    inventory.setItem(i, getDepositCustom(language.getCFG(), acc.getBalance()));
                     break;
                 case 26:
                     inventory.setItem(i, getMenuBack(language.getCFG()));
@@ -132,7 +180,7 @@ public class DepositAmountMenu extends DioreMenu {
         ItemMeta meta = item.getItemMeta();
         if(meta == null) return null;
 
-        meta.setDisplayName(configManager.getFormattedString("deposit-menu-all", config));
+        meta.setDisplayName(configManager.getFormattedString("deposit-menu-half", config));
 
         double amount = Math.floor(getDiamondOres(p) / 2);
 
@@ -150,13 +198,29 @@ public class DepositAmountMenu extends DioreMenu {
         ItemMeta meta = item.getItemMeta();
         if(meta == null) return null;
 
-        meta.setDisplayName(configManager.getFormattedString("deposit-menu-all", config));
+        meta.setDisplayName(configManager.getFormattedString("deposit-menu-quarter", config));
 
         double amount = Math.floor(getDiamondOres(p) / 4);
 
         meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, String.valueOf(amount));
 
         meta.setLore(getLore(config, balance, amount));
+
+        item.setItemMeta(meta);
+
+        return item;
+    }
+    private ItemStack getDepositCustom(FileConfiguration config, double balance) {
+        ItemStack item = new ItemStack(Material.OAK_SIGN);
+
+        ItemMeta meta = item.getItemMeta();
+        if(meta == null) return null;
+
+        meta.setDisplayName(configManager.getFormattedString("deposit-menu-custom", config));
+
+        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "custom");
+
+        meta.setLore(getLore(config, balance, 0));
 
         item.setItemMeta(meta);
 

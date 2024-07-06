@@ -58,9 +58,13 @@ public class MainMenu extends DioreMenu {
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
         if(container.has(key, PersistentDataType.STRING)) {
-            switch (container.get(key, PersistentDataType.STRING)) {
+
+            String func = container.get(key, PersistentDataType.STRING);
+            if(func == null) return;
+
+            switch (func) {
                 case "skull":
-                    new AccountMenu(plugin.getMenuKey()).open(p);
+                    new AccountMenu(key).open(p);
                     break;
                 case "top":
                     break;

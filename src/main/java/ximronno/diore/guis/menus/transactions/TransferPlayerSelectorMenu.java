@@ -15,7 +15,6 @@ import ximronno.diore.guis.DiorePaginatedMenu;
 import ximronno.diore.guis.menus.BalanceMenu;
 import ximronno.diore.impl.Languages;
 import ximronno.diore.impl.TopBalance;
-import ximronno.diore.utils.AccountUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,9 +52,6 @@ public class TransferPlayerSelectorMenu extends DiorePaginatedMenu {
         Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
         if(acc == null) return;
 
-        Languages language = acc.getLanguage();
-        if(language == null) language = Languages.ENGLISH;
-
         PersistentDataContainer container = meta.getPersistentDataContainer();
 
         if(container.has(key, PersistentDataType.STRING)) {
@@ -63,6 +59,7 @@ public class TransferPlayerSelectorMenu extends DiorePaginatedMenu {
             ArrayList<Player> players = new ArrayList<>(getServer().getOnlinePlayers());
 
             String func = container.get(key, PersistentDataType.STRING);
+            if(func == null) return;
 
             switch(func) {
                 case "left":
