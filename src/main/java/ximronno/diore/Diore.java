@@ -57,7 +57,7 @@ public final class Diore extends JavaPlugin {
                 getLogger().info("You are up to date!");
             } else {
                 getLogger().info("There is a new update available: " + version + ".");
-                getLogger().info("Download from: https://www.spigotmc.org/resources/diore.117800/");
+                getLogger().info("Download from: https://www.spigotmc.org/resources/diore.117800/ ");
             }
         });
 
