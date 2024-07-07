@@ -68,12 +68,11 @@ public class FundAccount implements Account {
 
         if(balance < amount) return false;
 
-        balance -= amount;
-
         TransferEvent event = new TransferEvent(this, account, amount);
         Diore.getInstance().getServer().getPluginManager().callEvent(event);
         if(event.isCancelled()) return false;
 
+        balance -= amount;
         account.receive(amount);
 
         return true;

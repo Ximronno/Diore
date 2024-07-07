@@ -21,8 +21,10 @@ public class AccountManager {
 
     private final List<Account> accounts = Collections.synchronizedList(new ArrayList<>());
     private final Diore plugin;
+    private final ConfigManager configManager;
     public AccountManager(Diore plugin) {
         this.plugin = plugin;
+        this.configManager = plugin.getConfigManager();
     }
 
     /*
@@ -84,19 +86,12 @@ public class AccountManager {
         if(!data.exists()) createAccount(player);
 
         FileConfiguration cfg = YamlConfiguration.loadConfiguration(data);
-        createAccount(UUID.fromString(cfg.getString("uuid")), player.getName(), cfg.getDouble("balance"), Languages.valueOf(cfg.getString("language")), cfg.getBoolean("public_balance"));
+
+        createAccount(player.getUniqueId(), player.getName(), cfg.getDouble("balance"), Languages.valueOf(cfg.getString("language")), cfg.getBoolean("public_balance"));
 
     }
     public void getOrCreateAccount(UUID id) {
-
-        String path = plugin.getDataFolder().getAbsolutePath() + "/data/" + id.toString() + ".yml";
-        File data = new File(path);
-
-        if(!data.exists()) createAccount(Bukkit.getPlayer(id));
-
-        FileConfiguration cfg = YamlConfiguration.loadConfiguration(data);
-        createAccount(UUID.fromString(cfg.getString("uuid")), cfg.getString("name"), cfg.getDouble("balance"), Languages.valueOf(cfg.getString("language")), cfg.getBoolean("public_balance"));
-
+        getOrCreateAccount(Bukkit.getOfflinePlayer(id));
     }
     public void createAccount(OfflinePlayer player) {
         createAccount(player.getUniqueId(), player.getName(), 0D);
@@ -131,7 +126,7 @@ public class AccountManager {
             cfg.save(data);
             return true;
         } catch (Exception e) {
-            e.printStackTrace();
+            plugin.getLogger().severe("§cFailed to save account data for " + id);
             return false;
         }
 
@@ -152,7 +147,7 @@ public class AccountManager {
 
         balance = bd.doubleValue();
 
-        return plugin.getConfig().getString("currency-format")
+        return configManager.getFormattedString("currency-format")
                 .replace("<amount>", decimalFormat.format(balance));
     }
 

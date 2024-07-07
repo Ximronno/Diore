@@ -4,13 +4,12 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
+import ximronno.api.item.ItemBuilder;
 
 public abstract class DiorePaginatedMenu extends DioreMenu {
 
     protected int currentPage = 0;
-    protected int maxItemPerPage = 28;
+    protected final int maxItemPerPage = 28;
     protected int index = 0;
     public DiorePaginatedMenu(NamespacedKey key) {
         super(key);
@@ -22,53 +21,45 @@ public abstract class DiorePaginatedMenu extends DioreMenu {
 
         inventory.setItem(50, getButtonRight(config));
 
+        ItemStack menuBlank = getMenuBlank();
+
         for (int i = 0; i < 10; i++) {
             if (inventory.getItem(i) == null) {
-                inventory.setItem(i, getMenuBlank());
+                inventory.setItem(i, menuBlank);
             }
         }
 
-        inventory.setItem(17, getMenuBlank());
-        inventory.setItem(18, getMenuBlank());
-        inventory.setItem(26, getMenuBlank());
-        inventory.setItem(27, getMenuBlank());
-        inventory.setItem(35, getMenuBlank());
-        inventory.setItem(36, getMenuBlank());
+        inventory.setItem(17, menuBlank);
+        inventory.setItem(18, menuBlank);
+        inventory.setItem(26, menuBlank);
+        inventory.setItem(27, menuBlank);
+        inventory.setItem(35, menuBlank);
+        inventory.setItem(36, menuBlank);
 
         for (int i = 44; i < 54; i++) {
             if (inventory.getItem(i) == null) {
-                inventory.setItem(i, getMenuBlank());
+                inventory.setItem(i, menuBlank);
             }
         }
     }
     private ItemStack getButtonLeft(FileConfiguration config) {
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.DARK_OAK_BUTTON)
+                .setDisplayName(configManager.getFormattedString(config, "paginated-menu-button-left"))
+                .build();
 
-        ItemStack item = new ItemStack(Material.DARK_OAK_BUTTON);
-
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
-
-        meta.setDisplayName(configManager.getFormattedString("paginated-menu-button-left", config));
-
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "left");
-
-        item.setItemMeta(meta);
+        ItemBuilder.addPersistentData(item, key,"left");
 
         return item;
 
     }
     private ItemStack getButtonRight(FileConfiguration config) {
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.DARK_OAK_BUTTON)
+                .setDisplayName(configManager.getFormattedString(config, "paginated-menu-button-right"))
+                .build();
 
-        ItemStack item = new ItemStack(Material.DARK_OAK_BUTTON);
-
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
-
-        meta.setDisplayName(configManager.getFormattedString("paginated-menu-button-right", config));
-
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "right");
-
-        item.setItemMeta(meta);
+        ItemBuilder.addPersistentData(item, key,"right");
 
         return item;
 

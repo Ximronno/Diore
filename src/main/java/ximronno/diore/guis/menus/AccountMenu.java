@@ -1,25 +1,20 @@
 package ximronno.diore.guis.menus;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.NotNull;
 import ximronno.api.interfaces.Account;
+import ximronno.api.item.ItemBuilder;
 import ximronno.diore.Diore;
 import ximronno.diore.guis.DioreMenu;
 import ximronno.diore.impl.Languages;
 import ximronno.diore.model.AccountManager;
 import ximronno.diore.model.ConfigManager;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class AccountMenu extends DioreMenu {
     private final Diore plugin = Diore.getInstance();
@@ -40,20 +35,13 @@ public class AccountMenu extends DioreMenu {
         return configManager.getFormattedString("main-menu-title");
     }
     @Override
-    public void handleMenu(InventoryClickEvent e) {
-
-        ItemStack item = e.getCurrentItem();
-        if(item == null) return;
-
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return;
-
-        Player p = (Player) e.getWhoClicked();
-
-        PersistentDataContainer container = meta.getPersistentDataContainer();
+    public void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container) {
 
         if(container.has(key, PersistentDataType.STRING)) {
-            switch (container.get(key, PersistentDataType.STRING)) {
+            String func = container.get(key, PersistentDataType.STRING);
+            if(func == null) return;
+
+            switch (func) {
                 case "balance":
                     new BalanceMenu(key).open(p);
                     break;
@@ -70,6 +58,7 @@ public class AccountMenu extends DioreMenu {
         }
 
     }
+
     @Override
     public void setContents(Player p) {
 
@@ -103,82 +92,51 @@ public class AccountMenu extends DioreMenu {
 
     }
     private ItemStack getAccountMenuBalance(Account acc, FileConfiguration config) {
-        ItemStack item = new ItemStack(Material.DIAMOND_ORE);
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.DIAMOND_ORE)
+                .setDisplayName(configManager.getFormattedString(config, "account-menu-balance")
+                        .replace("<balance>", accountManager.formatBalance(acc.getBalance())))
+                .setLore(configManager.getFormattedList(config, "account-menu-balance-lore"))
+                .build();
 
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
-
-        meta.setDisplayName(configManager.getFormattedString("account-menu-balance", config)
-                .replace("<balance>", accountManager.formatBalance(acc.getBalance())));
-
-        List<String> lore = new ArrayList<>();
-
-        config.getStringList("account-menu-balance-lore")
-                .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)));
-
-        meta.setLore(lore);
-
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "balance");
-
-        item.setItemMeta(meta);
+        ItemBuilder.addPersistentData(item, key, "balance");
 
         return item;
     }
-    private ItemStack getAccountMenuLanguage(Languages language) {
-        if(language == null) language = Languages.ENGLISH;
-        ItemStack skull = language.getItemStack();
-
-        SkullMeta meta = (SkullMeta) skull.getItemMeta();
-        if(meta == null) return null;
-
+    private ItemStack getAccountMenuLanguage(@NotNull Languages language) {
         FileConfiguration config = language.getCFG();
 
-        meta.setDisplayName(configManager.getFormattedString("account-menu-language", config)
-                .replace("<language>", language.getName()));
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.PLAYER_HEAD)
+                .setDisplayName(configManager.getFormattedString(config, "account-menu-language")
+                        .replace("<language>", language.getName()))
+                .setLore(configManager.getFormattedList(config, "account-menu-language-lore"))
+                .setProfileFromURL(language.getTextureURL())
+                .build();
 
-        List<String> lore = new ArrayList<>();
-
-        config.getStringList("account-menu-language-lore")
-                .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)));
-
-        meta.setLore(lore);
-
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "language");
-
-        skull.setItemMeta(meta);
-
-        return skull;
-    }
-    private ItemStack getAccountMenuPublic(Account acc, FileConfiguration config) {
-        ItemStack item;
-        if(acc.isPublicBalance()) {
-            item = new ItemStack(Material.GREEN_TERRACOTTA);
-        }
-        else {
-            item = new ItemStack(Material.RED_TERRACOTTA);
-        }
-
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
-
-        String yes = configManager.getFormattedString("menu-yes", config);
-        String no = configManager.getFormattedString("menu-no", config);
-
-        meta.setDisplayName(configManager.getFormattedString("account-menu-public", config)
-                .replace("<public>", (acc.isPublicBalance() ? yes : no)));
-
-        List<String> lore = new ArrayList<>();
-
-        config.getStringList("account-menu-public-lore")
-                .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)));
-
-        meta.setLore(lore);
-
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "public");
-
-        item.setItemMeta(meta);
+        ItemBuilder.addPersistentData(item, key, "language");
 
         return item;
+    }
+    private ItemStack getAccountMenuPublic(Account acc, FileConfiguration config) {
+
+        String yes = configManager.getFormattedString(config, "menu-yes");
+        String no = configManager.getFormattedString(config, "menu-no");
+
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(getPublicMaterial(acc.isPublicBalance()))
+                .setDisplayName(configManager.getFormattedString(config, "account-menu-public")
+                        .replace("<public>", (acc.isPublicBalance() ? yes : no)))
+                .setLore(configManager.getFormattedList(config, "account-menu-public-lore"))
+                .build();
+
+        ItemBuilder.addPersistentData(item, key, "public");
+
+        return item;
+    }
+    private Material getPublicMaterial(Boolean publicBalance) {
+        if(publicBalance) return Material.LIME_TERRACOTTA;
+        else return Material.RED_TERRACOTTA;
     }
 
 }

@@ -1,20 +1,16 @@
 package ximronno.diore.guis.menus;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.profile.PlayerProfile;
-import org.bukkit.profile.PlayerTextures;
 import ximronno.api.interfaces.Account;
+import ximronno.api.item.ItemBuilder;
 import ximronno.diore.Diore;
 import ximronno.diore.guis.DioreMenu;
 import ximronno.diore.impl.Languages;
@@ -22,9 +18,7 @@ import ximronno.diore.model.AccountManager;
 import ximronno.diore.model.ConfigManager;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.Map;
 
 public class MainMenu extends DioreMenu {
     private final Diore plugin = Diore.getInstance();
@@ -44,18 +38,9 @@ public class MainMenu extends DioreMenu {
     public String getTitle() {
         return configManager.getFormattedString("main-menu-title");
     }
+
     @Override
-    public void handleMenu(InventoryClickEvent e) {
-
-        ItemStack item = e.getCurrentItem();
-        if(item == null) return;
-
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return;
-
-        Player p = (Player) e.getWhoClicked();
-
-        PersistentDataContainer container = meta.getPersistentDataContainer();
+    public void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container) {
 
         if(container.has(key, PersistentDataType.STRING)) {
 
@@ -66,7 +51,13 @@ public class MainMenu extends DioreMenu {
                 case "skull":
                     new AccountMenu(key).open(p);
                     break;
-                case "top":
+                case "issues":
+                    TextComponent component = new TextComponent(configManager.getFormattedString(language.getCFG(), "issues-link-text"));
+
+                    component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/Ximronno/Diore/issues"));
+
+                    p.spigot().sendMessage(component);
+                    p.closeInventory();
                     break;
             }
         }
@@ -88,8 +79,8 @@ public class MainMenu extends DioreMenu {
                 case 4:
                     inventory.setItem(i, getMainMenuSkull(acc, language.getCFG(), p));
                     break;
-                case 8:
-                    inventory.setItem(i, getMainMenuTopSkull(language.getCFG()));
+                case 29:
+                    inventory.setItem(i, getMainMenuIssuesSkull(language.getCFG()));
                     break;
                 default:
                     inventory.setItem(i, getMenuBlank());
@@ -100,59 +91,42 @@ public class MainMenu extends DioreMenu {
 
     }
     private ItemStack getMainMenuSkull(Account acc, FileConfiguration config, Player p) {
-        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
 
-        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-        if(skullMeta == null) return null;
+        String yes = configManager.getFormattedString(config, "menu-yes");
+        String no = configManager.getFormattedString(config, "menu-no");
 
-        skullMeta.setDisplayName(configManager.getFormattedString("main-menu-skull", config)
-                .replace("<player>", p.getDisplayName()));
-        skullMeta.setOwningPlayer(p);
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.PLAYER_HEAD)
+                .setDisplayName(configManager.getFormattedString(config, "main-menu-skull")
+                        .replace("<player>", p.getDisplayName()))
+                .setLore(configManager.getFormattedList(config, "main-menu-skull-lore",
+                                Map.of("<balance>", accountManager.formatBalance(acc.getBalance()),
+                                        "<language>", acc.getLanguage().getName(),
+                                        "<public>", (acc.isPublicBalance() ? yes : no))))
+                .setProfile(p.getPlayerProfile())
+                .build();
 
-        List<String> lore = new ArrayList<>();
+        ItemBuilder.addPersistentData(item, key, "skull");
 
-        String yes = configManager.getFormattedString("menu-yes", config);
-        String no = configManager.getFormattedString("menu-no", config);
-
-        config.getStringList("main-menu-skull-lore")
-                .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)
-                        .replace("<balance>", accountManager.formatBalance(acc.getBalance()))
-                        .replace("<language>", acc.getLanguage().getName())
-                        .replace("<public>", (acc.isPublicBalance() ? yes : no))));
-
-        skullMeta.setLore(lore);
-
-        skullMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "skull");
-
-        skull.setItemMeta(skullMeta);
-
-        return skull;
+        return item;
     }
-    private ItemStack getMainMenuTopSkull(FileConfiguration config) {
-        PlayerProfile profile = Bukkit.createPlayerProfile(UUID.randomUUID());
-        PlayerTextures textures = profile.getTextures();
-        URL urlObject;
+    private ItemStack getMainMenuIssuesSkull(FileConfiguration config) {
+        URL url;
         try {
-            urlObject = new URL("https://textures.minecraft.net/texture/7e69b5cfebe05dd43050277e5be83c807b45ade30e08291f6867c723e854b482");
+            url = new URL("https://textures.minecraft.net/texture/26e27da12819a8b053da0cc2b62dec4cda91de6eeec21ccf3bfe6dd8d4436a7");
         } catch(Exception e) {
             return null;
         }
-        textures.setSkin(urlObject);
-        profile.setTextures(textures);
 
-        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.PLAYER_HEAD)
+                .setDisplayName(configManager.getFormattedString(config, "main-menu-issues-skull"))
+                .setLore(configManager.getFormattedList(config, "main-menu-issues-skull-lore"))
+                .setProfileFromURL(url)
+                .build();
 
-        SkullMeta skullMeta = (SkullMeta) skull.getItemMeta();
-        if(skullMeta == null) return null;
+        ItemBuilder.addPersistentData(item, key, "issues");
 
-        skullMeta.setOwnerProfile(profile);
-
-        skullMeta.setDisplayName(configManager.getFormattedString("main-menu-top-skull", config));
-
-        skullMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "top");
-
-        skull.setItemMeta(skullMeta);
-
-        return skull;
+        return item;
     }
 }

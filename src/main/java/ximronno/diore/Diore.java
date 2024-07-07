@@ -6,7 +6,7 @@ import org.bukkit.Server;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import ximronno.api.UpdateChecker;
-import ximronno.diore.commands.managers.BalanceNew;
+import ximronno.diore.commands.managers.Balance;
 import ximronno.diore.hooks.HookManager;
 import ximronno.diore.listeners.InventoryListener;
 import ximronno.diore.listeners.PlayerJoinListener;
@@ -27,9 +27,9 @@ public final class Diore extends JavaPlugin {
 
         instance = this;
 
-        accountManager = new AccountManager(this);
-
         configManager = new ConfigManager(this);
+
+        accountManager = new AccountManager(this);
 
         menuKey = new NamespacedKey(this, "diore-menu-key");
 
@@ -77,7 +77,7 @@ public final class Diore extends JavaPlugin {
 
     }
     private void setupCommands() {
-        getCommand("balance").setExecutor(new BalanceNew(this));
+        getCommand("balance").setExecutor(new Balance(this));
     }
     private void setupTabCompleters() {
         getCommand("balance").setTabCompleter(new BalanceTabCompleter());

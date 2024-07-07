@@ -25,32 +25,23 @@ public class BalanceTop extends DioreSubCommand {
     @Override
     public String getDescription(@Nullable FileConfiguration config) {
         if(config == null) return ChatColor.BLUE + "Shows top 5 balances";
-        return configManager.getFormattedString("balance-top-description", config);
+        return configManager.getFormattedString(config, "balance-top-description");
     }
 
     @Override
     public String getSyntax() {
         return "/balance top";
     }
-
     @Override
-    public void perform(Player p, String[] args) {
-
-        Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
-
-        if(acc == null) {
-            p.sendMessage(configManager.getFormattedString("no-account-found"));
-            return;
-        }
-
-        Languages language = acc.getLanguage();
-        if(language == null) language = Languages.ENGLISH;
+    public void perform(Player p, String[] args, Account acc, Languages language) {
 
         List<TopBalance> topBalances = accountManager.getTopBalances();
 
+
+        p.sendMessage(configManager.getFormattedString(language.getCFG(), "top-list-title"));
         for (int i = 0; i < Math.min(topBalances.size(), 5); i++) {
             TopBalance topBalance = topBalances.get(i);
-            p.sendMessage(plugin.getConfigManager().getFormattedString("top-list-format", language.getCFG())
+            p.sendMessage(plugin.getConfigManager().getFormattedString(language.getCFG(), "top-list-format")
                     .replace("<place>", String.valueOf(i + 1))
                     .replace("<player>", topBalance.account().getName())
                     .replace("<balance>", accountManager.formatBalance(topBalance.balance())));

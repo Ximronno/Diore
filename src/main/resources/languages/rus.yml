@@ -16,6 +16,8 @@ language-not-found: "&cЯзык не найден"
 language-set: "&bУспешно установлен язык на <language>"
 public-balance-enabled: "&bВаш баланс теперь публичен"
 public-balance-disabled: "&bВаш баланс теперь приватен"
+issues-link-text: "&b&lНажмите здесь, чтобы открыть GitHub issues!"
+top-list-title: "&bТоп балансов:"
 top-list-format: "&b<place>. <player> - <balance>"
 balance-info-list:
   - "&bБаланс: <balance>"
@@ -37,6 +39,10 @@ balance-transfer-description: "&bПереводит деньги на друго
 
 main-menu-skull: "&b<player>"
 main-menu-top-skull: "&bТоп балансов"
+main-menu-issues-skull: "&bПроблемы"
+main-menu-issues-skull-lore:
+  - "&bЕсли вы обнаружили проблему"
+  - "&bВы можете отправить жалобу, нажав на эту кнопку!"
 main-menu-skull-lore:
   - "&bБаланс: <balance>"
   - "&bЯзык: <language>"

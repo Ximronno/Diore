@@ -8,7 +8,7 @@ import ximronno.api.command.SubCommand;
 import ximronno.api.interfaces.Account;
 import ximronno.diore.Diore;
 import ximronno.diore.commands.DioreSubCommand;
-import ximronno.diore.commands.managers.BalanceNew;
+import ximronno.diore.commands.managers.Balance;
 import ximronno.diore.impl.Languages;
 
 public class BalanceHelp extends DioreSubCommand {
@@ -23,34 +23,22 @@ public class BalanceHelp extends DioreSubCommand {
     @Override
     public String getDescription(@Nullable FileConfiguration config) {
         if(config == null) return ChatColor.BLUE + "Shows all subcommands of /balance";
-        return configManager.getFormattedString("balance-help-description", config);
+        return configManager.getFormattedString(config, "balance-help-description");
     }
 
     @Override
     public String getSyntax() {
         return "/balance help";
     }
-
     @Override
-    public void perform(Player p, String[] args) {
+    public void perform(Player p, String[] args, Account acc, Languages language) {
 
-        Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
-
-        if(acc == null) {
-            p.sendMessage(configManager.getFormattedString("no-account-found"));
-            return;
-        }
-
-        Languages language = acc.getLanguage();
-        if(language == null) language = Languages.ENGLISH;
-
-        p.sendMessage(configManager.getFormattedString("balance-help-title", language.getCFG()));
-        for(SubCommand subCommand : BalanceNew.getSubCommands()) {
-            p.sendMessage(configManager.getFormattedString("balance-help-format", language.getCFG())
+        p.sendMessage(configManager.getFormattedString(language.getCFG(), "balance-help-title"));
+        for(SubCommand subCommand : Balance.getSubCommands()) {
+            p.sendMessage(configManager.getFormattedString(language.getCFG(), "balance-help-format")
                     .replace("<syntax>", subCommand.getSyntax())
                     .replace("<description>", subCommand.getDescription(language.getCFG())));
         }
-
 
     }
 }

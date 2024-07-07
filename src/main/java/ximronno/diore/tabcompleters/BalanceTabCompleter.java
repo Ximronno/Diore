@@ -1,17 +1,14 @@
 package ximronno.diore.tabcompleters;
 
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ximronno.api.command.SubCommand;
-import ximronno.diore.commands.managers.BalanceNew;
-import ximronno.diore.impl.Languages;
+import ximronno.diore.commands.managers.Balance;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class BalanceTabCompleter implements TabCompleter {
@@ -22,7 +19,7 @@ public class BalanceTabCompleter implements TabCompleter {
 
         if(strings.length == 1) {
 
-            for(SubCommand subCommand : BalanceNew.getSubCommands()) {
+            for(SubCommand subCommand : Balance.getSubCommands()) {
                 completions.add(subCommand.getName());
             }
 

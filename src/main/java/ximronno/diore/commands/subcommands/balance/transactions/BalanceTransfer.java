@@ -24,7 +24,7 @@ public class BalanceTransfer extends DioreSubCommand {
     @Override
     public String getDescription(@Nullable FileConfiguration config) {
         if(config == null) return ChatColor.BLUE + "Transfers ores to another player";
-        return configManager.getFormattedString("balance-transfer-description", config);
+        return configManager.getFormattedString(config, "balance-transfer-description");
     }
 
     @Override
@@ -32,21 +32,11 @@ public class BalanceTransfer extends DioreSubCommand {
         return "/balance transfer <player> <amount>";
     }
     @Override
-    public void perform(Player p, String[] args) {
-
-        Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
-
-        if(acc == null) {
-            p.sendMessage(configManager.getFormattedString("no-account-found"));
-            return;
-        }
-
-        Languages language = acc.getLanguage();
-        if(language == null) language = Languages.ENGLISH;
+    public void perform(Player p, String[] args, Account acc, Languages language) {
 
         if(args.length < 3) {
 
-            p.sendMessage(configManager.getFormattedString("balance-help-format", language.getCFG())
+            p.sendMessage(configManager.getFormattedString(language.getCFG(), "balance-help-format")
                     .replace("<syntax>", getSyntax())
                     .replace("<description>", getDescription(language.getCFG())));
 
@@ -55,11 +45,11 @@ public class BalanceTransfer extends DioreSubCommand {
 
             Player target = Bukkit.getPlayer(args[1]);
             if(target == null) {
-                p.sendMessage(plugin.getConfigManager().getFormattedString("player-not-found", language.getCFG()));
+                p.sendMessage(plugin.getConfigManager().getFormattedString(language.getCFG(), "player-not-found"));
                 return;
             }
             if(isSamePlayer(p, target)) {
-                p.sendMessage(plugin.getConfigManager().getFormattedString("cannot-transfer-to-yourself", language.getCFG()));
+                p.sendMessage(plugin.getConfigManager().getFormattedString(language.getCFG(), "cannot-transfer-to-yourself"));
                 return;
             }
 
@@ -70,11 +60,12 @@ public class BalanceTransfer extends DioreSubCommand {
                 amount = Double.parseDouble(args[2]);
                 AccountUtils.tryTransfer(p, acc, targetAcc, language.getCFG(), amount);
             } catch (Exception e) {
-                p.sendMessage(configManager.getFormattedString("invalid-amount", language.getCFG()));
+                p.sendMessage(configManager.getFormattedString(language.getCFG(), "invalid-amount"));
             }
         }
 
     }
+
     private boolean isSamePlayer(Player p1, Player p2) {
         return p1.getUniqueId().equals(p2.getUniqueId());
     }

@@ -14,14 +14,14 @@ public class AccountUtils {
 
     public static boolean tryWithdraw(Player p, Account acc, FileConfiguration config, double amount) {
         if(!acc.withdraw(amount)) {
-            p.sendMessage(configManager.getFormattedString("something-went-wrong", config));
+            p.sendMessage(configManager.getFormattedString(config, "something-went-wrong"));
             return false;
         }
         return true;
     }
     public static boolean tryDeposit(Player p, Account acc, FileConfiguration config, double amount) {
         if(!acc.deposit(amount)) {
-            p.sendMessage(configManager.getFormattedString("something-went-wrong", config));
+            p.sendMessage(configManager.getFormattedString(config, "something-went-wrong"));
             return false;
         }
         return true;
@@ -29,16 +29,16 @@ public class AccountUtils {
     public static boolean tryTransfer(Player sender, Account from, Account to, FileConfiguration config, double amount) {
 
         if(to == null) {
-            sender.sendMessage(configManager.getFormattedString("player-has-no-account", config));
+            sender.sendMessage(configManager.getFormattedString(config, "player-has-no-account"));
             return true;
         }
         if(isSameAccount(from, to)) {
-            sender.sendMessage(configManager.getFormattedString("cannot-transfer-to-your-own-account", config));
+            sender.sendMessage(configManager.getFormattedString(config, "cannot-transfer-to-your-own-account"));
             return true;
         }
 
         if(!from.transfer(to, amount)) {
-            sender.sendMessage(configManager.getFormattedString("something-went-wrong", config));
+            sender.sendMessage(configManager.getFormattedString(config, "something-went-wrong"));
             return false;
         }
         return true;
@@ -47,17 +47,17 @@ public class AccountUtils {
 
         acc.setLanguage(languageToSet);
 
-        p.sendMessage(configManager.getFormattedString("language-set", languageToSet.getCFG())
+        p.sendMessage(configManager.getFormattedString(languageToSet.getCFG(), "language-set")
                 .replace("<language>", languageToSet.getName()));
     }
     public static void setPublicBalance(Player p, Account acc, FileConfiguration config, boolean publicToSet) {
         acc.setPublicBalance(publicToSet);
 
         if(publicToSet) {
-            p.sendMessage(configManager.getFormattedString("public-balance-enabled", config));
+            p.sendMessage(configManager.getFormattedString(config, "public-balance-enabled"));
         }
         else {
-            p.sendMessage(configManager.getFormattedString("public-balance-disabled", config));
+            p.sendMessage(configManager.getFormattedString(config, "public-balance-disabled"));
         }
     }
     private static boolean isSameAccount(Account a1, Account a2) {

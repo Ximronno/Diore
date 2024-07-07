@@ -7,12 +7,11 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import ximronno.api.interfaces.Account;
+import ximronno.api.item.ItemBuilder;
 import ximronno.diore.guis.DioreMenu;
 import ximronno.diore.guis.menus.BalanceMenu;
 import ximronno.diore.impl.Languages;
@@ -22,6 +21,7 @@ import ximronno.diore.utils.AccountUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class DepositAmountMenu extends DioreMenu {
     public DepositAmountMenu(NamespacedKey key) {
@@ -39,23 +39,7 @@ public class DepositAmountMenu extends DioreMenu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e) {
-
-        ItemStack item = e.getCurrentItem();
-        if(item == null) return;
-
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return;
-
-        Player p = (Player) e.getWhoClicked();
-
-        Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
-        if(acc == null) return;
-
-        Languages language = acc.getLanguage();
-        if(language == null) language = Languages.ENGLISH;
-
-        PersistentDataContainer container = meta.getPersistentDataContainer();
+    public void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container) {
 
         if(container.has(key, PersistentDataType.STRING)) {
 
@@ -78,11 +62,8 @@ public class DepositAmountMenu extends DioreMenu {
                     lines.add(0, "");
 
                     SignGUI gui = SignGUI.builder()
-
                             .setLines(lines.toArray(new String[0]))
-
                             .setType(Material.OAK_SIGN)
-
                             .setHandler((player, result) -> {
 
                                 String line0 = result.getLine(0);
@@ -97,14 +78,12 @@ public class DepositAmountMenu extends DioreMenu {
                                     double amount = Math.floor(Double.parseDouble(line0)) ;
                                     new BalanceMenu(key).open(p);
                                     AccountUtils.tryDeposit(p, acc, config, amount);
-                                    return Collections.EMPTY_LIST;
+                                    return Collections.emptyList();
 
                                 }
 
                             })
-
                             .callHandlerSynchronously(plugin)
-
                             .build();
 
                     gui.open(p);
@@ -157,72 +136,54 @@ public class DepositAmountMenu extends DioreMenu {
 
     }
     private ItemStack getDepositAll(Player p, FileConfiguration config, double balance) {
-        ItemStack item = new ItemStack(Material.CHEST, 64);
-
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
-
-        meta.setDisplayName(configManager.getFormattedString("deposit-menu-all", config));
-
         double amount = getDiamondOres(p);
 
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, String.valueOf(amount));
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.CHEST)
+                .setAmount(64)
+                .setDisplayName(configManager.getFormattedString(config, "deposit-menu-all"))
+                .setLore(getLore(config, balance, amount))
+                .build();
 
-        meta.setLore(getLore(config, balance, amount));
-
-        item.setItemMeta(meta);
+        ItemBuilder.addPersistentData(item, key, String.valueOf(amount));
 
         return item;
     }
     private ItemStack getDepositHalf(Player p, FileConfiguration config, double balance) {
-        ItemStack item = new ItemStack(Material.CHEST, 32);
-
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
-
-        meta.setDisplayName(configManager.getFormattedString("deposit-menu-half", config));
-
         double amount = Math.floor(getDiamondOres(p) / 2);
 
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, String.valueOf(amount));
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.CHEST)
+                .setAmount(32)
+                .setDisplayName(configManager.getFormattedString(config, "deposit-menu-half"))
+                .setLore(getLore(config, balance, amount))
+                .build();
 
-        meta.setLore(getLore(config, balance, amount));
-
-        item.setItemMeta(meta);
+        ItemBuilder.addPersistentData(item, key, String.valueOf(amount));
 
         return item;
     }
     private ItemStack getDepositQuarter(Player p, FileConfiguration config, double balance) {
-        ItemStack item = new ItemStack(Material.CHEST);
-
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
-
-        meta.setDisplayName(configManager.getFormattedString("deposit-menu-quarter", config));
-
         double amount = Math.floor(getDiamondOres(p) / 4);
 
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, String.valueOf(amount));
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.CHEST)
+                .setDisplayName(configManager.getFormattedString(config, "deposit-menu-quarter"))
+                .setLore(getLore(config, balance, amount))
+                .build();
 
-        meta.setLore(getLore(config, balance, amount));
-
-        item.setItemMeta(meta);
+        ItemBuilder.addPersistentData(item, key, String.valueOf(amount));
 
         return item;
     }
     private ItemStack getDepositCustom(FileConfiguration config, double balance) {
-        ItemStack item = new ItemStack(Material.OAK_SIGN);
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.OAK_SIGN)
+                .setDisplayName(configManager.getFormattedString(config, "deposit-menu-custom"))
+                .setLore(getLore(config, balance, 0))
+                .build();
 
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
-
-        meta.setDisplayName(configManager.getFormattedString("deposit-menu-custom", config));
-
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "custom");
-
-        meta.setLore(getLore(config, balance, 0));
-
-        item.setItemMeta(meta);
+        ItemBuilder.addPersistentData(item, key, "custom");
 
         return item;
     }
@@ -247,15 +208,10 @@ public class DepositAmountMenu extends DioreMenu {
 
     }
     private List<String> getLore(FileConfiguration config, double balance, double amount) {
-        List<String> lore = new ArrayList<>();
 
-        config.getStringList("deposit-menu-lore-format")
-                .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)
-                        .replace("<balance>", accountManager.formatBalance(balance))
-                        .replace("<amount>", accountManager.formatBalance(amount))));
-
-
-        return lore;
+        return configManager.getFormattedList(config, "deposit-menu-lore-format",
+                Map.of("<balance>", accountManager.formatBalance(balance),
+                        "<amount>", accountManager.formatBalance(amount)));
     }
 
 }

@@ -23,33 +23,22 @@ public class BalanceInfo extends DioreSubCommand {
     @Override
     public String getDescription(@Nullable FileConfiguration config) {
         if(config == null) return ChatColor.BLUE + "Shows account information";
-        return configManager.getFormattedString("balance-info-description", config);
+        return configManager.getFormattedString(config, "balance-info-description");
     }
 
     @Override
     public String getSyntax() {
         return "/balance info";
     }
-
     @Override
-    public void perform(Player p, String[] args) {
-
-        Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
-
-        if(acc == null) {
-            p.sendMessage(configManager.getFormattedString("no-account-found"));
-            return;
-        }
-
-        Languages language = acc.getLanguage();
-        if(language == null) language = Languages.ENGLISH;
+    public void perform(Player p, String[] args, Account acc, Languages language) {
 
         String langName = language.getName();
 
         FileConfiguration config = language.getCFG();
 
-        String yes = configManager.getFormattedString("menu-yes", config);
-        String no = configManager.getFormattedString("menu-no", config);
+        String yes = configManager.getFormattedString(config, "menu-yes");
+        String no = configManager.getFormattedString(config, "menu-no");
 
         config.getStringList("balance-info-list")
                 .forEach(loreString -> p.sendMessage(ChatColor.translateAlternateColorCodes('&', loreString)

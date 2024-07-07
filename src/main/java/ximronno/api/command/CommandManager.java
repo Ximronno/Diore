@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public abstract class CommandManager implements CommandExecutor {
 
 
-    protected static ArrayList<SubCommand> subCommands = new ArrayList<>();
+    protected final static ArrayList<SubCommand> subCommands = new ArrayList<>();
 
 
     public static ArrayList<SubCommand> getSubCommands() {

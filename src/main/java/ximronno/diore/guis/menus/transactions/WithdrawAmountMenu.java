@@ -5,13 +5,11 @@ import de.rapha149.signgui.SignGUIAction;
 import org.bukkit.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import ximronno.api.interfaces.Account;
+import ximronno.api.item.ItemBuilder;
 import ximronno.diore.guis.DioreMenu;
 import ximronno.diore.guis.menus.BalanceMenu;
 import ximronno.diore.impl.Languages;
@@ -20,6 +18,7 @@ import ximronno.diore.utils.AccountUtils;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 public class WithdrawAmountMenu extends DioreMenu {
 
@@ -44,23 +43,7 @@ public class WithdrawAmountMenu extends DioreMenu {
     }
 
     @Override
-    public void handleMenu(InventoryClickEvent e) {
-
-        ItemStack item = e.getCurrentItem();
-        if(item == null) return;
-
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return;
-
-        Player p = (Player) e.getWhoClicked();
-
-        Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
-        if(acc == null) return;
-
-        Languages language = acc.getLanguage();
-        if(language == null) language = Languages.ENGLISH;
-
-        PersistentDataContainer container = meta.getPersistentDataContainer();
+    public void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container) {
 
         if(container.has(key, PersistentDataType.STRING)) {
 
@@ -84,11 +67,8 @@ public class WithdrawAmountMenu extends DioreMenu {
                     lines.add(0, "");
 
                     SignGUI gui = SignGUI.builder()
-
                             .setLines(lines.toArray(new String[0]))
-
                             .setType(Material.OAK_SIGN)
-
                             .setHandler((player, result) -> {
 
                                 String line0 = result.getLine(0);
@@ -105,14 +85,12 @@ public class WithdrawAmountMenu extends DioreMenu {
                                     else AccountUtils.tryTransfer(p, acc, target, config, amount);
                                     new BalanceMenu(key).open(p);
 
-                                    return Collections.EMPTY_LIST;
+                                    return Collections.emptyList();
 
                                 }
 
                             })
-
                             .callHandlerSynchronously(plugin)
-
                             .build();
 
                     gui.open(p);
@@ -172,102 +150,68 @@ public class WithdrawAmountMenu extends DioreMenu {
 
     }
     private ItemStack getWithdrawAll(FileConfiguration config, double balance) {
-        ItemStack item = new ItemStack(Material.DROPPER, 64);
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.DROPPER)
+                .setAmount(64)
+                .setDisplayName(configManager.getFormattedString(config, "withdraw-menu-all"))
+                .setLore(getLore(config, balance, balance))
+                .build();
 
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
-
-        meta.setDisplayName(configManager.getFormattedString("withdraw-menu-all", config));
-
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, String.valueOf(balance));
-
-        meta.setLore(getLore(config, balance, balance));
-
-        item.setItemMeta(meta);
+        ItemBuilder.addPersistentData(item, key, String.valueOf(balance));
 
         return item;
     }
     private ItemStack getWithdrawHalf(FileConfiguration config, double balance) {
-        ItemStack item = new ItemStack(Material.DROPPER, 32);
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.DROPPER)
+                .setAmount(32)
+                .setDisplayName(configManager.getFormattedString(config, "withdraw-menu-half"))
+                .setLore(getLore(config, balance, balance / 2))
+                .build();
 
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
-
-        meta.setDisplayName(configManager.getFormattedString("withdraw-menu-half", config));
-
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, String.valueOf(balance / 2));
-
-        meta.setLore(getLore(config, balance, balance / 2));
-
-        item.setItemMeta(meta);
+        ItemBuilder.addPersistentData(item, key, String.valueOf(balance / 2));
 
         return item;
     }
     private ItemStack getWithdrawQuarter(FileConfiguration config, double balance) {
-        ItemStack item = new ItemStack(Material.DROPPER);
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.DROPPER)
+                .setDisplayName(configManager.getFormattedString(config, "withdraw-menu-quarter"))
+                .setLore(getLore(config, balance, balance / 4))
+                .build();
 
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
-
-        meta.setDisplayName(configManager.getFormattedString("withdraw-menu-quarter", config));
-
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, String.valueOf(balance / 4));
-
-        meta.setLore(getLore(config, balance, balance / 4));
-
-        item.setItemMeta(meta);
+        ItemBuilder.addPersistentData(item, key, String.valueOf(balance / 4));
 
         return item;
     }
     private ItemStack getWithdrawCustom(FileConfiguration config, double balance) {
-        ItemStack item = new ItemStack(Material.OAK_SIGN);
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.OAK_SIGN)
+                .setDisplayName(configManager.getFormattedString(config, "withdraw-menu-custom"))
+                .setLore(getLore(config, balance, 0))
+                .build();
 
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
-
-        meta.setDisplayName(configManager.getFormattedString("withdraw-menu-custom", config));
-
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "custom");
-
-        meta.setLore(getLore(config, balance, 0));
-
-        item.setItemMeta(meta);
+        ItemBuilder.addPersistentData(item, key, "custom");
 
         return item;
     }
+    private ItemStack getPlayerSkull(Player p, FileConfiguration config) {
+        return ItemBuilder.builder()
+                .setMaterial(Material.PLAYER_HEAD)
+                .setDisplayName(configManager.getFormattedString(config, "transfer-menu-sending-to")
+                        .replace("<player>", p.getDisplayName()))
+                .setProfile(p.getPlayerProfile())
+                .build();
+    }
     private List<String> getLore(FileConfiguration config, double balance, double amount) {
-
-        List<String> lore = new ArrayList<>();
+        Map<String, String> replacements =
+                Map.of("<balance>", accountManager.formatBalance(balance),
+                        "<amount>", accountManager.formatBalance(amount));
 
         if (target == null) {
-            config.getStringList("withdraw-menu-lore-format")
-                    .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)
-                            .replace("<balance>", accountManager.formatBalance(balance))
-                            .replace("<amount>", accountManager.formatBalance(amount))));
+            return configManager.getFormattedList(config, "withdraw-menu-lore-format", replacements);
         }
-        else {
-            config.getStringList("transfer-menu-lore-format")
-                    .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)
-                            .replace("<balance>", accountManager.formatBalance(balance))
-                            .replace("<amount>", accountManager.formatBalance(amount))));
-        }
+        return configManager.getFormattedList(config, "transfer-menu-lore-format", replacements);
 
-        return lore;
-    }
-    private ItemStack getPlayerSkull(Player p, FileConfiguration config) {
-
-        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
-
-        SkullMeta playerMeta = (SkullMeta) skull.getItemMeta();
-        if(playerMeta == null) return null;
-
-        playerMeta.setDisplayName(configManager.getFormattedString("transfer-menu-sending-to", config)
-                .replace("<player>", p.getDisplayName()));
-
-        playerMeta.setOwningPlayer(p);
-
-        skull.setItemMeta(playerMeta);
-
-        return skull;
     }
 }

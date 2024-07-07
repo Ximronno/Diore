@@ -1,22 +1,18 @@
 package ximronno.diore.guis.menus;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import ximronno.api.interfaces.Account;
+import ximronno.api.item.ItemBuilder;
 import ximronno.diore.guis.DioreMenu;
 import ximronno.diore.impl.Languages;
 import ximronno.diore.utils.AccountUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class PublicBalanceMenu extends DioreMenu {
     public PublicBalanceMenu(NamespacedKey key) {
@@ -32,29 +28,13 @@ public class PublicBalanceMenu extends DioreMenu {
     public String getTitle() {
         return configManager.getFormattedString("public-balance-menu-title");
     }
-
     @Override
-    public void handleMenu(InventoryClickEvent e) {
-
-        ItemStack item = e.getCurrentItem();
-        if(item == null) return;
-
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return;
-
-        Player p = (Player) e.getWhoClicked();
-
-        Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
-        if(acc == null) return;
-
-        Languages language = acc.getLanguage();
-        if(language == null) language = Languages.ENGLISH;
-
-        PersistentDataContainer container = meta.getPersistentDataContainer();
+    public void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container) {
 
         if(container.has(key, PersistentDataType.STRING)) {
 
             String func = container.get(key, PersistentDataType.STRING);
+            if(func == null) return;
 
             switch(func) {
                 case "true":
@@ -104,40 +84,24 @@ public class PublicBalanceMenu extends DioreMenu {
 
     }
     private ItemStack getPublicBalanceTrue(FileConfiguration config) {
-        ItemStack item = new ItemStack(Material.GREEN_TERRACOTTA);
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.GREEN_TERRACOTTA)
+                .setDisplayName(configManager.getFormattedString(config, "public-balance-menu-true"))
+                .setLore(configManager.getFormattedList(config, "public-balance-menu-true-lore"))
+                .build();
 
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
-
-        meta.setDisplayName(configManager.getFormattedString("public-balance-menu-true", config));
-
-        List<String> lore = new ArrayList<>();
-
-        config.getStringList("public-balance-menu-true-lore")
-                .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)));
-
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "true");
-
-        item.setItemMeta(meta);
+        ItemBuilder.addPersistentData(item, key, "true");
 
         return item;
     }
     private ItemStack getPublicBalanceFalse(FileConfiguration config) {
-        ItemStack item = new ItemStack(Material.RED_TERRACOTTA);
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.RED_TERRACOTTA)
+                .setDisplayName(configManager.getFormattedString(config, "public-balance-menu-false"))
+                .setLore(configManager.getFormattedList(config, "public-balance-menu-false-lore"))
+                .build();
 
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
-
-        meta.setDisplayName(configManager.getFormattedString("public-balance-menu-false", config));
-
-        List<String> lore = new ArrayList<>();
-
-        config.getStringList("public-balance-menu-false-lore")
-                .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)));
-
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "false");
-
-        item.setItemMeta(meta);
+        ItemBuilder.addPersistentData(item, key, "false");
 
         return item;
     }

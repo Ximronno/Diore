@@ -1,22 +1,22 @@
 package ximronno.diore.guis;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.profile.PlayerProfile;
-import org.bukkit.profile.PlayerTextures;
+import org.bukkit.persistence.PersistentDataContainer;
+import ximronno.api.interfaces.Account;
+import ximronno.api.item.ItemBuilder;
 import ximronno.api.menu.Menu;
 import ximronno.diore.Diore;
+import ximronno.diore.impl.Languages;
 import ximronno.diore.model.AccountManager;
 import ximronno.diore.model.ConfigManager;
 
 import java.net.URL;
-import java.util.UUID;
 
 public abstract class DioreMenu extends Menu {
     protected final Diore plugin;
@@ -29,43 +29,51 @@ public abstract class DioreMenu extends Menu {
         accountManager = plugin.getAccountManager();
         this.key = key;
     }
-    protected ItemStack getMenuBlank() {
-        ItemStack item = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
+
+    @Override
+    public void handleMenu(InventoryClickEvent e) {
+        ItemStack item = e.getCurrentItem();
+        if(item == null) return;
 
         ItemMeta meta = item.getItemMeta();
-        if(meta == null) return null;
+        if(meta == null) return;
 
-        meta.setDisplayName(" ");
+        Player p = (Player) e.getWhoClicked();
 
-        item.setItemMeta(meta);
+        Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
+        if(acc == null) return;
 
-        return item;
+        Languages language = acc.getLanguage();
+        if(language == null) language = Languages.ENGLISH;
+
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+
+        handleMenu(p, acc, language, container);
+    }
+
+    public abstract void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container);
+    protected ItemStack getMenuBlank() {
+        return ItemBuilder.builder()
+                .setMaterial(Material.BLACK_STAINED_GLASS_PANE)
+                .setDisplayName(" ")
+                .build();
     }
     protected ItemStack getMenuBack(FileConfiguration config) {
-        PlayerProfile profile = Bukkit.createPlayerProfile(UUID.randomUUID());
-        PlayerTextures textures = profile.getTextures();
-        URL urlObject;
+        URL url;
         try {
-            urlObject = new URL("https://textures.minecraft.net/texture/7f3e7bca5c651bba29cd359d5cd474402cc23ca7b309dc48736436b9f055b905");
+            url = new URL("https://textures.minecraft.net/texture/7f3e7bca5c651bba29cd359d5cd474402cc23ca7b309dc48736436b9f055b905");
         } catch(Exception e) {
             return null;
         }
-        textures.setSkin(urlObject);
-        profile.setTextures(textures);
 
-        ItemStack skull = new ItemStack(Material.PLAYER_HEAD);
+        ItemStack item = ItemBuilder.builder()
+                .setMaterial(Material.PLAYER_HEAD)
+                .setDisplayName(configManager.getFormattedString(config, "menu-back"))
+                .setProfileFromURL(url)
+                .build();
 
-        SkullMeta meta = (SkullMeta) skull.getItemMeta();
-        if(meta == null) return null;
+        ItemBuilder.addPersistentData(item, key, "back");
 
-        meta.setOwnerProfile(profile);
-
-        meta.setDisplayName(configManager.getFormattedString("menu-back", config));
-
-        meta.getPersistentDataContainer().set(key, PersistentDataType.STRING, "back");
-
-        skull.setItemMeta(meta);
-
-        return skull;
+        return item;
     }
 }

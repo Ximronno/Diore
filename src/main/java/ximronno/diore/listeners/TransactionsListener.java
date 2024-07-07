@@ -42,12 +42,12 @@ public class TransactionsListener implements Listener {
         Player p = Bukkit.getPlayer(from.getOwner());
         Player p2 = Bukkit.getPlayer(to.getOwner());
 
-        String pMessage = configManager.getFormattedString("sent-amount-to-player", from.getLanguage().getCFG())
+        String pMessage = configManager.getFormattedString(from.getLanguage().getCFG(), "sent-amount-to-player")
                 .replace("<amount>", accountManager.formatBalance(e.getAmount()))
                 .replace("<player>", p2.getDisplayName());
-        String p2Message = configManager.getFormattedString("received-amount-from-player", to.getLanguage().getCFG())
+        String p2Message = configManager.getFormattedString(to.getLanguage().getCFG(), "received-amount-from-player")
                 .replace("<amount>", accountManager.formatBalance(e.getAmount()))
-                .replace("<player>", p.getDisplayName());;
+                .replace("<player>", p.getDisplayName());
 
         p.sendMessage(pMessage);
         p2.sendMessage(p2Message);
@@ -73,7 +73,7 @@ public class TransactionsListener implements Listener {
 
         p.getInventory().addItem(items.toArray(new ItemStack[0]));
 
-        String message = configManager.getFormattedString("on-withdraw", acc.getLanguage().getCFG())
+        String message = configManager.getFormattedString(acc.getLanguage().getCFG(), "on-withdraw")
                         .replace("<amount>", accountManager.formatBalance(e.getAmount()));
 
         p.sendMessage(message);
@@ -112,7 +112,7 @@ public class TransactionsListener implements Listener {
         if (amount < 1) {
             if (diamondOreNuggetCount < nuggets) {
                 e.setCancelled(true);
-                p.sendMessage(configManager.getFormattedString("not-enough-ores", acc.getLanguage().getCFG()));
+                p.sendMessage(configManager.getFormattedString(acc.getLanguage().getCFG(), "not-enough-ores"));
                 return;
             }
             ItemStack nuggetStack = Items.getDiamondOreNugget(nuggets);
@@ -122,7 +122,7 @@ public class TransactionsListener implements Listener {
 
             if (totalDiamondOreCount + deepslateDiamondOreCount < ores || (totalDiamondOreCount + deepslateDiamondOreCount == 0 && nuggets > 0)) {
                 e.setCancelled(true);
-                p.sendMessage(configManager.getFormattedString("not-enough-ores", acc.getLanguage().getCFG()));
+                p.sendMessage(configManager.getFormattedString(acc.getLanguage().getCFG(), "not-enough-ores"));
                 return;
             }
 
@@ -151,11 +151,11 @@ public class TransactionsListener implements Listener {
         HashMap<Integer, ItemStack> remainingItems = p.getInventory().removeItem(itemsArray);
 
         if (remainingItems.isEmpty()) {
-            p.sendMessage(configManager.getFormattedString("on-deposit", acc.getLanguage().getCFG())
+            p.sendMessage(configManager.getFormattedString(acc.getLanguage().getCFG(), "on-deposit")
                     .replace("<amount>", accountManager.formatBalance(e.getAmount())));
         } else {
             e.setCancelled(true);
-            p.sendMessage(configManager.getFormattedString("not-enough-ores", acc.getLanguage().getCFG()));
+            p.sendMessage(configManager.getFormattedString(acc.getLanguage().getCFG(), "not-enough-ores"));
             p.getInventory().addItem(itemsArray);
         }
 

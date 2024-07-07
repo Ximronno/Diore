@@ -24,30 +24,19 @@ public class BalanceLanguage extends DioreSubCommand {
     @Override
     public String getDescription(@Nullable FileConfiguration config) {
         if(config == null) return ChatColor.BLUE + "Changes the language of your account";
-        return configManager.getFormattedString("balance-language-description", config);
+        return configManager.getFormattedString(config, "balance-language-description");
     }
 
     @Override
     public String getSyntax() {
         return "/balance language <language>";
     }
-
     @Override
-    public void perform(Player p, String[] args) {
-
-        Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
-
-        if(acc == null) {
-            p.sendMessage(configManager.getFormattedString("no-account-found"));
-            return;
-        }
-
-        Languages language = acc.getLanguage();
-        if(language == null) language = Languages.ENGLISH;
+    public void perform(Player p, String[] args, Account acc, Languages language) {
 
         if(args.length < 2) {
 
-            p.sendMessage(configManager.getFormattedString("balance-help-format", language.getCFG())
+            p.sendMessage(configManager.getFormattedString(language.getCFG(), "balance-help-format")
                     .replace("<syntax>", getSyntax())
                     .replace("<description>", getDescription(language.getCFG())));
 
@@ -60,7 +49,7 @@ public class BalanceLanguage extends DioreSubCommand {
                 languageToSet = Languages.valueOf(lang);
                 AccountUtils.setLanguage(p, acc, languageToSet);
             } catch (Exception e) {
-                p.sendMessage(plugin.getConfigManager().getFormattedString("language-not-found", language.getCFG()));
+                p.sendMessage(plugin.getConfigManager().getFormattedString(language.getCFG(), "language-not-found"));
             }
         }
 

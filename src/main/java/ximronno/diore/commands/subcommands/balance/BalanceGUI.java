@@ -23,35 +23,23 @@ public class BalanceGUI extends DioreSubCommand {
     @Override
     public String getDescription(@Nullable FileConfiguration config) {
         if(config == null) return ChatColor.BLUE + "Opens the balance GUI";
-        return configManager.getFormattedString("balance-gui-description", config);
+        return configManager.getFormattedString(config, "balance-gui-description");
     }
 
     @Override
     public String getSyntax() {
         return "/balance gui";
     }
-
     @Override
-    public void perform(Player p, String[] args) {
-
-        Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
-
-        if(acc == null) {
-            p.sendMessage(configManager.getFormattedString("no-account-found"));
-            return;
-        }
-
-        Languages language = acc.getLanguage();
-        if(language == null) language = Languages.ENGLISH;
-
+    public void perform(Player p, String[] args, Account acc, Languages language) {
 
         if(plugin.getConfig().getBoolean("enable-gui")) {
             new MainMenu(plugin.getMenuKey()).open(p);
         }
         else {
-            p.sendMessage(configManager.getFormattedString("gui-disabled", language.getCFG()));
+            p.sendMessage(configManager.getFormattedString(language.getCFG(), "gui-disabled"));
         }
 
-
     }
+
 }

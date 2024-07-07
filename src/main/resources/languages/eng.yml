@@ -16,7 +16,9 @@ language-not-found: "&cLanguage not found"
 language-set: "&bSuccessfully set language to <language>"
 public-balance-enabled: "&bYour balance is now public"
 public-balance-disabled: "&bYour balance is now private"
+top-list-title: "&bTop balances:"
 top-list-format: "&b<place>. <player> - <balance>"
+issues-link-text: "&b&lClick here to open GitHub issues!"
 balance-info-list:
   - "&bBalance: <balance>"
   - "&bLanguage: <language>"
@@ -37,6 +39,10 @@ balance-transfer-description: "&bTransfers money to another player"
 
 main-menu-skull: "&b<player>"
 main-menu-top-skull: "&bTop balances"
+main-menu-issues-skull: "&bIssues"
+main-menu-issues-skull-lore:
+  - "&bIf you found a problem"
+  - "&bYou can report it by clicking on this button!"
 main-menu-skull-lore:
   - "&bBalance: <balance>"
   - "&bLanguage: <language>"

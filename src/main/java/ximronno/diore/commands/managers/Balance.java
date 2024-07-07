@@ -11,8 +11,8 @@ import ximronno.diore.commands.subcommands.balance.*;
 import ximronno.diore.commands.subcommands.balance.transactions.*;
 
 
-public class BalanceNew extends DioreCommandManager {
-    public BalanceNew(Diore plugin) {
+public class Balance extends DioreCommandManager {
+    public Balance(Diore plugin) {
         super(plugin);
 
         subCommands.add(new BalanceShow(plugin));
@@ -54,4 +54,5 @@ public class BalanceNew extends DioreCommandManager {
 
         return true;
     }
+
 }

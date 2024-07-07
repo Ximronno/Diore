@@ -4,9 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -37,22 +35,8 @@ public class TransferPlayerSelectorMenu extends DiorePaginatedMenu {
     public String getTitle() {
         return configManager.getFormattedString("transfer-player-selector-menu-title");
     }
-
     @Override
-    public void handleMenu(InventoryClickEvent e) {
-
-        ItemStack item = e.getCurrentItem();
-        if(item == null) return;
-
-        ItemMeta meta = item.getItemMeta();
-        if(meta == null) return;
-
-        Player p = (Player) e.getWhoClicked();
-
-        Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
-        if(acc == null) return;
-
-        PersistentDataContainer container = meta.getPersistentDataContainer();
+    public void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container) {
 
         if(container.has(key, PersistentDataType.STRING)) {
 
@@ -124,7 +108,7 @@ public class TransferPlayerSelectorMenu extends DiorePaginatedMenu {
                     SkullMeta playerMeta = (SkullMeta) playerItem.getItemMeta();
                     if(playerMeta == null) return;
 
-                    playerMeta.setDisplayName(configManager.getFormattedString("transfer-selector-menu-skull", language.getCFG())
+                    playerMeta.setDisplayName(configManager.getFormattedString(language.getCFG(), "transfer-selector-menu-skull")
                             .replace("<player>", target.getName()));
 
                     List<String> lore = new ArrayList<>();

@@ -1,7 +1,10 @@
 package ximronno.diore.commands;
 
+import org.bukkit.entity.Player;
 import ximronno.api.command.SubCommand;
+import ximronno.api.interfaces.Account;
 import ximronno.diore.Diore;
+import ximronno.diore.impl.Languages;
 import ximronno.diore.model.AccountManager;
 import ximronno.diore.model.ConfigManager;
 
@@ -16,5 +19,22 @@ public abstract class DioreSubCommand extends SubCommand {
         this.configManager = plugin.getConfigManager();
         this.accountManager = plugin.getAccountManager();
     }
+
+    @Override
+    public void perform(Player p, String[] args) {
+        Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
+
+        if(acc == null) {
+            p.sendMessage(configManager.getFormattedString("no-account-found"));
+            return;
+        }
+
+        Languages language = acc.getLanguage();
+        if(language == null) language = Languages.ENGLISH;
+
+        perform(p, args, acc, language);
+    }
+
+    public abstract void perform(Player p, String[] args, Account acc, Languages language);
 
 }

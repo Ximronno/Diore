@@ -236,7 +236,7 @@ public class VaultHook implements Economy {
 
     @Override
     public List<String> getBanks() {
-        return Collections.EMPTY_LIST;
+        return Collections.emptyList();
     }
 
     @Override
