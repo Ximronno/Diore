@@ -2,13 +2,17 @@ package ximronno.diore.guis.menus.transactions;
 
 import de.rapha149.signgui.SignGUI;
 import de.rapha149.signgui.SignGUIAction;
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
 import ximronno.api.item.ItemBuilder;
 import ximronno.diore.guis.DioreMenu;
 import ximronno.diore.guis.menus.BalanceMenu;
@@ -43,7 +47,7 @@ public class WithdrawAmountMenu extends DioreMenu {
     }
 
     @Override
-    public void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container) {
+    public void handleMenu(Player p, Account acc, Language language, PersistentDataContainer container) {
 
         if(container.has(key, PersistentDataType.STRING)) {
 
@@ -57,7 +61,7 @@ public class WithdrawAmountMenu extends DioreMenu {
                     else new TransferPlayerSelectorMenu(key).open(p);
                     break;
                 case "custom":
-                    FileConfiguration config = language.getCFG();
+                    FileConfiguration config = language.getConfig();
 
                     List<String> lines = new ArrayList<>();
 
@@ -97,8 +101,8 @@ public class WithdrawAmountMenu extends DioreMenu {
                     break;
                 default:
                     double amount = Double.parseDouble(func);
-                    if(target == null) AccountUtils.tryWithdraw(p, acc, language.getCFG(), amount);
-                    else AccountUtils.tryTransfer(p, acc, target, language.getCFG(), amount);
+                    if(target == null) AccountUtils.tryWithdraw(p, acc, language.getConfig(), amount);
+                    else AccountUtils.tryTransfer(p, acc, target, language.getConfig(), amount);
                     new BalanceMenu(key).open(p);
                     break;
             }
@@ -113,7 +117,7 @@ public class WithdrawAmountMenu extends DioreMenu {
         Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
         if(acc == null) return;
 
-        Languages language = acc.getLanguage();
+        Language language = acc.getLanguage();
         if(language == null) language = Languages.ENGLISH;
 
         for(int i = 0; i < getSize(); i++) {
@@ -123,23 +127,23 @@ public class WithdrawAmountMenu extends DioreMenu {
                         inventory.setItem(i, getMenuBlank());
                     }
                     else {
-                        inventory.setItem(i, getPlayerSkull(Bukkit.getPlayer(target.getOwner()), language.getCFG()));
+                        inventory.setItem(i, getPlayerSkull(Bukkit.getPlayer(target.getOwner()), language.getConfig()));
                     }
                     break;
                 case 10:
-                    inventory.setItem(i, getWithdrawAll(language.getCFG(), acc.getBalance()));
+                    inventory.setItem(i, getWithdrawAll(language.getConfig(), acc.getBalance()));
                     break;
                 case 12:
-                    inventory.setItem(i, getWithdrawHalf(language.getCFG(), acc.getBalance()));
+                    inventory.setItem(i, getWithdrawHalf(language.getConfig(), acc.getBalance()));
                     break;
                 case 14:
-                    inventory.setItem(i, getWithdrawQuarter(language.getCFG(), acc.getBalance()));
+                    inventory.setItem(i, getWithdrawQuarter(language.getConfig(), acc.getBalance()));
                     break;
                 case 16:
-                    inventory.setItem(i, getWithdrawCustom(language.getCFG(), acc.getBalance()));
+                    inventory.setItem(i, getWithdrawCustom(language.getConfig(), acc.getBalance()));
                     break;
                 case 26:
-                    inventory.setItem(i, getMenuBack(language.getCFG()));
+                    inventory.setItem(i, getMenuBack(language.getConfig()));
                     break;
                 default:
                     inventory.setItem(i, getMenuBlank());

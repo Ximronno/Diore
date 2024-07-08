@@ -4,16 +4,19 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
+import ximronno.api.command.CommandManager;
 import ximronno.api.command.SubCommand;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
 import ximronno.diore.Diore;
 import ximronno.diore.commands.DioreSubCommand;
 import ximronno.diore.commands.managers.Balance;
-import ximronno.diore.impl.Languages;
 
 public class BalanceHelp extends DioreSubCommand {
-    public BalanceHelp(Diore plugin) {
+    private final CommandManager manager;
+    public BalanceHelp(Diore plugin, CommandManager manager) {
         super(plugin);
+        this.manager = manager;
     }
     @Override
     public String getName() {
@@ -31,13 +34,13 @@ public class BalanceHelp extends DioreSubCommand {
         return "/balance help";
     }
     @Override
-    public void perform(Player p, String[] args, Account acc, Languages language) {
+    public void perform(Player p, String[] args, Account acc, Language language) {
 
-        p.sendMessage(configManager.getFormattedString(language.getCFG(), "balance-help-title"));
-        for(SubCommand subCommand : Balance.getSubCommands()) {
-            p.sendMessage(configManager.getFormattedString(language.getCFG(), "balance-help-format")
+        p.sendMessage(configManager.getFormattedString(language.getConfig(), "balance-help-title"));
+        for(SubCommand subCommand : manager.getSubCommands()) {
+            p.sendMessage(configManager.getFormattedString(language.getConfig(), "balance-help-format")
                     .replace("<syntax>", subCommand.getSyntax())
-                    .replace("<description>", subCommand.getDescription(language.getCFG())));
+                    .replace("<description>", subCommand.getDescription(language.getConfig())));
         }
 
     }

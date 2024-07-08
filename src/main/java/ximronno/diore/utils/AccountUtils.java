@@ -2,9 +2,9 @@ package ximronno.diore.utils;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import ximronno.diore.Diore;
 import ximronno.api.interfaces.Account;
-import ximronno.diore.impl.Languages;
+import ximronno.api.interfaces.Language;
+import ximronno.diore.Diore;
 import ximronno.diore.model.ConfigManager;
 
 public class AccountUtils {
@@ -43,11 +43,11 @@ public class AccountUtils {
         }
         return true;
     }
-    public static void setLanguage(Player p, Account acc, Languages languageToSet) {
+    public static void setLanguage(Player p, Account acc, Language languageToSet) {
 
         acc.setLanguage(languageToSet);
 
-        p.sendMessage(configManager.getFormattedString(languageToSet.getCFG(), "language-set")
+        p.sendMessage(configManager.getFormattedString(languageToSet.getConfig(), "language-set")
                 .replace("<language>", languageToSet.getName()));
     }
     public static void setPublicBalance(Player p, Account acc, FileConfiguration config, boolean publicToSet) {

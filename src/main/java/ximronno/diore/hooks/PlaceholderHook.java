@@ -5,8 +5,8 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ximronno.diore.Diore;
 import ximronno.api.interfaces.Account;
+import ximronno.diore.Diore;
 import ximronno.diore.model.AccountManager;
 
 public class PlaceholderHook extends PlaceholderExpansion {
@@ -44,7 +44,7 @@ public class PlaceholderHook extends PlaceholderExpansion {
             if(params.equalsIgnoreCase("language")) {
                 Account acc = am.getAccount(player.getUniqueId()).orElse(null);
                 if(acc == null) return null;
-                return acc.getLanguage().name();
+                return acc.getLanguage().getName();
             }
         }
 

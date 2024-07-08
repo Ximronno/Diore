@@ -3,10 +3,13 @@ package ximronno.diore;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Server;
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import ximronno.api.UpdateChecker;
+import ximronno.api.command.CommandManager;
 import ximronno.diore.commands.managers.Balance;
+import ximronno.diore.commands.managers.Config;
 import ximronno.diore.hooks.HookManager;
 import ximronno.diore.listeners.InventoryListener;
 import ximronno.diore.listeners.PlayerJoinListener;
@@ -15,7 +18,6 @@ import ximronno.diore.model.AccountManager;
 import ximronno.diore.model.ConfigManager;
 import ximronno.diore.recipes.DioreNuggetFromDeepDiore;
 import ximronno.diore.recipes.DioreNuggetFromDiore;
-import ximronno.diore.tabcompleters.BalanceTabCompleter;
 
 public final class Diore extends JavaPlugin {
     private static Diore instance;
@@ -33,9 +35,7 @@ public final class Diore extends JavaPlugin {
 
         menuKey = new NamespacedKey(this, "diore-menu-key");
 
-        setupCommands();
-
-        setupTabCompleters();
+        setupCommandsAndTabCompleters();
 
         setupListeners(getServer().getPluginManager());
 
@@ -76,11 +76,19 @@ public final class Diore extends JavaPlugin {
         HookManager.getInstance().unregisterPlaceholder();
 
     }
-    private void setupCommands() {
-        getCommand("balance").setExecutor(new Balance(this));
-    }
-    private void setupTabCompleters() {
-        getCommand("balance").setTabCompleter(new BalanceTabCompleter());
+    private void setupCommandsAndTabCompleters() {
+        PluginCommand balance = getCommand("balance");
+        PluginCommand config = getCommand("config");
+
+        CommandManager balanceCommandManager = new Balance(this);
+        CommandManager configCommandManager = new Config(this);
+
+        balance.setExecutor(balanceCommandManager);
+        balance.setTabCompleter(balanceCommandManager);
+
+        config.setExecutor(configCommandManager);
+        config.setTabCompleter(configCommandManager);
+
     }
     private void setupListeners(PluginManager pM) {
         pM.registerEvents(new PlayerJoinListener(this), this);

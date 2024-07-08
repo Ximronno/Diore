@@ -5,10 +5,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
 import ximronno.diore.Diore;
 import ximronno.diore.commands.DioreSubCommand;
 import ximronno.diore.guis.menus.MainMenu;
-import ximronno.diore.impl.Languages;
 
 public class BalanceShow extends DioreSubCommand {
     public BalanceShow(Diore plugin) {
@@ -32,9 +32,9 @@ public class BalanceShow extends DioreSubCommand {
         return "/balance | /balance show";
     }
     @Override
-    public void perform(Player p, String[] args, Account acc, Languages language) {
+    public void perform(Player p, String[] args, Account acc, Language language) {
 
-        p.sendMessage(configManager.getFormattedString(language.getCFG(), "on-balance")
+        p.sendMessage(configManager.getFormattedString(language.getConfig(), "on-balance")
                 .replace("<balance>", accountManager.formatBalance(acc.getBalance())));
 
         if(plugin.getConfig().getBoolean("open-gui-on-commands")) {

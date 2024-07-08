@@ -10,6 +10,12 @@ commands:
       aliases:
       - bal
       permission: diore.balance
+    config:
+      description: Manage the config
+      usage: /config
+      permission: diore.config
 permissions:
   diore.balance:
     default: true
+  diore.config:
+    default: op

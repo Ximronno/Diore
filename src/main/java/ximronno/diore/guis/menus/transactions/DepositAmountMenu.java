@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
 import ximronno.api.item.ItemBuilder;
 import ximronno.diore.guis.DioreMenu;
 import ximronno.diore.guis.menus.BalanceMenu;
@@ -39,7 +40,7 @@ public class DepositAmountMenu extends DioreMenu {
     }
 
     @Override
-    public void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container) {
+    public void handleMenu(Player p, Account acc, Language language, PersistentDataContainer container) {
 
         if(container.has(key, PersistentDataType.STRING)) {
 
@@ -52,7 +53,7 @@ public class DepositAmountMenu extends DioreMenu {
                     new BalanceMenu(key).open(p);
                     break;
                 case "custom":
-                    FileConfiguration config = language.getCFG();
+                    FileConfiguration config = language.getConfig();
 
                     List<String> lines = new ArrayList<>();
 
@@ -90,7 +91,7 @@ public class DepositAmountMenu extends DioreMenu {
                     break;
                 default:
                     double amount = Double.parseDouble(func);
-                    AccountUtils.tryDeposit(p, acc, language.getCFG(), amount);
+                    AccountUtils.tryDeposit(p, acc, language.getConfig(), amount);
                     new BalanceMenu(key).open(p);
                     break;
             }
@@ -106,26 +107,26 @@ public class DepositAmountMenu extends DioreMenu {
         Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
         if(acc == null) return;
 
-        Languages language = acc.getLanguage();
+        Language language = acc.getLanguage();
         if(language == null) language = Languages.ENGLISH;
 
         for(int i = 0; i < getSize(); i++) {
 
             switch (i) {
                 case 10:
-                    inventory.setItem(i, getDepositAll(p, language.getCFG(), acc.getBalance()));
+                    inventory.setItem(i, getDepositAll(p, language.getConfig(), acc.getBalance()));
                     break;
                 case 12:
-                    inventory.setItem(i, getDepositHalf(p, language.getCFG(), acc.getBalance()));
+                    inventory.setItem(i, getDepositHalf(p, language.getConfig(), acc.getBalance()));
                     break;
                 case 14:
-                    inventory.setItem(i, getDepositQuarter(p, language.getCFG(), acc.getBalance()));
+                    inventory.setItem(i, getDepositQuarter(p, language.getConfig(), acc.getBalance()));
                     break;
                 case 16:
-                    inventory.setItem(i, getDepositCustom(language.getCFG(), acc.getBalance()));
+                    inventory.setItem(i, getDepositCustom(language.getConfig(), acc.getBalance()));
                     break;
                 case 26:
-                    inventory.setItem(i, getMenuBack(language.getCFG()));
+                    inventory.setItem(i, getMenuBack(language.getConfig()));
                     break;
                 default:
                     inventory.setItem(i, getMenuBlank());

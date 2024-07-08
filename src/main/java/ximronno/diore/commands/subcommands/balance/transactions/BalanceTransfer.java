@@ -6,9 +6,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
 import ximronno.diore.Diore;
 import ximronno.diore.commands.DioreSubCommand;
-import ximronno.diore.impl.Languages;
 import ximronno.diore.utils.AccountUtils;
 
 public class BalanceTransfer extends DioreSubCommand {
@@ -32,24 +32,24 @@ public class BalanceTransfer extends DioreSubCommand {
         return "/balance transfer <player> <amount>";
     }
     @Override
-    public void perform(Player p, String[] args, Account acc, Languages language) {
+    public void perform(Player p, String[] args, Account acc, Language language) {
 
         if(args.length < 3) {
 
-            p.sendMessage(configManager.getFormattedString(language.getCFG(), "balance-help-format")
+            p.sendMessage(configManager.getFormattedString(language.getConfig(), "balance-help-format")
                     .replace("<syntax>", getSyntax())
-                    .replace("<description>", getDescription(language.getCFG())));
+                    .replace("<description>", getDescription(language.getConfig())));
 
         }
         else {
 
             Player target = Bukkit.getPlayer(args[1]);
             if(target == null) {
-                p.sendMessage(plugin.getConfigManager().getFormattedString(language.getCFG(), "player-not-found"));
+                p.sendMessage(plugin.getConfigManager().getFormattedString(language.getConfig(), "player-not-found"));
                 return;
             }
             if(isSamePlayer(p, target)) {
-                p.sendMessage(plugin.getConfigManager().getFormattedString(language.getCFG(), "cannot-transfer-to-yourself"));
+                p.sendMessage(plugin.getConfigManager().getFormattedString(language.getConfig(), "cannot-transfer-to-yourself"));
                 return;
             }
 
@@ -58,9 +58,9 @@ public class BalanceTransfer extends DioreSubCommand {
             double amount;
             try {
                 amount = Double.parseDouble(args[2]);
-                AccountUtils.tryTransfer(p, acc, targetAcc, language.getCFG(), amount);
+                AccountUtils.tryTransfer(p, acc, targetAcc, language.getConfig(), amount);
             } catch (Exception e) {
-                p.sendMessage(configManager.getFormattedString(language.getCFG(), "invalid-amount"));
+                p.sendMessage(configManager.getFormattedString(language.getConfig(), "invalid-amount"));
             }
         }
 

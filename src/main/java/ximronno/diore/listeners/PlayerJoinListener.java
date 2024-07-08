@@ -4,16 +4,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-import ximronno.diore.Diore;
 import ximronno.api.interfaces.Account;
+import ximronno.diore.Diore;
+import ximronno.diore.model.AccountManager;
 
 public class PlayerJoinListener implements Listener {
 
 
-    private final Diore plugin;
+    private final AccountManager accountManager;
 
     public PlayerJoinListener(Diore plugin) {
-        this.plugin = plugin;
+        this.accountManager = plugin.getAccountManager();
     }
 
     @EventHandler
@@ -21,11 +22,11 @@ public class PlayerJoinListener implements Listener {
 
         final Player p = e.getPlayer();
 
-        final Account pAccount = plugin.getAccountManager().getAccount(p.getUniqueId()).orElse(null);
+        final Account pAccount = accountManager.getAccount(p.getUniqueId()).orElse(null);
 
         if(pAccount == null) {
 
-            Diore.getInstance().getAccountManager().getOrCreateAccount(p);
+            accountManager.getOrCreateAccount(p);
 
         }
 

@@ -5,9 +5,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
 import ximronno.diore.Diore;
 import ximronno.diore.commands.DioreSubCommand;
-import ximronno.diore.impl.Languages;
 import ximronno.diore.utils.AccountUtils;
 
 public class BalanceDeposit extends DioreSubCommand {
@@ -31,13 +31,13 @@ public class BalanceDeposit extends DioreSubCommand {
         return "/balance deposit <amount>";
     }
     @Override
-    public void perform(Player p, String[] args, Account acc, Languages language) {
+    public void perform(Player p, String[] args, Account acc, Language language) {
 
         if(args.length < 2) {
 
-            p.sendMessage(configManager.getFormattedString(language.getCFG(), "balance-help-format")
+            p.sendMessage(configManager.getFormattedString(language.getConfig(), "balance-help-format")
                     .replace("<syntax>", getSyntax())
-                    .replace("<description>", getDescription(language.getCFG())));
+                    .replace("<description>", getDescription(language.getConfig())));
 
 
         }
@@ -45,9 +45,9 @@ public class BalanceDeposit extends DioreSubCommand {
             double amount;
             try {
                 amount = Double.parseDouble(args[1]);
-                AccountUtils.tryDeposit(p, acc, language.getCFG(), amount);
+                AccountUtils.tryDeposit(p, acc, language.getConfig(), amount);
             } catch (Exception e) {
-                p.sendMessage(configManager.getFormattedString(language.getCFG(), "invalid-amount"));
+                p.sendMessage(configManager.getFormattedString(language.getConfig(), "invalid-amount"));
             }
         }
 

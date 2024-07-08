@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import ximronno.api.interfaces.Language;
 import ximronno.diore.Diore;
 import ximronno.diore.impl.Languages;
 
@@ -21,29 +22,22 @@ public class ConfigManager {
     }
     public void loadLanguageCFGS() {
 
-        for(Languages language : Languages.values()) {
-            language.getCFG();
+        for(Language language : Languages.values()) {
+            language.reloadConfig();
         }
 
     }
-    public FileConfiguration getLanguageConfig(String language) {
-
-        File file = new File(plugin.getDataFolder() + "/languages/", language + ".yml");
-        FileConfiguration config = null;
+    public File getFile(String path) {
+        File file = new File(plugin.getDataFolder(), "/" + path);
 
         if(!file.exists()) {
-            plugin.saveResource("languages/" + language + ".yml", false);
+            plugin.saveResource(path, true);
         }
 
-        try {
-            config = new YamlConfiguration();
-            config.load(file);
-        } catch (Exception e) {
-            Bukkit.getConsoleSender().sendMessage("§cFailed to load" + language + " language file: " + e.getMessage());
-        }
-
-        return config;
-
+        return file;
+    }
+    public FileConfiguration getConfig(File file) {
+        return YamlConfiguration.loadConfiguration(file);
     }
     public String getFormattedString(String path) {
         String string = plugin.getConfig().getString(path);
@@ -53,7 +47,7 @@ public class ConfigManager {
         }
         return ChatColor.translateAlternateColorCodes('&', string);
     }
-    public String getFormattedString( FileConfiguration config, String path) {
+    public String getFormattedString(FileConfiguration config, String path) {
         String string = config.getString(path);
         if(string == null) {
             string = "&c" + path;

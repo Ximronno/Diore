@@ -5,10 +5,10 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
 import ximronno.diore.Diore;
 import ximronno.diore.commands.DioreSubCommand;
 import ximronno.diore.guis.menus.AccountMenu;
-import ximronno.diore.impl.Languages;
 
 public class BalanceInfo extends DioreSubCommand {
     public BalanceInfo(Diore plugin) {
@@ -31,11 +31,11 @@ public class BalanceInfo extends DioreSubCommand {
         return "/balance info";
     }
     @Override
-    public void perform(Player p, String[] args, Account acc, Languages language) {
+    public void perform(Player p, String[] args, Account acc, Language language) {
 
         String langName = language.getName();
 
-        FileConfiguration config = language.getCFG();
+        FileConfiguration config = language.getConfig();
 
         String yes = configManager.getFormattedString(config, "menu-yes");
         String no = configManager.getFormattedString(config, "menu-no");

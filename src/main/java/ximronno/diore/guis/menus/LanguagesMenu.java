@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
 import ximronno.api.item.ItemBuilder;
 import ximronno.diore.guis.DioreMenu;
 import ximronno.diore.impl.Languages;
@@ -27,7 +28,7 @@ public class LanguagesMenu extends DioreMenu {
         return configManager.getFormattedString("languages-menu-title");
     }
     @Override
-    public void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container) {
+    public void handleMenu(Player p, Account acc, Language language, PersistentDataContainer container) {
 
         if(container.has(key, PersistentDataType.STRING)) {
 
@@ -39,7 +40,7 @@ public class LanguagesMenu extends DioreMenu {
                     new AccountMenu(key).open(p);
                     break;
                 default:
-                    Languages languageToSet;
+                    Language languageToSet;
 
                     try {
                         languageToSet = Languages.valueOf(func);
@@ -61,17 +62,17 @@ public class LanguagesMenu extends DioreMenu {
         Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
         if(acc == null) return;
 
-        Languages accLanguage = acc.getLanguage();
+        Language accLanguage = acc.getLanguage();
         if(accLanguage == null) accLanguage = Languages.ENGLISH;
 
         for(int i = 0; i < inventory.getSize(); i++) {
 
-            if(i == 26) inventory.setItem(i, getMenuBack(accLanguage.getCFG()));
+            if(i == 26) inventory.setItem(i, getMenuBack(accLanguage.getConfig()));
 
             else inventory.setItem(i, getMenuBlank());
         }
         int languageIterator = 10;
-        for(Languages language : Languages.values()) {
+        for(Language language : Languages.values()) {
 
             inventory.setItem(languageIterator, getLanguageItem(language));
 
@@ -80,14 +81,14 @@ public class LanguagesMenu extends DioreMenu {
 
         }
     }
-    private ItemStack getLanguageItem(Languages language) {
+    private ItemStack getLanguageItem(Language language) {
         ItemStack item = ItemBuilder.builder()
                 .setMaterial(Material.PLAYER_HEAD)
                 .setDisplayName(language.getName())
                 .setProfileFromURL(language.getTextureURL())
                 .build();
 
-        ItemBuilder.addPersistentData(item, key, language.name());
+        ItemBuilder.addPersistentData(item, key, language.getRawName());
 
         return item;
 

@@ -1,4 +1,4 @@
-package ximronno.diore.commands.subcommands.balance;
+package ximronno.diore.commands.subcommands.config;
 
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -8,38 +8,39 @@ import ximronno.api.interfaces.Account;
 import ximronno.api.interfaces.Language;
 import ximronno.diore.Diore;
 import ximronno.diore.commands.DioreSubCommand;
-import ximronno.diore.guis.menus.MainMenu;
+import ximronno.diore.impl.Languages;
 
-public class BalanceGUI extends DioreSubCommand {
-    public BalanceGUI(Diore plugin) {
+public class ConfigReload extends DioreSubCommand {
+    public ConfigReload(Diore plugin) {
         super(plugin);
     }
 
     @Override
     public String getName() {
-        return "gui";
+        return "reload";
     }
 
     @Override
     public String getDescription(@Nullable FileConfiguration config) {
-        if(config == null) return ChatColor.BLUE + "Opens the balance GUI";
-        return configManager.getFormattedString(config, "balance-gui-description");
+        if(config == null) return ChatColor.BLUE + "Reloads the config";
+        return configManager.getFormattedString(config, "config-reload-description");
     }
 
     @Override
     public String getSyntax() {
-        return "/balance gui";
+        return "/config reload";
     }
     @Override
     public void perform(Player p, String[] args, Account acc, Language language) {
 
-        if(plugin.getConfig().getBoolean("enable-gui")) {
-            new MainMenu(plugin.getMenuKey()).open(p);
+        for(Language lang : Languages.values()) {
+
+            lang.reloadConfig();
+
         }
-        else {
-            p.sendMessage(configManager.getFormattedString(language.getConfig(), "gui-disabled"));
-        }
+        plugin.reloadConfig();
+
+        p.sendMessage(configManager.getFormattedString(language.getConfig(), "config-reloaded"));
 
     }
-
 }

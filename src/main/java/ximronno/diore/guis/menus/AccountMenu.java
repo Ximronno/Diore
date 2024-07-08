@@ -9,6 +9,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
 import ximronno.api.item.ItemBuilder;
 import ximronno.diore.Diore;
 import ximronno.diore.guis.DioreMenu;
@@ -35,7 +36,7 @@ public class AccountMenu extends DioreMenu {
         return configManager.getFormattedString("main-menu-title");
     }
     @Override
-    public void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container) {
+    public void handleMenu(Player p, Account acc, Language language, PersistentDataContainer container) {
 
         if(container.has(key, PersistentDataType.STRING)) {
             String func = container.get(key, PersistentDataType.STRING);
@@ -65,23 +66,23 @@ public class AccountMenu extends DioreMenu {
         Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
         if(acc == null) return;
 
-        Languages language = acc.getLanguage();
+        Language language = acc.getLanguage();
         if(language == null) language = Languages.ENGLISH;
 
         for(int i = 0; i < inventory.getSize(); i++) {
 
             switch(i) {
                 case 10:
-                    inventory.setItem(i, getAccountMenuBalance(acc, language.getCFG()));
+                    inventory.setItem(i, getAccountMenuBalance(acc, language.getConfig()));
                     break;
                 case 13:
                     inventory.setItem(i, getAccountMenuLanguage(language));
                     break;
                 case 16:
-                    inventory.setItem(i, getAccountMenuPublic(acc, language.getCFG()));
+                    inventory.setItem(i, getAccountMenuPublic(acc, language.getConfig()));
                     break;
                 case 26:
-                    inventory.setItem(i, getMenuBack(language.getCFG()));
+                    inventory.setItem(i, getMenuBack(language.getConfig()));
                     break;
                 default:
                     inventory.setItem(i, getMenuBlank());
@@ -103,8 +104,8 @@ public class AccountMenu extends DioreMenu {
 
         return item;
     }
-    private ItemStack getAccountMenuLanguage(@NotNull Languages language) {
-        FileConfiguration config = language.getCFG();
+    private ItemStack getAccountMenuLanguage(@NotNull Language language) {
+        FileConfiguration config = language.getConfig();
 
         ItemStack item = ItemBuilder.builder()
                 .setMaterial(Material.PLAYER_HEAD)

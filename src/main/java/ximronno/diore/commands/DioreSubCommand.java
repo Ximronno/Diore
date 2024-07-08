@@ -3,6 +3,7 @@ package ximronno.diore.commands;
 import org.bukkit.entity.Player;
 import ximronno.api.command.SubCommand;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
 import ximronno.diore.Diore;
 import ximronno.diore.impl.Languages;
 import ximronno.diore.model.AccountManager;
@@ -29,12 +30,12 @@ public abstract class DioreSubCommand extends SubCommand {
             return;
         }
 
-        Languages language = acc.getLanguage();
+        Language language = acc.getLanguage();
         if(language == null) language = Languages.ENGLISH;
 
         perform(p, args, acc, language);
     }
 
-    public abstract void perform(Player p, String[] args, Account acc, Languages language);
+    public abstract void perform(Player p, String[] args, Account acc, Language language);
 
 }

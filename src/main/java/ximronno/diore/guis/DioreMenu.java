@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
 import ximronno.api.item.ItemBuilder;
 import ximronno.api.menu.Menu;
 import ximronno.diore.Diore;
@@ -43,7 +44,7 @@ public abstract class DioreMenu extends Menu {
         Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
         if(acc == null) return;
 
-        Languages language = acc.getLanguage();
+        Language language = acc.getLanguage();
         if(language == null) language = Languages.ENGLISH;
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
@@ -51,7 +52,7 @@ public abstract class DioreMenu extends Menu {
         handleMenu(p, acc, language, container);
     }
 
-    public abstract void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container);
+    public abstract void handleMenu(Player p, Account acc, Language language, PersistentDataContainer container);
     protected ItemStack getMenuBlank() {
         return ItemBuilder.builder()
                 .setMaterial(Material.BLACK_STAINED_GLASS_PANE)

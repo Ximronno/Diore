@@ -9,6 +9,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
 import ximronno.diore.guis.DiorePaginatedMenu;
 import ximronno.diore.guis.menus.BalanceMenu;
 import ximronno.diore.impl.Languages;
@@ -36,7 +37,7 @@ public class TransferPlayerSelectorMenu extends DiorePaginatedMenu {
         return configManager.getFormattedString("transfer-player-selector-menu-title");
     }
     @Override
-    public void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container) {
+    public void handleMenu(Player p, Account acc, Language language, PersistentDataContainer container) {
 
         if(container.has(key, PersistentDataType.STRING)) {
 
@@ -85,10 +86,10 @@ public class TransferPlayerSelectorMenu extends DiorePaginatedMenu {
         Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
         if(acc == null) return;
 
-        Languages language = acc.getLanguage();
+        Language language = acc.getLanguage();
         if(language == null) language = Languages.ENGLISH;
 
-        addMenuBorder(language.getCFG());
+        addMenuBorder(language.getConfig());
 
 
         ArrayList<Player> players = new ArrayList<>(getServer().getOnlinePlayers());
@@ -108,12 +109,12 @@ public class TransferPlayerSelectorMenu extends DiorePaginatedMenu {
                     SkullMeta playerMeta = (SkullMeta) playerItem.getItemMeta();
                     if(playerMeta == null) return;
 
-                    playerMeta.setDisplayName(configManager.getFormattedString(language.getCFG(), "transfer-selector-menu-skull")
+                    playerMeta.setDisplayName(configManager.getFormattedString(language.getConfig(), "transfer-selector-menu-skull")
                             .replace("<player>", target.getName()));
 
                     List<String> lore = new ArrayList<>();
 
-                    language.getCFG().getStringList("transfer-selector-menu-lore-format")
+                    language.getConfig().getStringList("transfer-selector-menu-lore-format")
                             .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)
                                     .replace("<balance>", accountManager.formatBalance(returnBalance(target.getUniqueId())))));
 

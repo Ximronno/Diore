@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
 import ximronno.api.item.ItemBuilder;
 import ximronno.diore.Diore;
 import ximronno.diore.guis.DioreMenu;
@@ -40,7 +41,7 @@ public class MainMenu extends DioreMenu {
     }
 
     @Override
-    public void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container) {
+    public void handleMenu(Player p, Account acc, Language language, PersistentDataContainer container) {
 
         if(container.has(key, PersistentDataType.STRING)) {
 
@@ -52,7 +53,7 @@ public class MainMenu extends DioreMenu {
                     new AccountMenu(key).open(p);
                     break;
                 case "issues":
-                    TextComponent component = new TextComponent(configManager.getFormattedString(language.getCFG(), "issues-link-text"));
+                    TextComponent component = new TextComponent(configManager.getFormattedString(language.getConfig(), "issues-link-text"));
 
                     component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/Ximronno/Diore/issues"));
 
@@ -70,17 +71,17 @@ public class MainMenu extends DioreMenu {
         Account acc = plugin.getAccountManager().getAccount(p.getUniqueId()).orElse(null);
         if(acc == null) return;
 
-        Languages language = acc.getLanguage();
+        Language language = acc.getLanguage();
         if(language == null) language = Languages.ENGLISH;
 
         for(int i = 0; i < inventory.getSize(); i++) {
 
             switch(i) {
                 case 4:
-                    inventory.setItem(i, getMainMenuSkull(acc, language.getCFG(), p));
+                    inventory.setItem(i, getMainMenuSkull(acc, language.getConfig(), p));
                     break;
                 case 29:
-                    inventory.setItem(i, getMainMenuIssuesSkull(language.getCFG()));
+                    inventory.setItem(i, getMainMenuIssuesSkull(language.getConfig()));
                     break;
                 default:
                     inventory.setItem(i, getMenuBlank());

@@ -9,11 +9,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
-import ximronno.diore.Diore;
 import ximronno.api.events.DepositEvent;
 import ximronno.api.events.TransferEvent;
 import ximronno.api.events.WithdrawEvent;
 import ximronno.api.interfaces.Account;
+import ximronno.diore.Diore;
 import ximronno.diore.items.Items;
 import ximronno.diore.model.AccountManager;
 import ximronno.diore.model.ConfigManager;
@@ -42,10 +42,10 @@ public class TransactionsListener implements Listener {
         Player p = Bukkit.getPlayer(from.getOwner());
         Player p2 = Bukkit.getPlayer(to.getOwner());
 
-        String pMessage = configManager.getFormattedString(from.getLanguage().getCFG(), "sent-amount-to-player")
+        String pMessage = configManager.getFormattedString(from.getLanguage().getConfig(), "sent-amount-to-player")
                 .replace("<amount>", accountManager.formatBalance(e.getAmount()))
                 .replace("<player>", p2.getDisplayName());
-        String p2Message = configManager.getFormattedString(to.getLanguage().getCFG(), "received-amount-from-player")
+        String p2Message = configManager.getFormattedString(to.getLanguage().getConfig(), "received-amount-from-player")
                 .replace("<amount>", accountManager.formatBalance(e.getAmount()))
                 .replace("<player>", p.getDisplayName());
 
@@ -73,7 +73,7 @@ public class TransactionsListener implements Listener {
 
         p.getInventory().addItem(items.toArray(new ItemStack[0]));
 
-        String message = configManager.getFormattedString(acc.getLanguage().getCFG(), "on-withdraw")
+        String message = configManager.getFormattedString(acc.getLanguage().getConfig(), "on-withdraw")
                         .replace("<amount>", accountManager.formatBalance(e.getAmount()));
 
         p.sendMessage(message);
@@ -112,7 +112,7 @@ public class TransactionsListener implements Listener {
         if (amount < 1) {
             if (diamondOreNuggetCount < nuggets) {
                 e.setCancelled(true);
-                p.sendMessage(configManager.getFormattedString(acc.getLanguage().getCFG(), "not-enough-ores"));
+                p.sendMessage(configManager.getFormattedString(acc.getLanguage().getConfig(), "not-enough-ores"));
                 return;
             }
             ItemStack nuggetStack = Items.getDiamondOreNugget(nuggets);
@@ -122,7 +122,7 @@ public class TransactionsListener implements Listener {
 
             if (totalDiamondOreCount + deepslateDiamondOreCount < ores || (totalDiamondOreCount + deepslateDiamondOreCount == 0 && nuggets > 0)) {
                 e.setCancelled(true);
-                p.sendMessage(configManager.getFormattedString(acc.getLanguage().getCFG(), "not-enough-ores"));
+                p.sendMessage(configManager.getFormattedString(acc.getLanguage().getConfig(), "not-enough-ores"));
                 return;
             }
 
@@ -151,11 +151,11 @@ public class TransactionsListener implements Listener {
         HashMap<Integer, ItemStack> remainingItems = p.getInventory().removeItem(itemsArray);
 
         if (remainingItems.isEmpty()) {
-            p.sendMessage(configManager.getFormattedString(acc.getLanguage().getCFG(), "on-deposit")
+            p.sendMessage(configManager.getFormattedString(acc.getLanguage().getConfig(), "on-deposit")
                     .replace("<amount>", accountManager.formatBalance(e.getAmount())));
         } else {
             e.setCancelled(true);
-            p.sendMessage(configManager.getFormattedString(acc.getLanguage().getCFG(), "not-enough-ores"));
+            p.sendMessage(configManager.getFormattedString(acc.getLanguage().getConfig(), "not-enough-ores"));
             p.getInventory().addItem(itemsArray);
         }
 

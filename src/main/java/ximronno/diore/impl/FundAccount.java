@@ -1,13 +1,17 @@
 package ximronno.diore.impl;
 
-import ximronno.diore.Diore;
 import ximronno.api.events.DepositEvent;
 import ximronno.api.events.TransferEvent;
 import ximronno.api.events.WithdrawEvent;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
+import ximronno.api.interfaces.Transaction;
+import ximronno.diore.Diore;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class FundAccount implements Account {
@@ -15,20 +19,24 @@ public class FundAccount implements Account {
     private UUID owner;
     private String name;
     private double balance;
-    private Languages language;
+    private Language language;
     private boolean publicBalance;
-    public FundAccount(UUID owner, String name, double balance, Languages language, boolean publicBalance) {
+    private final List<Transaction> transactions;
+
+    public FundAccount(UUID owner, String name, double balance, Language language, boolean publicBalance, List<Transaction> transactions) {
         this.owner = owner;
         this.name = name;
         this.balance = balance;
-        this.language = language;
+        this.language = language != null ? language : Languages.ENGLISH;
         this.publicBalance = publicBalance;
+        this.transactions = transactions != null ? transactions : new ArrayList<>();
     }
-    public FundAccount(UUID owner, String name, double balance, Languages language) {
-        this(owner, name, balance, language, true);
+
+    public FundAccount(UUID owner, String name, double balance, Language language, boolean publicBalance) {
+        this(owner, name, balance, language, publicBalance, new ArrayList<>());
     }
     public FundAccount(UUID owner, String name, double balance) {
-        this(owner, name, balance, Languages.ENGLISH, true);
+        this(owner, name, balance, Languages.ENGLISH, true, new ArrayList<>());
 
     }
 
@@ -73,6 +81,7 @@ public class FundAccount implements Account {
         if(event.isCancelled()) return false;
 
         balance -= amount;
+        addTransaction(new Transaction(-amount, System.currentTimeMillis()));
         account.receive(amount);
 
         return true;
@@ -94,6 +103,7 @@ public class FundAccount implements Account {
         if(event.isCancelled()) return false;
 
         balance -= amount;
+        addTransaction(new Transaction(-amount, System.currentTimeMillis()));
 
         return true;
 
@@ -112,21 +122,23 @@ public class FundAccount implements Account {
         if(event.isCancelled()) return false;
 
         balance += amount;
+        addTransaction(new Transaction(amount, System.currentTimeMillis()));
 
         return true;
     }
     @Override
     public void receive(double amount) {
         balance += amount;
+        addTransaction(new Transaction(amount, System.currentTimeMillis()));
     }
 
     @Override
-    public Languages getLanguage() {
+    public Language getLanguage() {
         return this.language;
     }
 
     @Override
-    public void setLanguage(Languages language) {
+    public void setLanguage(Language language) {
         this.language = language;
     }
     @Override
@@ -137,5 +149,16 @@ public class FundAccount implements Account {
     @Override
     public void setPublicBalance(boolean publicBalance) {
         this.publicBalance = publicBalance;
+    }
+
+    @Override
+    public void addTransaction(Transaction transaction) {
+        if(transactions.size() == 5) transactions.remove(0);
+        transactions.add(transaction);
+    }
+
+    @Override
+    public List<Transaction> getTransactions() {
+        return new ArrayList<>(transactions);
     }
 }

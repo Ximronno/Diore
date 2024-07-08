@@ -5,6 +5,9 @@ no-account-found: "&bYou have no account"
 enable-gui: true
 open-gui-on-commands: true
 
+auto-save: true
+auto-save-interval: 5 # in minutes
+
 #Without ChatColor formatting
 currency-format:  "<amount> ores"
 

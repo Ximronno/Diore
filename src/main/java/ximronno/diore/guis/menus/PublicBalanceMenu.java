@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import ximronno.api.interfaces.Account;
+import ximronno.api.interfaces.Language;
 import ximronno.api.item.ItemBuilder;
 import ximronno.diore.guis.DioreMenu;
 import ximronno.diore.impl.Languages;
@@ -29,7 +30,7 @@ public class PublicBalanceMenu extends DioreMenu {
         return configManager.getFormattedString("public-balance-menu-title");
     }
     @Override
-    public void handleMenu(Player p, Account acc, Languages language, PersistentDataContainer container) {
+    public void handleMenu(Player p, Account acc, Language language, PersistentDataContainer container) {
 
         if(container.has(key, PersistentDataType.STRING)) {
 
@@ -38,11 +39,11 @@ public class PublicBalanceMenu extends DioreMenu {
 
             switch(func) {
                 case "true":
-                    AccountUtils.setPublicBalance(p, acc, language.getCFG(), true);
+                    AccountUtils.setPublicBalance(p, acc, language.getConfig(), true);
                     new AccountMenu(key).open(p);
                     break;
                 case "false":
-                    AccountUtils.setPublicBalance(p, acc, language.getCFG(), false);
+                    AccountUtils.setPublicBalance(p, acc, language.getConfig(), false);
                     new AccountMenu(key).open(p);
                     break;
                 case "back":
@@ -60,20 +61,20 @@ public class PublicBalanceMenu extends DioreMenu {
         Account acc = accountManager.getAccount(p.getUniqueId()).orElse(null);
         if(acc == null) return;
 
-        Languages language = acc.getLanguage();
+        Language language = acc.getLanguage();
         if(language == null) language = Languages.ENGLISH;
 
         for(int i = 0; i < inventory.getSize(); i++) {
 
             switch(i) {
                 case 11:
-                    inventory.setItem(i, getPublicBalanceTrue(language.getCFG()));
+                    inventory.setItem(i, getPublicBalanceTrue(language.getConfig()));
                     break;
                 case 15:
-                    inventory.setItem(i, getPublicBalanceFalse(language.getCFG()));
+                    inventory.setItem(i, getPublicBalanceFalse(language.getConfig()));
                     break;
                 case 26:
-                    inventory.setItem(i, getMenuBack(language.getCFG()));
+                    inventory.setItem(i, getMenuBack(language.getConfig()));
                     break;
                 default:
                     inventory.setItem(i, getMenuBlank());
