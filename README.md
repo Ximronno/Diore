@@ -12,7 +12,38 @@ Diore is a standalone economy plugin for Spigot, using diamond ore as currency, 
 
 ## API
 
-TODO
+### Maven
+
+```xml
+<repositories>
+  <repository>
+    <id>jitpack.io</id>
+    <url>https://jitpack.io</url>
+  </repository>
+</repositories>
+
+<dependency>
+    <groupId>com.github.Ximronno</groupId>
+    <artifactId>Diore</artifactId>
+    <version>RELEASE-VERSION</version>
+</dependency>
+```
+### Gradle
+
+**Groovy DSL:**
+```gradle
+dependencyResolutionManagement {
+  repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+  repositories {
+    mavenCentral()
+    maven { url 'https://jitpack.io' }
+  }
+}
+
+dependencies {
+        implementation 'com.github.Ximronno:Diore:RELEASE-VERSION'
+}
+```
 
 
 ## Contributing
