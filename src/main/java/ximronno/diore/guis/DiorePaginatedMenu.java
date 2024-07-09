@@ -28,41 +28,30 @@ public abstract class DiorePaginatedMenu extends DioreMenu {
                 inventory.setItem(i, menuBlank);
             }
         }
-
-        inventory.setItem(17, menuBlank);
-        inventory.setItem(18, menuBlank);
-        inventory.setItem(26, menuBlank);
-        inventory.setItem(27, menuBlank);
-        inventory.setItem(35, menuBlank);
-        inventory.setItem(36, menuBlank);
-
         for (int i = 44; i < 54; i++) {
             if (inventory.getItem(i) == null) {
                 inventory.setItem(i, menuBlank);
             }
         }
+
+        int[] specificSlots = {17, 18, 26, 27, 35, 36};
+        for (int slot : specificSlots) {
+            inventory.setItem(slot, menuBlank);
+        }
     }
     private ItemStack getButtonLeft(FileConfiguration config) {
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.DARK_OAK_BUTTON)
                 .setDisplayName(configManager.getFormattedString(config, "paginated-menu-button-left"))
+                .addPersistentData(key, "left")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key,"left");
-
-        return item;
-
     }
     private ItemStack getButtonRight(FileConfiguration config) {
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.DARK_OAK_BUTTON)
                 .setDisplayName(configManager.getFormattedString(config, "paginated-menu-button-right"))
+                .addPersistentData(key, "right")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key,"right");
-
-        return item;
-
     }
     public int getMaxItemPerPage() {
         return maxItemPerPage;

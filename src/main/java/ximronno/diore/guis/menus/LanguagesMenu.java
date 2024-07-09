@@ -82,16 +82,11 @@ public class LanguagesMenu extends DioreMenu {
         }
     }
     private ItemStack getLanguageItem(Language language) {
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.PLAYER_HEAD)
                 .setDisplayName(language.getName())
                 .setProfileFromURL(language.getTextureURL())
+                .addPersistentData(key, language.getRawName())
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, language.getRawName());
-
-        return item;
-
-
     }
 }

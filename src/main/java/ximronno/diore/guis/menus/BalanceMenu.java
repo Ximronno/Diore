@@ -100,37 +100,28 @@ public class BalanceMenu extends DioreMenu {
 
     }
     private ItemStack getWithdrawItem(FileConfiguration config) {
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.DIAMOND_ORE)
                 .setDisplayName(configManager.getFormattedString(config, "balance-menu-withdraw"))
                 .setLore(configManager.getFormattedList(config, "balance-menu-withdraw-lore"))
+                .addPersistentData(key, "withdraw")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, "withdraw");
-
-        return item;
     }
     private ItemStack getDepositItem(FileConfiguration config) {
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.DEEPSLATE_DIAMOND_ORE)
                 .setDisplayName(configManager.getFormattedString(config, "balance-menu-deposit"))
                 .setLore(configManager.getFormattedList(config, "balance-menu-deposit-lore"))
+                .addPersistentData(key, "deposit")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, "deposit");
-
-        return item;
     }
     private ItemStack getTransferItem(FileConfiguration config) {
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.PLAYER_HEAD)
                 .setDisplayName(configManager.getFormattedString(config, "balance-menu-transfer"))
                 .setLore(configManager.getFormattedList(config, "balance-menu-transfer-lore"))
+                .addPersistentData(key, "transfer")
                 .build();
-
-        ItemBuilder.addPersistentData(item,key,"transfer");
-
-        return item;
     }
     private ItemStack getTransactionItem(FileConfiguration config, Account acc) {
         List<String> lore = new ArrayList<>();
@@ -138,22 +129,19 @@ public class BalanceMenu extends DioreMenu {
         for(Transaction t : acc.getTransactions()) {
 
             lore.add(configManager.getFormattedString(config, "balance-menu-transactions-format")
-                    .replace("<amount>", accountManager.formatBalance(t.getAmount()))
-                    .replace("<date>", formatTimeDifference(t.getTime(), System.currentTimeMillis(), config)));
+                    .replace("<amount>", accountManager.formatBalance(t.amount()))
+                    .replace("<date>", formatTimeDifference(t.time(), System.currentTimeMillis(), config)));
 
         }
 
         Collections.reverse(lore);
 
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.PAPER)
                 .setDisplayName(configManager.getFormattedString(config, "balance-menu-transactions"))
                 .setLore(lore)
+                .addPersistentData(key, "transactions")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, "transactions");
-
-        return item;
     }
     private String formatTimeDifference(long startMillis, long endMillis, FileConfiguration config) {
         long durationMillis = endMillis - startMillis;

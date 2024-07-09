@@ -15,13 +15,13 @@ import ximronno.api.menu.Menu;
 import ximronno.diore.Diore;
 import ximronno.diore.impl.Languages;
 import ximronno.diore.model.AccountManager;
-import ximronno.diore.model.ConfigManager;
+import ximronno.diore.model.DioreConfigManager;
 
 import java.net.URL;
 
 public abstract class DioreMenu extends Menu {
     protected final Diore plugin;
-    protected final ConfigManager configManager;
+    protected final DioreConfigManager configManager;
     protected final AccountManager accountManager;
     protected final NamespacedKey key;
     public DioreMenu(NamespacedKey key) {
@@ -30,7 +30,6 @@ public abstract class DioreMenu extends Menu {
         accountManager = plugin.getAccountManager();
         this.key = key;
     }
-
     @Override
     public void handleMenu(InventoryClickEvent e) {
         ItemStack item = e.getCurrentItem();
@@ -67,14 +66,11 @@ public abstract class DioreMenu extends Menu {
             return null;
         }
 
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.PLAYER_HEAD)
                 .setDisplayName(configManager.getFormattedString(config, "menu-back"))
                 .setProfileFromURL(url)
+                .addPersistentData(key, "back")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, "back");
-
-        return item;
     }
 }

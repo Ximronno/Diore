@@ -63,11 +63,7 @@ public class WithdrawAmountMenu extends DioreMenu {
                 case "custom":
                     FileConfiguration config = language.getConfig();
 
-                    List<String> lines = new ArrayList<>();
-
-                    config.getStringList("withdraw-menu-sign")
-                            .forEach(loreLine -> lines.add(ChatColor.translateAlternateColorCodes('&', loreLine)));
-
+                    List<String> lines = configManager.getFormattedList(config, "withdraw-menu-sign");
                     lines.add(0, "");
 
                     SignGUI gui = SignGUI.builder()
@@ -154,50 +150,40 @@ public class WithdrawAmountMenu extends DioreMenu {
 
     }
     private ItemStack getWithdrawAll(FileConfiguration config, double balance) {
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.DROPPER)
                 .setAmount(64)
                 .setDisplayName(configManager.getFormattedString(config, "withdraw-menu-all"))
                 .setLore(getLore(config, balance, balance))
+                .addPersistentData(key, String.valueOf(balance))
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, String.valueOf(balance));
-
-        return item;
     }
     private ItemStack getWithdrawHalf(FileConfiguration config, double balance) {
-        ItemStack item = ItemBuilder.builder()
+        double amount = balance / 2;
+        return ItemBuilder.builder()
                 .setMaterial(Material.DROPPER)
                 .setAmount(32)
                 .setDisplayName(configManager.getFormattedString(config, "withdraw-menu-half"))
-                .setLore(getLore(config, balance, balance / 2))
+                .setLore(getLore(config, balance, amount))
+                .addPersistentData(key, String.valueOf(amount))
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, String.valueOf(balance / 2));
-
-        return item;
     }
     private ItemStack getWithdrawQuarter(FileConfiguration config, double balance) {
-        ItemStack item = ItemBuilder.builder()
+        double amount = balance / 4;
+        return ItemBuilder.builder()
                 .setMaterial(Material.DROPPER)
                 .setDisplayName(configManager.getFormattedString(config, "withdraw-menu-quarter"))
-                .setLore(getLore(config, balance, balance / 4))
+                .setLore(getLore(config, balance, amount))
+                .addPersistentData(key, String.valueOf(amount))
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, String.valueOf(balance / 4));
-
-        return item;
     }
     private ItemStack getWithdrawCustom(FileConfiguration config, double balance) {
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.OAK_SIGN)
                 .setDisplayName(configManager.getFormattedString(config, "withdraw-menu-custom"))
                 .setLore(getLore(config, balance, 0))
+                .addPersistentData(key, "custom")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, "custom");
-
-        return item;
     }
     private ItemStack getPlayerSkull(Player p, FileConfiguration config) {
         return ItemBuilder.builder()

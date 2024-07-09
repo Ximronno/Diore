@@ -1,22 +1,22 @@
 package ximronno.diore.guis.menus.transactions;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import ximronno.api.interfaces.Account;
 import ximronno.api.interfaces.Language;
+import ximronno.api.item.ItemBuilder;
 import ximronno.diore.guis.DiorePaginatedMenu;
 import ximronno.diore.guis.menus.BalanceMenu;
 import ximronno.diore.impl.Languages;
 import ximronno.diore.impl.TopBalance;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static org.bukkit.Bukkit.getPlayer;
@@ -104,35 +104,23 @@ public class TransferPlayerSelectorMenu extends DiorePaginatedMenu {
 
                     if(target.getUniqueId().equals(p.getUniqueId())) continue;
 
-                    ItemStack playerItem = new ItemStack(Material.PLAYER_HEAD);
-
-                    SkullMeta playerMeta = (SkullMeta) playerItem.getItemMeta();
-                    if(playerMeta == null) return;
-
-                    playerMeta.setDisplayName(configManager.getFormattedString(language.getConfig(), "transfer-selector-menu-skull")
-                            .replace("<player>", target.getName()));
-
-                    List<String> lore = new ArrayList<>();
-
-                    language.getConfig().getStringList("transfer-selector-menu-lore-format")
-                            .forEach(loreLine -> lore.add(ChatColor.translateAlternateColorCodes('&', loreLine)
-                                    .replace("<balance>", accountManager.formatBalance(returnBalance(target.getUniqueId())))));
-
-
-                    playerMeta.setLore(lore);
-
-                    playerMeta.setOwningPlayer(target);
-
-                    playerMeta.getPersistentDataContainer().set(key, PersistentDataType.STRING, target.getUniqueId().toString());
-
-                    playerItem.setItemMeta(playerMeta);
-
-                    inventory.addItem(playerItem);
+                    inventory.addItem(getPlayerSkull(target, language.getConfig()));
 
                 }
             }
         }
 
+    }
+    private ItemStack getPlayerSkull(Player target, FileConfiguration config) {
+        return ItemBuilder.builder()
+                .setMaterial(Material.PLAYER_HEAD)
+                .setDisplayName(configManager.getFormattedString(config, "transfer-selector-menu-skull")
+                        .replace("<player>", target.getName()))
+                .setLore(configManager.getFormattedList(config, "transfer-selector-menu-lore-format",
+                        Map.of("<balance>", accountManager.formatBalance(returnBalance(target.getUniqueId())))))
+                .setProfile(target.getPlayerProfile())
+                .addPersistentData(key, target.getUniqueId().toString())
+                .build();
     }
     private double returnBalance(UUID target) {
         double balance = 0;

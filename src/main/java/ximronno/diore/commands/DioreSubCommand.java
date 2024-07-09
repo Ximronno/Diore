@@ -7,12 +7,12 @@ import ximronno.api.interfaces.Language;
 import ximronno.diore.Diore;
 import ximronno.diore.impl.Languages;
 import ximronno.diore.model.AccountManager;
-import ximronno.diore.model.ConfigManager;
+import ximronno.diore.model.DioreConfigManager;
 
 public abstract class DioreSubCommand extends SubCommand {
 
     protected final Diore plugin;
-    protected final ConfigManager configManager;
+    protected final DioreConfigManager configManager;
     protected final AccountManager accountManager;
 
     public DioreSubCommand(Diore plugin) {

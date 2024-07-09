@@ -16,7 +16,7 @@ import ximronno.api.interfaces.Account;
 import ximronno.diore.Diore;
 import ximronno.diore.items.Items;
 import ximronno.diore.model.AccountManager;
-import ximronno.diore.model.ConfigManager;
+import ximronno.diore.model.DioreConfigManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +24,7 @@ import java.util.HashMap;
 public class TransactionsListener implements Listener {
 
     private final Diore plugin;
-    private final ConfigManager configManager;
+    private final DioreConfigManager configManager;
     private final AccountManager accountManager;
 
     public TransactionsListener(Diore plugin) {

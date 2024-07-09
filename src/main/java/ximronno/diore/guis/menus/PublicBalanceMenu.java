@@ -85,25 +85,19 @@ public class PublicBalanceMenu extends DioreMenu {
 
     }
     private ItemStack getPublicBalanceTrue(FileConfiguration config) {
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.GREEN_TERRACOTTA)
                 .setDisplayName(configManager.getFormattedString(config, "public-balance-menu-true"))
                 .setLore(configManager.getFormattedList(config, "public-balance-menu-true-lore"))
+                .addPersistentData(key, "true")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, "true");
-
-        return item;
     }
     private ItemStack getPublicBalanceFalse(FileConfiguration config) {
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.RED_TERRACOTTA)
                 .setDisplayName(configManager.getFormattedString(config, "public-balance-menu-false"))
                 .setLore(configManager.getFormattedList(config, "public-balance-menu-false-lore"))
+                .addPersistentData(key, "false")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, "false");
-
-        return item;
     }
 }

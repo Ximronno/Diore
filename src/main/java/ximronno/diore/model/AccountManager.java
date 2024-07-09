@@ -24,7 +24,7 @@ public class AccountManager {
 
     private final List<Account> accounts = Collections.synchronizedList(new ArrayList<>());
     private final Diore plugin;
-    private final ConfigManager configManager;
+    private final DioreConfigManager configManager;
     public AccountManager(Diore plugin) {
         this.plugin = plugin;
         this.configManager = plugin.getConfigManager();

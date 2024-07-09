@@ -16,7 +16,7 @@ import ximronno.diore.Diore;
 import ximronno.diore.guis.DioreMenu;
 import ximronno.diore.impl.Languages;
 import ximronno.diore.model.AccountManager;
-import ximronno.diore.model.ConfigManager;
+import ximronno.diore.model.DioreConfigManager;
 
 import java.net.URL;
 import java.util.Map;
@@ -24,7 +24,7 @@ import java.util.Map;
 public class MainMenu extends DioreMenu {
     private final Diore plugin = Diore.getInstance();
     private final AccountManager accountManager = plugin.getAccountManager();
-    private final ConfigManager configManager = plugin.getConfigManager();
+    private final DioreConfigManager configManager = plugin.getConfigManager();
 
     public MainMenu(NamespacedKey key) {
         super(key);
@@ -92,11 +92,10 @@ public class MainMenu extends DioreMenu {
 
     }
     private ItemStack getMainMenuSkull(Account acc, FileConfiguration config, Player p) {
-
         String yes = configManager.getFormattedString(config, "menu-yes");
         String no = configManager.getFormattedString(config, "menu-no");
 
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.PLAYER_HEAD)
                 .setDisplayName(configManager.getFormattedString(config, "main-menu-skull")
                         .replace("<player>", p.getDisplayName()))
@@ -105,11 +104,8 @@ public class MainMenu extends DioreMenu {
                                         "<language>", acc.getLanguage().getName(),
                                         "<public>", (acc.isPublicBalance() ? yes : no))))
                 .setProfile(p.getPlayerProfile())
+                .addPersistentData(key, "skull")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, "skull");
-
-        return item;
     }
     private ItemStack getMainMenuIssuesSkull(FileConfiguration config) {
         URL url;
@@ -119,15 +115,12 @@ public class MainMenu extends DioreMenu {
             return null;
         }
 
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.PLAYER_HEAD)
                 .setDisplayName(configManager.getFormattedString(config, "main-menu-issues-skull"))
                 .setLore(configManager.getFormattedList(config, "main-menu-issues-skull-lore"))
                 .setProfileFromURL(url)
+                .addPersistentData(key, "issues")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, "issues");
-
-        return item;
     }
 }

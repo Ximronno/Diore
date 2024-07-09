@@ -15,12 +15,12 @@ import ximronno.diore.Diore;
 import ximronno.diore.guis.DioreMenu;
 import ximronno.diore.impl.Languages;
 import ximronno.diore.model.AccountManager;
-import ximronno.diore.model.ConfigManager;
+import ximronno.diore.model.DioreConfigManager;
 
 public class AccountMenu extends DioreMenu {
     private final Diore plugin = Diore.getInstance();
     private final AccountManager accountManager = plugin.getAccountManager();
-    private final ConfigManager configManager = plugin.getConfigManager();
+    private final DioreConfigManager configManager = plugin.getConfigManager();
 
     public AccountMenu(NamespacedKey key) {
         super(key);
@@ -33,7 +33,7 @@ public class AccountMenu extends DioreMenu {
 
     @Override
     public String getTitle() {
-        return configManager.getFormattedString("main-menu-title");
+        return configManager.getFormattedString("account-menu-title");
     }
     @Override
     public void handleMenu(Player p, Account acc, Language language, PersistentDataContainer container) {
@@ -93,47 +93,37 @@ public class AccountMenu extends DioreMenu {
 
     }
     private ItemStack getAccountMenuBalance(Account acc, FileConfiguration config) {
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.DIAMOND_ORE)
                 .setDisplayName(configManager.getFormattedString(config, "account-menu-balance")
                         .replace("<balance>", accountManager.formatBalance(acc.getBalance())))
                 .setLore(configManager.getFormattedList(config, "account-menu-balance-lore"))
+                .addPersistentData(key, "balance")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, "balance");
-
-        return item;
     }
     private ItemStack getAccountMenuLanguage(@NotNull Language language) {
         FileConfiguration config = language.getConfig();
 
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.PLAYER_HEAD)
                 .setDisplayName(configManager.getFormattedString(config, "account-menu-language")
                         .replace("<language>", language.getName()))
                 .setLore(configManager.getFormattedList(config, "account-menu-language-lore"))
                 .setProfileFromURL(language.getTextureURL())
+                .addPersistentData(key, "language")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, "language");
-
-        return item;
     }
     private ItemStack getAccountMenuPublic(Account acc, FileConfiguration config) {
-
         String yes = configManager.getFormattedString(config, "menu-yes");
         String no = configManager.getFormattedString(config, "menu-no");
 
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(getPublicMaterial(acc.isPublicBalance()))
                 .setDisplayName(configManager.getFormattedString(config, "account-menu-public")
                         .replace("<public>", (acc.isPublicBalance() ? yes : no)))
                 .setLore(configManager.getFormattedList(config, "account-menu-public-lore"))
+                .addPersistentData(key, "public")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, "public");
-
-        return item;
     }
     private Material getPublicMaterial(Boolean publicBalance) {
         if(publicBalance) return Material.LIME_TERRACOTTA;

@@ -19,10 +19,7 @@ import ximronno.diore.impl.Languages;
 import ximronno.diore.items.Items;
 import ximronno.diore.utils.AccountUtils;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DepositAmountMenu extends DioreMenu {
     public DepositAmountMenu(NamespacedKey key) {
@@ -139,58 +136,44 @@ public class DepositAmountMenu extends DioreMenu {
     private ItemStack getDepositAll(Player p, FileConfiguration config, double balance) {
         double amount = getDiamondOres(p);
 
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.CHEST)
                 .setAmount(64)
                 .setDisplayName(configManager.getFormattedString(config, "deposit-menu-all"))
                 .setLore(getLore(config, balance, amount))
+                .addPersistentData(key, String.valueOf(amount))
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, String.valueOf(amount));
-
-        return item;
     }
     private ItemStack getDepositHalf(Player p, FileConfiguration config, double balance) {
         double amount = Math.floor(getDiamondOres(p) / 2);
-
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.CHEST)
                 .setAmount(32)
                 .setDisplayName(configManager.getFormattedString(config, "deposit-menu-half"))
                 .setLore(getLore(config, balance, amount))
+                .addPersistentData(key, String.valueOf(amount))
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, String.valueOf(amount));
-
-        return item;
     }
     private ItemStack getDepositQuarter(Player p, FileConfiguration config, double balance) {
         double amount = Math.floor(getDiamondOres(p) / 4);
-
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.CHEST)
                 .setDisplayName(configManager.getFormattedString(config, "deposit-menu-quarter"))
                 .setLore(getLore(config, balance, amount))
+                .addPersistentData(key, String.valueOf(amount))
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, String.valueOf(amount));
-
-        return item;
     }
     private ItemStack getDepositCustom(FileConfiguration config, double balance) {
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.OAK_SIGN)
                 .setDisplayName(configManager.getFormattedString(config, "deposit-menu-custom"))
                 .setLore(getLore(config, balance, 0))
+                .addPersistentData(key, "custom")
                 .build();
-
-        ItemBuilder.addPersistentData(item, key, "custom");
-
-        return item;
     }
     private double getDiamondOres(Player p) {
 
-        int diamondOreCount = 0;
+        Integer diamondOreCount = 0;
         int diamondOreNuggetCount = 0;
 
         for (ItemStack items : p.getInventory().getContents()) {

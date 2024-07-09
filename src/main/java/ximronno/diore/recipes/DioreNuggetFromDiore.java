@@ -2,6 +2,7 @@ package ximronno.diore.recipes;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Tag;
 import org.bukkit.inventory.ShapelessRecipe;
 import org.jetbrains.annotations.NotNull;
 import ximronno.diore.items.Items;

@@ -11,16 +11,13 @@ public class Items {
     private static final NamespacedKey diore_items_key = new NamespacedKey(plugin, "diore_items_key");
 
     public static ItemStack getDiamondOreNugget(int amount) {
-        ItemStack item = ItemBuilder.builder()
+        return ItemBuilder.builder()
                 .setMaterial(Material.TUBE_CORAL)
                 .setAmount(amount)
                 .setDisplayName(plugin.getConfigManager().getFormattedString("diamond-nugget-name"))
                 .setLore(plugin.getConfigManager().getFormattedList("diamond-nugget-lore"))
+                .addPersistentData(diore_items_key, "diamond_nugget")
                 .build();
-
-        ItemBuilder.addPersistentData(item, diore_items_key, "diore_nugget");
-
-        return item;
     }
 
     public static NamespacedKey getDioreItemsKey() {

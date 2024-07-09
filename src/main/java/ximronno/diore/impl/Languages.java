@@ -5,7 +5,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import ximronno.api.interfaces.Language;
 import ximronno.diore.Diore;
-import ximronno.diore.model.ConfigManager;
+import ximronno.diore.model.DioreConfigManager;
 
 import java.io.File;
 import java.io.InputStream;
@@ -29,7 +29,7 @@ public enum Languages implements Language {
     File configFile;
     URL textureURL;
     Languages(String unicode, URL textureURL) {
-        ConfigManager configManager = Diore.getInstance().getConfigManager();
+        DioreConfigManager configManager = Diore.getInstance().getConfigManager();
         this.unicode = unicode;
         this.configFile = configManager.getFile("languages/" + this.unicode + ".yml");
         this.config = configManager.getConfig(configFile);
