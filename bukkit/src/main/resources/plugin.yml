@@ -13,5 +13,29 @@ commands:
       - bal
     permission: diore.balance
 permissions:
+  diore.balance.*:
+    default: op
+    children:
+      diore.balance.help: true
+      diore.balance.info: true
+      diore.balance.locale: true
+      diore.balance.privacy: true
+      diore.balance.deposit: true
+      diore.balance.transfer: true
+      diore.balance.withdraw: true
   diore.balance:
+    default: true
+  diore.balance.help:
+    default: true
+  diore.balance.info:
+    default: true
+  diore.balance.locale:
+    default: true
+  diore.balance.privacy:
+    default: true
+  diore.balance.deposit:
+    default: true
+  diore.balance.transfer:
+    default: true
+  diore.balance.withdraw:
     default: true
