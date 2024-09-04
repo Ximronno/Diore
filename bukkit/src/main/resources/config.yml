@@ -1,0 +1,12 @@
+diamond_nugget_name: "Diamond nugget" #Diamond nugget item name
+save:
+  enabled: true #Enables auto saving
+  cooldown_minutes: 5 #Auto save interval in minutes
+  load_saved_accounts: false #Loads all saved accounts in account_data folder, can crash server at start if you have a lot of accounts!
+  max_saved_transactions: 25 #Max saved transactions in players account data, lower if you have lots of players
+  save_missing_paths: false #Saves all missing paths, should not save anything with pre-configured messages, helps with new languages creation
+console:
+  use_logger: true #Logs to console practically every important action
+lang:
+  default: "en_us" #Default language, you can change it to other language that is in messages folder
+  try_detect_client: true #Tryes to set account language with clients language, only when player doesn't have an account

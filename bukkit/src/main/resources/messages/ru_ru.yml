@@ -1,0 +1,24 @@
+language:
+  name: "&bРусский"
+  flag_url: "https://textures.minecraft.net/texture/16eafef980d6117dabe8982ac4b4509887e2c4621f6a8fe5c9b735a83d775ad"
+commands:
+  balance:
+    help_title: "&b----Подкоманды /balance:----"
+    help_description: "Выводит все подкоманды /balance"
+    help_format: "&b{syntax} -> {description}"
+    amount_format: "&b{amount} руд"
+    info_description: "&bПоказывает информацию о балансе"
+    info_list:
+      - "&bВаш баланс: {balance}"
+      - "&bВаш публичный баланс: {public_balance}"
+    locale_description: "&bИзменяет язык вашего аккаунта"
+    locale_set: "&bЯзык установлен на {locale}"
+    public_balance_description: "&bУстанавливает публичность вашего баланса"
+    public_balance_set_true: "&bВаш баланс теперь публичный"
+    public_balance_set_false: "&bВаш баланс теперь приватный"
+    withdraw_description: "Выводит ваши средства на аккаунт"
+    deposit_description: "Кладет ваши средства на аккаунт"
+    transfer_description: "Переводит средства с вашего аккаунта на аккаунт другого игрока"
+error:
+  no_account: "&bАккаунт не существует"
+  locale_not_found: "&bЯзык не найден"

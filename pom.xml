@@ -4,61 +4,24 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>Ximronno</groupId>
-  <artifactId>Diore</artifactId>
-  <version>beta-0.2.3</version>
-  <packaging>jar</packaging>
+  <groupId>lv.ximronno</groupId>
+  <artifactId>diore</artifactId>
+  <version>beta-0.3</version>
+  <packaging>pom</packaging>
+
+<modules>
+    <module>api</module>
+    <module>bukkit</module>
+</modules>
 
   <name>Diore</name>
+  <description>Diamond-based economy plugin with Vault.</description>
+  <url>https://github.com/Ximronno/Diore</url>
 
   <properties>
     <java.version>1.8</java.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <id>maven-snapshots</id>
-            <url>https://repository.apache.org/content/repositories/snapshots/</url>
-        </pluginRepository>
-        <pluginRepository>
-            <id>maven-shade-plugin</id>
-            <url>https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-shade-plugin</url>
-        </pluginRepository>
-    </pluginRepositories>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <source>16</source>
-          <target>16</target>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.4</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-      </resource>
-    </resources>
-  </build>
 
   <repositories>
       <repository>
@@ -68,14 +31,6 @@
       <repository>
           <id>sonatype</id>
           <url>https://oss.sonatype.org/content/groups/public/</url>
-      </repository>
-      <repository>
-          <id>jitpack.io</id>
-          <url>https://jitpack.io</url>
-      </repository>
-      <repository>
-          <id>placeholderapi</id>
-          <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
       </repository>
   </repositories>
 
@@ -87,27 +42,10 @@
           <scope>provided</scope>
       </dependency>
       <dependency>
-          <groupId>com.github.MilkBowl</groupId>
-          <artifactId>VaultAPI</artifactId>
-          <version>1.7</version>
-          <scope>provided</scope>
-      </dependency>
-      <dependency>
           <groupId>org.jetbrains</groupId>
           <artifactId>annotations</artifactId>
           <version>24.1.0</version>
           <scope>compile</scope>
-      </dependency>
-      <dependency>
-          <groupId>me.clip</groupId>
-          <artifactId>placeholderapi</artifactId>
-          <version>2.11.6</version>
-          <scope>provided</scope>
-      </dependency>
-      <dependency>
-          <groupId>de.rapha149.signgui</groupId>
-          <artifactId>signgui</artifactId>
-          <version>2.3.6</version>
       </dependency>
   </dependencies>
 </project>

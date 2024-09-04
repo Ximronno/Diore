@@ -1,0 +1,17 @@
+name: Diore
+version: '${project.version}'
+main: ximronno.bukkit.Diore
+author: Ximronno
+softdepend:
+  - Vault
+api-version: '1.19'
+commands:
+  balance:
+    description: Show your balance and make transactions, use /balance help to get subcommands
+    usage: /balance
+    aliases:
+      - bal
+    permission: diore.balance
+permissions:
+  diore.balance:
+    default: true

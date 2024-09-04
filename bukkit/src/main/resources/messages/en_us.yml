@@ -1,0 +1,232 @@
+commands:
+  balance:
+    help_title: "&b----/Balance Help:----"
+    help_description: "&bGets all of /balance subcommands"
+    help_format: "&b{syntax} -> {description}"
+    info_description: "&bShows balance information"
+    info_list:
+      - "&bYour balance: {balance}"
+      - "&bYour privacy: {balance_status}"
+    locale_description: "&bChanges your locale"
+    locale_set: "&bLocale set to {locale}"
+    public_balance_description: "&bSets the publicity of your balance"
+    private_balance_set: "&bYour balance is now {balance_status}"
+    invalid_amount: "&bInvalid amount"
+    withdraw_description: "&bWithdraws ores from your account"
+    withdraw_success: "&bWithdrawn {amount} from your account"
+    deposit_description: "&bDeposits ores to your account"
+    deposit_success: "&bDeposited {amount} to your account"
+    transfer_description: "&bTransfers ores from your account to another account"
+    transfer_success: "&bTransferred {amount} from your account to {target}"
+    transfer_received: "&bYou have received {amount} from {sender}"
+    deposit_insufficient: "&bNot enough ores to deposit"
+    transfer_insufficient: "&bNot enough ores to transfer"
+    withdraw_insufficient: "&bNot enough ores to withdraw"
+  issues_link: "&b&oClick here to open GitHub Issues"
+format:
+    amount_format: "&a{amount} &bores"
+    negative_amount_format: "&c{amount} &bores"
+    date_format: "MM.dd.yyyy"
+    seconds_format: "&b{seconds} seconds ago"
+    minutes_format: "&b{minutes} minutes ago"
+    hours_format: "&b{hours} hours ago"
+    days_format: "&b{days} days ago"
+    private_format: "&aprivate"
+    public_format: "&cpublic"
+language:
+  name: "&bEnglish"
+  flag_url: "https://textures.minecraft.net/texture/4cac9774da1217248532ce147f7831f67a12fdcca1cf0cb4b3848de6bc94b4"
+error:
+  no_account: "&bAccount does not exist"
+  locale_not_found: "&bLocale not found"
+  player_not_found: "&bPlayer not found"
+  sender_no_account: "&yYou don't have in-game account, please rejoin the server or contact admin!"
+menu:
+  main_menu:
+    name: "Main Menu"
+    item:
+      player_head:
+        name: "&bYour account: {player_name}"
+      player_skull:
+        lore:
+          - "&bBalance: {balance}"
+          - "&bLanguage: {lang_name}"
+          - "&bClick to see more"
+      github_issues:
+        name: "&bGitHub Issues"
+        lore:
+          - "&bIf you encounter issues, please report it!"
+          - "&bClick to open GitHub issues link"
+  item:
+    back_button:
+      name: "&bReturn"
+  account_menu:
+    name: "Account Menu"
+    item:
+      transactions:
+        name: "&bYour balance: {balance}"
+        lore:
+          - "&bClick to make transactions"
+      locale_setter:
+        name: "&bCurrent language: {lang_name}"
+        lore:
+          - "&bClick to change"
+      privacy_setter_true:
+        name: "&bPrivate balance"
+      privacy_setter_false:
+        name: "&bPublic balance"
+      privacy_setter:
+        lore:
+          - "&bClick to change"
+  locale_setter_menu:
+    name: "Languages"
+    item:
+      language:
+        format: "&bRaw format: {raw_format}"
+        equipped: "&bCurrently equipped language"
+        default: "&bServer default language"
+  transactions_menu:
+    name: "Transactions Menu"
+    item:
+      deposit:
+        name: "&bDeposit"
+        lore:
+          - "&bClick to deposit"
+      withdraw:
+        name: "&bWithdraw"
+        lore:
+          - "&bClick to withdraw"
+      transfer:
+        name: "&bTransfer"
+        lore:
+          - "&bClick to transfer"
+      recent_transactions:
+        name: "&bRecent transactions:"
+        format: "{formatted_amount}&b - {formatted_time}"
+        no_recent_transactions: "&bYou don't have any transactions"
+  deposit_menu:
+    name: "Select amount to deposit"
+    item:
+      deposit_all:
+        name: "&bDeposit all"
+        lore:
+          - "&bClick to deposit: {amount}"
+      deposit_half:
+        name: "&bDeposit half"
+        lore:
+          - "&bClick to deposit: {amount}"
+      deposit_quarter:
+        name: "&bDeposit quarter"
+        lore:
+          - "&bClick to deposit: {amount}"
+      deposit_custom:
+        name: "&bDeposit custom amount"
+        lore:
+          - "&bClick to set amount"
+      deposit_custom_amount:
+        name: "&bDeposit custom amount"
+        lore:
+          - "&bClick to deposit: {amount}"
+          - "&bRight click to change amount"
+  recent_transactions_menu:
+    name: "Recent transactions"
+    item:
+      no_recent_transactions:
+        name: "&bNo recent transactions"
+        lore:
+          - "&bYou don't have any transactions!"
+  transfer_selector_menu:
+    name: "Select account to transfer"
+    item:
+      transfer_selector_head:
+        name: "&b{target_name}"
+        lore:
+          - "&bBalance: {target_balance}"
+      transfer_selector_no_accounts:
+        name: "&bNo account to transfer"
+        lore:
+          - "&bNo one to transfer"
+  withdraw_menu:
+    name: "Select amount to withdraw"
+    item:
+      withdraw_all:
+        name: "&bWithdraw all"
+        lore:
+          - "&bClick to withdraw: {amount}"
+          - "&bYour balance after that: {balance-amount}"
+      withdraw_half:
+        name: "&bWithdraw half"
+        lore:
+          - "&bClick to withdraw: {amount}"
+          - "&bYour balance after that: {balance-amount}"
+      withdraw_quarter:
+        name: "&bWithdraw quarter"
+        lore:
+          - "&bClick to withdraw: {amount}"
+          - "&bYour balance after that: {balance-amount}"
+      withdraw_custom:
+        name: "&bWithdraw custom amount"
+        lore:
+          - "&bClick to set amount"
+      withdraw_custom_amount:
+        name: "&bWithdraw custom amount"
+        lore:
+          - "&bClick to withdraw: {amount}"
+          - "&bYour balance after that: {balance-amount}"
+          - "&bRight click to change amount"
+  transfer_sum_selector_menu:
+    name: "Select amount to transfer"
+    item:
+      transfer_sum_selector_head:
+        name: "&bTarget: {target_name}"
+        lore:
+          - "&bSelect how much you want to transfer"
+      transfer_all:
+        name: "&bTransfer all"
+        lore:
+          - "&bClick to transfer: {amount}"
+          - "&bYour balance after that: {balance-amount}"
+      transfer_half:
+        name: "&bTransfer half"
+        lore:
+          - "&bClick to transfer: {amount}"
+          - "&bYour balance after that: {balance-amount}"
+      transfer_quarter:
+        name: "&bTransfer quarter"
+        lore:
+          - "&bClick to transfer: {amount}"
+          - "&bYour balance after that: {balance-amount}"
+      transfer_custom:
+        name: "&bTransfer custom amount"
+        lore:
+          - "&bClick to set amount"
+      transfer_custom_amount:
+        name: "&bTransfer custom amount"
+        lore:
+          - "&bClick to transfer: {amount}"
+          - "&bYour balance after that: {balance-amount}"
+          - "&bRight click to change amount"
+  transfer_confirm_menu:
+    name: "Please, confirm info"
+    item:
+      transfer_confirm_head:
+        name: "&bTarget: {target_name}"
+        lore:
+          - "&bYou will transfer: {amount}"
+      transfer_confirm:
+        name: "&bConfirm"
+        lore:
+          - "&bClick to confirm"
+      transfer_decline:
+        name: "&bDecline"
+        lore:
+          - "&bClick to decline"
+  privacy_setter_menu:
+    name: "Select your privacy"
+    item:
+      privacy_setter_true:
+        lore:
+          - "&bSet to private"
+      privacy_setter_false:
+        lore:
+          - "&bSet to public"
