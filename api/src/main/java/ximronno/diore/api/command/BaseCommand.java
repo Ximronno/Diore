@@ -2,6 +2,7 @@ package ximronno.diore.api.command;
 
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -34,6 +35,9 @@ public abstract class BaseCommand implements TabExecutor {
         }
         for(SubCommand subCommand : subCommands) {
             if(subCommand.getName().equalsIgnoreCase(strings[0])) {
+                if(!commandSender.hasPermission(subCommand.getSubCommandPermission())) {
+                    return true;
+                }
                 if(subCommand.perform(player, strings)) {
                     return true;
                 }

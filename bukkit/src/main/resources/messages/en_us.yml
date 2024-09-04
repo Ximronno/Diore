@@ -9,7 +9,7 @@ commands:
       - "&bYour privacy: {balance_status}"
     locale_description: "&bChanges your locale"
     locale_set: "&bLocale set to {locale}"
-    public_balance_description: "&bSets the publicity of your balance"
+    private_balance_description: "&bSets the privacy of your balance"
     private_balance_set: "&bYour balance is now {balance_status}"
     invalid_amount: "&bInvalid amount"
     withdraw_description: "&bWithdraws ores from your account"

@@ -1,6 +1,8 @@
 package ximronno.bukkit.command.subcommands.balance.info;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.Nullable;
 import ximronno.bukkit.command.DioreSubcommand;
 import ximronno.bukkit.menu.yap.MainMenu;
@@ -19,6 +21,11 @@ public class BalanceInfo extends DioreSubcommand {
     @Override
     public String getName() {
         return "info";
+    }
+
+    @Override
+    public Permission getSubCommandPermission() {
+        return Bukkit.getPluginManager().getPermission("diore.balance.info");
     }
 
     @Override

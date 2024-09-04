@@ -1,6 +1,7 @@
 package ximronno.diore.api.command;
 
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -9,6 +10,8 @@ import java.util.Locale;
 public abstract class SubCommand {
 
     public abstract String getName();
+
+    public abstract Permission getSubCommandPermission();
 
     public abstract String getDescription(@Nullable Locale locale);
 
