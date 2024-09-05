@@ -6,6 +6,7 @@ import ximronno.bukkit.account.managment.DioreAccountManager;
 import ximronno.bukkit.account.storage.DioreAccountSaver;
 import ximronno.bukkit.config.DioreConfigLoader;
 import ximronno.bukkit.config.DioreConfigSaver;
+import ximronno.bukkit.config.DioreMainConfig;
 import ximronno.bukkit.message.DioreMessageLoader;
 import ximronno.bukkit.message.DioreMessageManager;
 import ximronno.bukkit.account.managment.DioreAccountController;
@@ -48,10 +49,10 @@ public class ApiDiore implements DioreAPI {
 
     public ApiDiore(Diore plugin) {
 
+        mainConfig = new DioreMainConfig(plugin);
+
         configLoader = new DioreConfigLoader(plugin);
         configLoader.loadMessagesConfigs();
-
-        mainConfig = configLoader.loadMainConfig();
 
         configSaver = new DioreConfigSaver(this, plugin.getLogger());
 

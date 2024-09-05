@@ -70,16 +70,17 @@ public class DioreAccountController implements AccountController {
 
         AccountResponse response;
 
-        WithdrawEvent event = new WithdrawEvent(acc, amount);
-        Bukkit.getServer().getPluginManager().callEvent(event);
-        if(!acc.canWithdraw(amount)) {
+        if (!acc.canWithdraw(amount)) {
             response = AccountResponse.NOT_ENOUGH_FUNDS;
-        }
-        else if(event.isCancelled()) {
-            response = event.getResponse();
-        }
-        else {
-            response = AccountResponse.SUCCESS;
+        } else {
+            WithdrawEvent event = new WithdrawEvent(acc, amount);
+            Bukkit.getServer().getPluginManager().callEvent(event);
+
+            if (event.isCancelled()) {
+                response = event.getResponse();
+            } else {
+                response = AccountResponse.SUCCESS;
+            }
         }
         return switch(response) {
             case NOT_ENOUGH_FUNDS -> {

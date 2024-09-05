@@ -70,8 +70,4 @@ public class DioreConfigLoader implements ConfigLoader {
 
     }
 
-    @Override
-    public MainConfig loadMainConfig() {
-        return new DioreMainConfig(plugin);
-    }
 }

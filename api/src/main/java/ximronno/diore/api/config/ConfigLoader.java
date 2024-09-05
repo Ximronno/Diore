@@ -20,5 +20,4 @@ public interface ConfigLoader {
 
     void loadMessagesConfigs();
 
-    MainConfig loadMainConfig();
 }

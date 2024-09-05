@@ -2,6 +2,7 @@ package ximronno.bukkit.menu.transactions;
 
 import de.rapha149.signgui.SignGUI;
 import de.rapha149.signgui.SignGUIAction;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
@@ -152,6 +153,11 @@ public class DepositMenu extends DioreDataMenu {
     private void callSign(Player p, Locale locale) {
         SignGUI signGUI = SignGUI.builder()
                 .setType(Material.DARK_OAK_SIGN)
+
+                .setColor(DyeColor.LIGHT_BLUE)
+                .setLine(1, "↑")
+                .setLine(2, "|")
+                .setLine(3, "Write amount to deposit!")
                 .setHandler(((player, signGUIResult) -> {
                     String line = signGUIResult.getLine(0);
 
@@ -160,9 +166,7 @@ public class DepositMenu extends DioreDataMenu {
                         doubleFromLine = Double.parseDouble(line);
                     } catch(Exception exc) {
                         return List.of(SignGUIAction.runSync(DiorePlugin.getInstance().getJavaPlugin(), () -> new DepositMenu().open(p)),
-                                SignGUIAction.run(() -> {
-                                    player.sendMessage(messageManager.getMessage(CommandMessagesPaths.BALANCE_INVALID_AMOUNT, locale, true));
-                                }));
+                                SignGUIAction.run(() -> player.sendMessage(messageManager.getMessage(CommandMessagesPaths.BALANCE_INVALID_AMOUNT, locale, true))));
                     }
 
                     return List.of(SignGUIAction.runSync(DiorePlugin.getInstance().getJavaPlugin(), () -> new DepositMenu(doubleFromLine).open(p)));

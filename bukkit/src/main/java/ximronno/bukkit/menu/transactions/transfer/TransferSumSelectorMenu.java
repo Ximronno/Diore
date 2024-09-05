@@ -2,6 +2,7 @@ package ximronno.bukkit.menu.transactions.transfer;
 
 import de.rapha149.signgui.SignGUI;
 import de.rapha149.signgui.SignGUIAction;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
@@ -12,6 +13,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.profile.PlayerProfile;
 import ximronno.bukkit.menu.DioreDataMenu;
+import ximronno.bukkit.menu.transactions.DepositMenu;
+import ximronno.bukkit.message.type.CommandMessagesPaths;
 import ximronno.bukkit.message.type.menu.MenuItemLorePaths;
 import ximronno.bukkit.message.type.menu.MenuItemNamesPaths;
 import ximronno.bukkit.message.type.menu.MenuNamesPaths;
@@ -134,12 +137,12 @@ public class TransferSumSelectorMenu extends DioreDataMenu {
     public void handleMenu(Player p, Account acc, Locale locale, InventoryClickEvent e, int slot, PersistentDataContainer container) {
         if(slot == DEPOSIT_SIGN_SLOT) {
             if(amount <= 0) {
-                callSign(p);
+                callSign(p, locale);
                 return;
             }
             else {
                 if (e.getClick().equals(ClickType.RIGHT)) {
-                    callSign(p);
+                    callSign(p, locale);
                     return;
                 }
             }
@@ -155,9 +158,13 @@ public class TransferSumSelectorMenu extends DioreDataMenu {
         }
     }
 
-    private void callSign(Player p) {
+    private void callSign(Player p, Locale locale) {
         SignGUI signGUI = SignGUI.builder()
                 .setType(Material.DARK_OAK_SIGN)
+                .setColor(DyeColor.LIGHT_BLUE)
+                .setLine(1, "↑")
+                .setLine(2, "|")
+                .setLine(3, "Write amount to transfer!")
                 .setHandler(((player, signGUIResult) -> {
                     String line = signGUIResult.getLine(0);
 
@@ -165,7 +172,8 @@ public class TransferSumSelectorMenu extends DioreDataMenu {
                     try {
                         doubleFromLine = Double.parseDouble(line);
                     } catch(Exception exc) {
-                        return Collections.emptyList();
+                        return List.of(SignGUIAction.runSync(DiorePlugin.getInstance().getJavaPlugin(), () -> new TransferSumSelectorMenu(targetAcc, target, profile).open(p)),
+                                SignGUIAction.run(() -> player.sendMessage(messageManager.getMessage(CommandMessagesPaths.BALANCE_INVALID_AMOUNT, locale, true))));
                     }
 
                     return List.of(SignGUIAction.runSync(DiorePlugin.getInstance().getJavaPlugin(), () -> new TransferSumSelectorMenu(targetAcc, target, profile, doubleFromLine).open(p)));

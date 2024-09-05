@@ -16,6 +16,7 @@ permissions:
   diore.balance.*:
     default: op
     children:
+      diore.balance: true
       diore.balance.help: true
       diore.balance.info: true
       diore.balance.locale: true
