@@ -42,8 +42,12 @@ public class TransactionsListener implements Listener {
                 addDiamonds(p.getInventory(), ores, nuggets);
 
         if(!itemsToDrop.isEmpty()) {
-
             for(ItemStack item : itemsToDrop.values()) {
+                while(item.getAmount() > 64) {
+                    ItemStack newItem = new ItemStack(item.getType(), 64);
+                    item.setAmount(item.getAmount() - 64);
+                    p.getWorld().dropItem(p.getLocation(), newItem);
+                }
                 p.getWorld().dropItem(p.getLocation(), item);
             }
 

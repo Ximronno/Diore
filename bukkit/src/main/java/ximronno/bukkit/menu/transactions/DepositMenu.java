@@ -10,6 +10,7 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 import ximronno.bukkit.listeners.TransactionsListener;
 import ximronno.bukkit.menu.DioreDataMenu;
 import ximronno.bukkit.message.type.CommandMessagesPaths;
@@ -150,10 +151,21 @@ public class DepositMenu extends DioreDataMenu {
         }
     }
 
+    @Override
+    public void update(Player p) {
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+
+                open(p);
+
+            }
+        }.runTaskLater(DiorePlugin.getInstance().getJavaPlugin(), 2L);
+    }
+
     private void callSign(Player p, Locale locale) {
         SignGUI signGUI = SignGUI.builder()
                 .setType(Material.DARK_OAK_SIGN)
-
                 .setColor(DyeColor.LIGHT_BLUE)
                 .setLine(1, "↑")
                 .setLine(2, "|")
