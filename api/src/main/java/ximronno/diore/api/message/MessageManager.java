@@ -9,7 +9,6 @@ import java.util.Map;
 
 public interface MessageManager {
 
-
     MessageProvider getMessageProvider();
 
     boolean hasMessage(Path path, Locale locale);

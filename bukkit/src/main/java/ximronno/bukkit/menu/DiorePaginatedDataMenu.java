@@ -11,7 +11,11 @@ public abstract class DiorePaginatedDataMenu extends DiorePaginatedMenu {
 
     @Override
     public void handleMenu(Player p, Account acc, Locale locale, InventoryClickEvent e, int slot) {
-        handleMenu(p, acc, locale, e, slot, DioreDataMenu.getContainer(e));
+        PersistentDataContainer container =  DioreDataMenu.getContainer(e);
+        if(container == null) {
+            return;
+        }
+        handleMenu(p, acc, locale, e, slot, container);
     }
 
     public abstract void handleMenu(Player p, Account acc, Locale locale, InventoryClickEvent e, int slot, PersistentDataContainer container);

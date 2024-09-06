@@ -3,12 +3,15 @@ package ximronno.bukkit.config;
 import org.bukkit.plugin.java.JavaPlugin;
 import ximronno.bukkit.message.type.MainConfigPaths;
 import ximronno.diore.api.config.MainConfig;
+import ximronno.diore.api.config.SQLConfig;
 
 import java.util.Locale;
 
 public class DioreMainConfig implements MainConfig {
 
     private final JavaPlugin plugin;
+
+    private DioreSQLConfig sqlConfig;
 
     public DioreMainConfig(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -54,6 +57,14 @@ public class DioreMainConfig implements MainConfig {
     @Override
     public boolean saveMissingPaths() {
         return plugin.getConfig().getBoolean(MainConfigPaths.SAVE_MISSING_PATHS.path());
+    }
+
+    @Override
+    public SQLConfig getSQLConfig() {
+        if(sqlConfig == null) {
+            sqlConfig = new DioreSQLConfig(plugin);
+        }
+        return sqlConfig;
     }
 
     @Override

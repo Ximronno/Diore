@@ -19,11 +19,11 @@ import java.util.logging.Logger;
 
 public class DioreAccountSaver implements AccountSaver {
 
-    private final DioreAPI api;
+    protected final DioreAPI api;
 
     private final JavaPlugin plugin;
 
-    private final Logger logger;
+    protected final Logger logger;
 
     private boolean autoSaving = false;
 

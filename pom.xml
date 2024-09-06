@@ -6,7 +6,7 @@
 
   <groupId>lv.ximronno</groupId>
   <artifactId>diore</artifactId>
-  <version>beta-0.3.2</version>
+  <version>beta-0.3.3</version>
   <packaging>pom</packaging>
 
 <modules>

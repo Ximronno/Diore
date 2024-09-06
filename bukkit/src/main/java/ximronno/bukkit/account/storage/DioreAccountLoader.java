@@ -18,9 +18,9 @@ import java.util.logging.Logger;
 
 public class DioreAccountLoader implements AccountLoader {
 
-    private final DioreAPI api;
+    protected final DioreAPI api;
 
-    private Logger logger;
+    protected Logger logger;
 
     public DioreAccountLoader(DioreAPI api, Logger logger) {
         this.api = api;
@@ -55,7 +55,7 @@ public class DioreAccountLoader implements AccountLoader {
                 .setUuid(uuid)
                 .setBalance(balance)
                 .setLocale(locale)
-                .setPublicBalance(isPublicBalance)
+                .setPrivateBalance(isPublicBalance)
                 .build();
     }
 

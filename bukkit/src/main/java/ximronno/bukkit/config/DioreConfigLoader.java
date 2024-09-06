@@ -6,7 +6,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 import ximronno.bukkit.message.type.YmlPaths;
 import ximronno.diore.api.config.ConfigLoader;
-import ximronno.diore.api.config.MainConfig;
 import ximronno.diore.api.polyglot.Path;
 
 import java.io.File;

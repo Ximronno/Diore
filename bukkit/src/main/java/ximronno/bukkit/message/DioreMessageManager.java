@@ -263,7 +263,6 @@ public class DioreMessageManager implements MessageManager {
         }
 
         long days = TimeUnit.MILLISECONDS.toDays(elapsedTimeMillis);
-        System.out.println(days);
         if (days < 7) {
             return getMessage(FormatPaths.DAYS_FORMAT, locale, true,  Map.of("{days}", String.valueOf(days)));
         }

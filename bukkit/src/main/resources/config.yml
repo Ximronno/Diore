@@ -8,5 +8,12 @@ save:
 console:
   use_logger: true #Logs to console practically every important action
 lang:
-  default: "en_us" #Default language, you can change it to other language that is in messages folder
+  default: en_us #Default language, you can change it to other language that is in messages folder
   try_detect_client: true #Tryes to set account language with clients language, only when player doesn't have an account
+sql: #Only MySQL is supported!
+  enabled: false
+  host: localhost
+  port: 3306
+  database: diore
+  username: root
+  password: pass

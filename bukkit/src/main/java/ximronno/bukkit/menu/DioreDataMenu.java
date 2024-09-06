@@ -13,7 +13,11 @@ public abstract class DioreDataMenu extends DioreMenu {
 
     @Override
     public void handleMenu(Player p, Account acc, Locale locale, InventoryClickEvent e, int slot) {
-        handleMenu(p, acc, locale, e, slot, getContainer(e));
+        PersistentDataContainer container = getContainer(e);
+        if(container == null) {
+            return;
+        }
+        handleMenu(p, acc, locale, e, slot, container);
     }
 
     public abstract void handleMenu(Player p, Account acc, Locale locale, InventoryClickEvent e, int slot, PersistentDataContainer container);

@@ -13,7 +13,13 @@ public enum MainConfigPaths implements Path {
     DIAMOND_NUGGET_NAME,
     LOAD_SAVED_ACCOUNTS(MainConfigCategories.SAVE, "load_saved_accounts"),
     MAX_SAVED_RECENT_TRANSACTIONS(MainConfigCategories.SAVE, "max_saved_transactions"),
-    SAVE_MISSING_PATHS(MainConfigCategories.SAVE, "save_missing_paths"),;
+    SAVE_MISSING_PATHS(MainConfigCategories.SAVE, "save_missing_paths"),
+    SQL_ENABLED(MainConfigCategories.SQL, "enabled"),
+    SQL_HOST(MainConfigCategories.SQL, "host"),
+    SQL_PORT(MainConfigCategories.SQL, "port"),
+    SQL_DATABASE(MainConfigCategories.SQL, "database"),
+    SQL_USERNAME(MainConfigCategories.SQL, "username"),
+    SQL_PASSWORD(MainConfigCategories.SQL, "password"),;
 
     private final String path;
 

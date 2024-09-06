@@ -4,7 +4,8 @@ public enum MainConfigCategories {
 
     SAVE,
     CONSOLE,
-    LANG,;
+    LANG,
+    SQL,;
 
     public String getName() {
         return name().toLowerCase();

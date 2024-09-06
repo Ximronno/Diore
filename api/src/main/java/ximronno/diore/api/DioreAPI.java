@@ -12,6 +12,7 @@ import ximronno.diore.api.config.ConfigSaver;
 import ximronno.diore.api.config.MainConfig;
 import ximronno.diore.api.message.MessageLoader;
 import ximronno.diore.api.message.MessageManager;
+import ximronno.diore.api.storage.DataBase;
 
 import java.util.UUID;
 
@@ -38,6 +39,8 @@ public interface DioreAPI {
     MessageManager getMessageManager();
 
     MainConfig getMainConfig();
+
+    DataBase getDataBase();
 
     static DioreAPI getInstance(){
         return DioreProvider.getInstance();

@@ -32,7 +32,7 @@ public class OnPlayerJoinListener implements Listener {
             if(acc == null) {
                 acc = api.getAccountManager().createNewAccount(target.getUniqueId());
 
-                if (api.getMainConfig().useLocateClientLocale()) {
+                if(api.getMainConfig().useLocateClientLocale()) {
                     Account finalAcc = acc;
 
                     new BukkitRunnable() {

@@ -20,6 +20,8 @@ public interface MainConfig {
 
     int getMaxSavedRecentTransactions();
 
+    SQLConfig getSQLConfig();
+
     String getDiamondNuggetName();
 
 }

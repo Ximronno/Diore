@@ -1,7 +1,5 @@
 package ximronno.diore.api.account;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
@@ -36,7 +34,7 @@ public abstract class AccountBuilder {
         return this;
     }
 
-    public AccountBuilder setPublicBalance(boolean publicBalance) {
+    public AccountBuilder setPrivateBalance(boolean publicBalance) {
         this.publicBalance = publicBalance;
         return this;
     }
