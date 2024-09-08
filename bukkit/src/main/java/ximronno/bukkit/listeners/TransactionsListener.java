@@ -38,8 +38,14 @@ public class TransactionsListener implements Listener {
         int nuggets = (int) ((amount * 10) % 10);
         int ores = (int) amount;
 
-        HashMap<Integer, ItemStack> itemsToDrop =
-                addDiamonds(p.getInventory(), ores, nuggets);
+        HashMap<Integer, ItemStack> itemsToDrop;
+
+        if(plugin.getAPI().getMainConfig().useDiamonds()) {
+            itemsToDrop = addDiamonds(p.getInventory(), ores, nuggets);
+        }
+        else {
+            itemsToDrop = addDiamondsOres(p.getInventory(), ores, nuggets);
+        }
 
         if(!itemsToDrop.isEmpty()) {
             for(ItemStack item : itemsToDrop.values()) {
@@ -61,32 +67,63 @@ public class TransactionsListener implements Listener {
         Player p = Bukkit.getPlayer(acc.getUuid());
         if (p == null) return;
 
-        int[] ores = getDiamondOres(p.getInventory(), plugin);
+        HashMap<Integer, ItemStack> itemsToDrop;
+        if(plugin.getAPI().getMainConfig().useDiamonds()) {
 
-        int diamondOres = ores[0];
-        int deepslateDiamondOres = ores[1];
-        int diamondNuggets = ores[2];
+            int[] diamonds = getDiamonds(p.getInventory(), plugin);
 
-        BigDecimal oresAmount = BigDecimal.valueOf(diamondOres)
-                .add(BigDecimal.valueOf(deepslateDiamondOres)
-                .add(BigDecimal.valueOf(diamondNuggets).divide(BigDecimal.TEN)));
-        BigDecimal amount = BigDecimal.valueOf(e.getAmount());
+            int diamondsGems = diamonds[0];
+            int diamondNuggets = diamonds[1];
 
-        if (oresAmount.compareTo(amount) < 0) {
-            e.setResponse(AccountResponse.NOT_ENOUGH_FUNDS);
-            e.setCancelled(true);
-            return;
+            BigDecimal diamondsAmount = BigDecimal.valueOf(diamondsGems)
+                    .add(BigDecimal.valueOf(diamondNuggets).divide(BigDecimal.TEN));
+
+            BigDecimal amount = BigDecimal.valueOf(e.getAmount());
+
+            if (diamondsAmount.compareTo(amount) < 0) {
+                e.setResponse(AccountResponse.NOT_ENOUGH_FUNDS);
+                e.setCancelled(true);
+                return;
+            }
+
+            BigDecimal remainingAmount = diamondsAmount.subtract(amount);
+            int diamondGemsToAdd = remainingAmount.intValue();
+
+            BigDecimal fractionalPart = remainingAmount.subtract(BigDecimal.valueOf(diamondGemsToAdd));
+            int diamondNuggetsToAdd = fractionalPart.multiply(BigDecimal.TEN).intValue();
+
+            removeDiamonds(p.getInventory(), diamondsGems, diamondNuggets);
+            itemsToDrop = addDiamonds(p.getInventory(), diamondGemsToAdd, diamondNuggetsToAdd);
         }
+        else {
 
-        BigDecimal remainingAmount = oresAmount.subtract(amount);
-        int diamondOresToAdd = remainingAmount.intValue();
+            int[] ores = getDiamondOres(p.getInventory(), plugin);
 
-        BigDecimal fractionalPart = remainingAmount.subtract(BigDecimal.valueOf(diamondOresToAdd));
-        int diamondNuggetsToAdd = fractionalPart.multiply(BigDecimal.TEN).intValue();
+            int diamondOres = ores[0];
+            int deepslateDiamondOres = ores[1];
+            int diamondNuggets = ores[2];
 
-        removeDiamonds(p.getInventory(), diamondOres, deepslateDiamondOres, diamondNuggets);
-        HashMap<Integer, ItemStack> itemsToDrop =
-                addDiamonds(p.getInventory(), diamondOresToAdd, diamondNuggetsToAdd);
+            BigDecimal oresAmount = BigDecimal.valueOf(diamondOres)
+                    .add(BigDecimal.valueOf(deepslateDiamondOres)
+                            .add(BigDecimal.valueOf(diamondNuggets).divide(BigDecimal.TEN)));
+
+            BigDecimal amount = BigDecimal.valueOf(e.getAmount());
+
+            if (oresAmount.compareTo(amount) < 0) {
+                e.setResponse(AccountResponse.NOT_ENOUGH_FUNDS);
+                e.setCancelled(true);
+                return;
+            }
+
+            BigDecimal remainingAmount = oresAmount.subtract(amount);
+            int diamondOresToAdd = remainingAmount.intValue();
+
+            BigDecimal fractionalPart = remainingAmount.subtract(BigDecimal.valueOf(diamondOresToAdd));
+            int diamondNuggetsToAdd = fractionalPart.multiply(BigDecimal.TEN).intValue();
+
+            removeDiamondsOres(p.getInventory(), diamondOres, deepslateDiamondOres, diamondNuggets);
+            itemsToDrop = addDiamondsOres(p.getInventory(), diamondOresToAdd, diamondNuggetsToAdd);
+        }
 
         if(!itemsToDrop.isEmpty()) {
 
@@ -98,7 +135,7 @@ public class TransactionsListener implements Listener {
 
     }
 
-    private HashMap<Integer, ItemStack> removeDiamonds(Inventory inv, int diamondOres, int deepslateDiamondOres, int diamondNuggets) {
+    private HashMap<Integer, ItemStack> removeDiamondsOres(Inventory inv, int diamondOres, int deepslateDiamondOres, int diamondNuggets) {
         List<ItemStack> itemsToRemove = new ArrayList<>();
         if (diamondNuggets > 0) itemsToRemove.add(Diore.getDiamondNugget(diamondNuggets));
         if (diamondOres > 0) itemsToRemove.add(new ItemStack(Material.DIAMOND_ORE, diamondOres));
@@ -107,10 +144,26 @@ public class TransactionsListener implements Listener {
         return inv.removeItem(itemsToRemove.toArray(new ItemStack[0]));
     }
 
-    private HashMap<Integer, ItemStack> addDiamonds(Inventory inv, int diamondOres, int diamondNuggets) {
+    private HashMap<Integer, ItemStack> addDiamondsOres(Inventory inv, int diamondOres, int diamondNuggets) {
         List<ItemStack> itemsToAdd = new ArrayList<>();
         if (diamondNuggets > 0) itemsToAdd.add(Diore.getDiamondNugget(diamondNuggets));
         if (diamondOres > 0) itemsToAdd.add(new ItemStack(Material.DEEPSLATE_DIAMOND_ORE, diamondOres));
+
+        return inv.addItem(itemsToAdd.toArray(new ItemStack[0]));
+    }
+
+    private HashMap<Integer, ItemStack> removeDiamonds(Inventory inv, int diamonds, int diamondNuggets) {
+        List<ItemStack> itemsToAdd = new ArrayList<>();
+        if(diamondNuggets > 0) itemsToAdd.add(Diore.getDiamondNugget(diamondNuggets));
+        if(diamonds > 0) itemsToAdd.add(new ItemStack(Material.DIAMOND, diamonds));
+
+        return inv.removeItem(itemsToAdd.toArray(new ItemStack[0]));
+    }
+
+    private HashMap<Integer, ItemStack> addDiamonds(Inventory inv, int diamonds, int diamondNuggets) {
+        List<ItemStack> itemsToAdd = new ArrayList<>();
+        if(diamondNuggets > 0) itemsToAdd.add(Diore.getDiamondNugget(diamondNuggets));
+        if(diamonds > 0) itemsToAdd.add(new ItemStack(Material.DIAMOND, diamonds));
 
         return inv.addItem(itemsToAdd.toArray(new ItemStack[0]));
     }
@@ -139,5 +192,25 @@ public class TransactionsListener implements Listener {
         }
 
         return new int[]{diamondOres, deepslateDiamondOres, diamondNuggets};
+    }
+    public static int[] getDiamonds(Inventory inv, DiorePlugin plugin) {
+        int diamonds = 0;
+        int diamondNuggets = 0;
+
+        for(ItemStack item : inv.getContents()) {
+            if(item == null) continue;
+            switch (item.getType()) {
+                case DIAMOND:
+                    diamonds += item.getAmount();
+                    break;
+                default:
+                    if (item.getItemMeta().getPersistentDataContainer().has(plugin.getNamespacedKey(), PersistentDataType.STRING) &&
+                            item.getItemMeta().getPersistentDataContainer().get(plugin.getNamespacedKey(), PersistentDataType.STRING).equals("diamond_nugget")) {
+                        diamondNuggets += item.getAmount();
+                    }
+                    break;
+            }
+        }
+        return new int[]{diamonds, diamondNuggets};
     }
 }

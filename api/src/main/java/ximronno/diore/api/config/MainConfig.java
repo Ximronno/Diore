@@ -24,4 +24,5 @@ public interface MainConfig {
 
     String getDiamondNuggetName();
 
+    boolean useDiamonds();
 }

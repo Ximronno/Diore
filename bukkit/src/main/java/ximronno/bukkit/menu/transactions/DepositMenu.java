@@ -58,13 +58,24 @@ public class DepositMenu extends DioreDataMenu {
     public void setContents(Player p, Account acc, Locale locale) {
         addBorder(locale, true);
 
-        int[] ores = TransactionsListener.getDiamondOres(p.getInventory(), DiorePlugin.getInstance());
+        double rawOresAmount;
+        if(api.getMainConfig().useDiamonds()) {
+            int[] diamonds = TransactionsListener.getDiamonds(p.getInventory(), DiorePlugin.getInstance());
 
-        int diamondOres = ores[0];
-        int deepslateDiamondOres = ores[1];
-        int diamondNuggets = ores[2];
+            int diamondGems = diamonds[0];
+            int diamondNuggets = diamonds[1];
 
-        double rawOresAmount = diamondOres + deepslateDiamondOres + (diamondNuggets / 10.0);
+            rawOresAmount = diamondGems + (diamondNuggets / 10.0);
+        }
+        else {
+            int[] ores = TransactionsListener.getDiamondOres(p.getInventory(), DiorePlugin.getInstance());
+
+            int diamondOres = ores[0];
+            int deepslateDiamondOres = ores[1];
+            int diamondNuggets = ores[2];
+
+            rawOresAmount = diamondOres + deepslateDiamondOres + (diamondNuggets / 10.0);
+        }
 
         int DEPOSIT_ALL_SLOT = 10;
         int DEPOSIT_HALF_SLOT = 12;
