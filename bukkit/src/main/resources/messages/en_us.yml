@@ -60,6 +60,10 @@ menu:
   item:
     back_button:
       name: "&bReturn"
+    next_page_button:
+      name: "&bNext page"
+    previous_page_button:
+      name: "&bPrevious page"
   account_menu:
     name: "Account Menu"
     item:

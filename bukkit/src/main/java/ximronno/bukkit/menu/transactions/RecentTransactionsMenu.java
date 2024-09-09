@@ -70,6 +70,7 @@ public class RecentTransactionsMenu extends DiorePaginatedMenu {
                 }
             }
         }
+        hasNextPage = !((index + 1) >= transactions.size());
         addButtons(locale, true);
     }
 

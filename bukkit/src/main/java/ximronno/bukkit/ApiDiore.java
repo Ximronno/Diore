@@ -98,7 +98,7 @@ public class ApiDiore implements DioreAPI {
 
         accountManager = new DioreAccountManager(plugin.getLogger(), this);
 
-        accountController = new DioreAccountController(this);
+        accountController = new DioreAccountController(this, plugin);
 
         accountInfoFormatter = new DioreAccountInfoFormatter(this);
 

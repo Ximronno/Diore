@@ -1,6 +1,7 @@
 package ximronno.diore.api.storage;
 
 import ximronno.diore.api.account.Account;
+import ximronno.diore.api.account.Transaction;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,4 +18,6 @@ public interface DataBase {
     void putAccountIntoTable(Account acc) throws SQLException;
 
     Account getAccountFromTable(UUID uuid) throws SQLException;
+
+    void addRecentTransaction(UUID uuid , Transaction transaction) throws SQLException;
 }

@@ -1,5 +1,5 @@
 diamond_nugget_name: "Diamond nugget" #Diamond nugget item name
-use_diamonds: false
+use_diamonds: false #Use diamonds instead of diamonds ores
 save:
   enabled: true #Enables auto saving
   cooldown_minutes: 5 #Auto save interval in minutes
@@ -15,6 +15,6 @@ sql: #Only MySQL is supported!
   enabled: false
   host: localhost
   port: 3306
-  database: diore
+  database: diore #Must be created before using it!
   username: root
   password: pass

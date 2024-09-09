@@ -57,15 +57,19 @@ public class DioreAccount extends Account {
     @Override
     public void setRecentTransactions(List<Transaction> recentTransactions) {
         this.recentTransactions = recentTransactions;
-        while(this.recentTransactions.size() > this.maxTransactions) {
-            this.recentTransactions.remove(0);
+        if(!DioreAPI.getInstance().getMainConfig().getSQLConfig().isEnabled()) {
+            while(this.recentTransactions.size() > this.maxTransactions) {
+                this.recentTransactions.remove(0);
+            }
         }
     }
 
     @Override
     public void addRecentTransaction(Transaction transaction) {
-        if(recentTransactions.size() >= this.maxTransactions) {
-            recentTransactions.remove(0);
+        if(!DioreAPI.getInstance().getMainConfig().getSQLConfig().isEnabled()) {
+            if(recentTransactions.size() >= this.maxTransactions) {
+                recentTransactions.remove(0);
+            }
         }
         recentTransactions.add(transaction);
     }

@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import ximronno.diore.api.DioreAPI;
@@ -55,6 +56,20 @@ public class OnPlayerJoinListener implements Listener {
 
     }
 
+    @EventHandler
+    private void onPlayerQuit(PlayerQuitEvent e) {
+        Player target = e.getPlayer();
 
+        if(api.getAccountManager().hasAccount(target.getUniqueId())) {
+            Account toSaveAcc = api.getAccount(target.getUniqueId());
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    api.getAccountSaver().saveAccountToCFG(toSaveAcc);
+                }
+            }.runTaskAsynchronously(plugin);
+        }
+    }
 
 }

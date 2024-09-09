@@ -1,6 +1,7 @@
 package ximronno.bukkit.account.storage.database;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 import ximronno.bukkit.account.storage.DioreAccountSaver;
 import ximronno.diore.api.DioreAPI;
 import ximronno.diore.api.account.Account;
@@ -18,13 +19,15 @@ public class DioreSQLAccountSaver extends DioreAccountSaver {
     public boolean saveAccountToCFG(Account account) {
         try {
             api.getDataBase().putAccountIntoTable(account);
-            return true;
+            return false;
         } catch (SQLException e) {
             if(api.getMainConfig().useLogger()) {
                 logger.info("Error while saving account " + account.getUuid());
+                e.printStackTrace();
             }
-            return false;
+            return true;
         }
+
     }
 
 }

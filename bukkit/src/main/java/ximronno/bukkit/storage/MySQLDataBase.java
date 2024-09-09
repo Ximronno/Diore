@@ -3,10 +3,13 @@ package ximronno.bukkit.storage;
 import ximronno.bukkit.account.DioreAccount;
 import ximronno.diore.api.DioreAPI;
 import ximronno.diore.api.account.Account;
+import ximronno.diore.api.account.Transaction;
 import ximronno.diore.api.config.SQLConfig;
 import ximronno.diore.api.storage.DataBase;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -52,6 +55,7 @@ public class MySQLDataBase implements DataBase {
 
         final Statement statement = conn.createStatement();
         statement.execute("CREATE TABLE IF NOT EXISTS account_data(uuid varchar(36) primary key, locale text, balance double, privateBalance boolean)");
+        statement.execute("CREATE TABLE IF NOT EXISTS account_transactions(transactionID int AUTO_INCREMENT primary key, uuid varchar(36), amount double, time long)");
     }
 
     @Override
@@ -100,11 +104,44 @@ public class MySQLDataBase implements DataBase {
     }
 
     @Override
+    public void addRecentTransaction(UUID uuid, Transaction transaction) throws SQLException{
+        Connection conn = getConnection();
+
+        double amount = transaction.amount();
+        long time = transaction.time();
+
+        final PreparedStatement preparedStatement = conn
+                .prepareStatement("INSERT INTO account_transactions(uuid, amount, time) VALUES(?,?,?)");
+
+        preparedStatement.setString(1, uuid.toString());
+        preparedStatement.setDouble(2, amount);
+        preparedStatement.setLong(3, time);
+
+        preparedStatement.execute();
+        preparedStatement.close();
+    }
+
+    @Override
     public Account getAccountFromTable(UUID uuid) throws SQLException {
         Connection conn = getConnection();
 
+        final Statement statement1 = conn.createStatement();
+        ResultSet set1 = statement1.executeQuery("SELECT amount, time FROM account_transactions WHERE uuid = '" + uuid + "'");
+
+        List<Transaction> recentTransactions = new ArrayList<>();
+
+        while(set1.next()) {
+            double amount = set1.getDouble("amount");
+            long time = set1.getLong("time");
+
+            recentTransactions.add(Transaction.of(amount, time));
+        }
+
+        set1.close();
+        statement1.close();
+
         final Statement statement = conn.createStatement();
-        ResultSet set = statement.executeQuery("SELECT * FROM account_data WHERE uuid = '" + uuid.toString() + "'");
+        ResultSet set = statement.executeQuery("SELECT locale, balance, privateBalance FROM account_data WHERE uuid = '" + uuid.toString() + "'");
 
         if(set.next()) {
 
@@ -117,6 +154,7 @@ public class MySQLDataBase implements DataBase {
             }
 
             return DioreAccount.builder()
+                    .setRecentTransactions(recentTransactions)
                     .setUuid(uuid)
                     .setBalance(balance)
                     .setPrivateBalance(privateBalance)

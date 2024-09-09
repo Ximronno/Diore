@@ -21,7 +21,7 @@ public class DioreAccountSaver implements AccountSaver {
 
     protected final DioreAPI api;
 
-    private final JavaPlugin plugin;
+    protected final JavaPlugin plugin;
 
     protected final Logger logger;
 
@@ -63,7 +63,12 @@ public class DioreAccountSaver implements AccountSaver {
     @Override
     public void saveAllAccounts() {
         for(Account acc : api.getAccountManager().getAccountsList()) {
-            saveAccountToCFG(acc);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    saveAccountToCFG(acc);
+                }
+            }.runTaskAsynchronously(plugin);
         }
         if(api.getMainConfig().useLogger()) {
             logger.info("Saved all accounts (" + api.getAccountManager().getAccountsList().size() + ")");
