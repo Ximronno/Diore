@@ -1,7 +1,5 @@
 package ximronno.bukkit.command.manager;
 
-import org.bukkit.Bukkit;
-import org.bukkit.permissions.Permission;
 import ximronno.bukkit.command.Commands;
 import ximronno.bukkit.command.subcommands.balance.info.BalanceHelp;
 import ximronno.bukkit.command.subcommands.balance.info.BalanceInfo;
@@ -29,7 +27,7 @@ public class BalanceCommand extends BaseCommand {
         subCommands.add(new BalancePrivacy(api));
 
         subCommands.add(new BalanceWithdraw(api));
-        subCommands.add(new BalanceDeposit(api, plugin));
+        subCommands.add(new BalanceDeposit(api));
         subCommands.add(new BalanceTransfer(api));
 
         noLengthCommand = balanceInfo;

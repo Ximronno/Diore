@@ -1,5 +1,6 @@
 diamond_nugget_name: "Diamond nugget" #Diamond nugget item name
 use_diamonds: false #Use diamonds instead of diamonds ores
+use_diamond_nuggets: true #Use diamonds nuggets instead of regular diamonds, doesn't work if use_diamonds is true
 save:
   enabled: true #Enables auto saving
   cooldown_minutes: 5 #Auto save interval in minutes

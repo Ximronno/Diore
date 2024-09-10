@@ -5,7 +5,9 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.Nullable;
+import ximronno.bukkit.Permissions;
 import ximronno.bukkit.command.DioreSubcommand;
+import ximronno.bukkit.command.subcommands.SubCommands;
 import ximronno.bukkit.message.type.CommandMessagesPaths;
 import ximronno.bukkit.message.type.ErrorMessagesPaths;
 import ximronno.diore.api.DioreAPI;
@@ -23,12 +25,12 @@ public class BalanceTransfer extends DioreSubcommand {
 
     @Override
     public String getName() {
-        return "transfer";
+        return SubCommands.BALANCE_TRANSFER.getName();
     }
 
     @Override
     public Permission getSubCommandPermission() {
-        return Bukkit.getPluginManager().getPermission("diore.balance.transfer");
+        return Permissions.BALANCE_TRANSFER.getPermission();
     }
 
     @Override

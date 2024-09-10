@@ -76,4 +76,9 @@ public class DioreMainConfig implements MainConfig {
     public boolean useDiamonds() {
         return plugin.getConfig().getBoolean(MainConfigPaths.USE_DIAMONDS.path());
     }
+
+    @Override
+    public boolean useDiamondsNuggets() {
+        return plugin.getConfig().getBoolean(MainConfigPaths.USE_DIAMOND_NUGGETS.path());
+    }
 }

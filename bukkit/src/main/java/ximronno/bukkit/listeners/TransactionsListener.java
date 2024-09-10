@@ -9,6 +9,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import ximronno.bukkit.Diore;
+import ximronno.diore.api.DioreAPI;
 import ximronno.diore.api.DiorePlugin;
 import ximronno.diore.api.account.Account;
 import ximronno.diore.api.account.AccountResponse;
@@ -24,8 +25,11 @@ public class TransactionsListener implements Listener {
 
     private final DiorePlugin plugin;
 
+    private final DioreAPI api;
+
     public TransactionsListener(DiorePlugin plugin) {
         this.plugin = plugin;
+        this.api = plugin.getAPI();
     }
 
     @EventHandler
@@ -40,7 +44,7 @@ public class TransactionsListener implements Listener {
 
         HashMap<Integer, ItemStack> itemsToDrop;
 
-        if(plugin.getAPI().getMainConfig().useDiamonds()) {
+        if(api.getMainConfig().useDiamonds()) {
             itemsToDrop = addDiamonds(p.getInventory(), ores, nuggets);
         }
         else {
@@ -68,9 +72,9 @@ public class TransactionsListener implements Listener {
         if (p == null) return;
 
         HashMap<Integer, ItemStack> itemsToDrop;
-        if(plugin.getAPI().getMainConfig().useDiamonds()) {
+        if(api.getMainConfig().useDiamonds()) {
 
-            int[] diamonds = getDiamonds(p.getInventory(), plugin);
+            int[] diamonds = getDiamonds(p.getInventory());
 
             int diamondsGems = diamonds[0];
             int diamondNuggets = diamonds[1];
@@ -97,7 +101,7 @@ public class TransactionsListener implements Listener {
         }
         else {
 
-            int[] ores = getDiamondOres(p.getInventory(), plugin);
+            int[] ores = getDiamondOres(p.getInventory());
 
             int diamondOres = ores[0];
             int deepslateDiamondOres = ores[1];
@@ -168,7 +172,7 @@ public class TransactionsListener implements Listener {
         return inv.addItem(itemsToAdd.toArray(new ItemStack[0]));
     }
 
-    public static int[] getDiamondOres(Inventory inv, DiorePlugin plugin) {
+    public static int[] getDiamondOres(Inventory inv) {
         int diamondOres = 0;
         int deepslateDiamondOres = 0;
         int diamondNuggets = 0;
@@ -183,8 +187,7 @@ public class TransactionsListener implements Listener {
                     deepslateDiamondOres += item.getAmount();
                     break;
                 default:
-                    if (item.getItemMeta().getPersistentDataContainer().has(plugin.getNamespacedKey(), PersistentDataType.STRING) &&
-                            item.getItemMeta().getPersistentDataContainer().get(plugin.getNamespacedKey(), PersistentDataType.STRING).equals("diamond_nugget")) {
+                    if(item.equals(Diore.getDiamondNugget(item.getAmount()))) {
                         diamondNuggets += item.getAmount();
                     }
                     break;
@@ -193,7 +196,7 @@ public class TransactionsListener implements Listener {
 
         return new int[]{diamondOres, deepslateDiamondOres, diamondNuggets};
     }
-    public static int[] getDiamonds(Inventory inv, DiorePlugin plugin) {
+    public static int[] getDiamonds(Inventory inv) {
         int diamonds = 0;
         int diamondNuggets = 0;
 
@@ -204,8 +207,7 @@ public class TransactionsListener implements Listener {
                     diamonds += item.getAmount();
                     break;
                 default:
-                    if (item.getItemMeta().getPersistentDataContainer().has(plugin.getNamespacedKey(), PersistentDataType.STRING) &&
-                            item.getItemMeta().getPersistentDataContainer().get(plugin.getNamespacedKey(), PersistentDataType.STRING).equals("diamond_nugget")) {
+                    if(item.equals(Diore.getDiamondNuggetRaw(item.getAmount()))) {
                         diamondNuggets += item.getAmount();
                     }
                     break;

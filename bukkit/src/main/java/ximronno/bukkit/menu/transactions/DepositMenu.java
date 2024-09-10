@@ -60,7 +60,7 @@ public class DepositMenu extends DioreDataMenu {
 
         double rawOresAmount;
         if(api.getMainConfig().useDiamonds()) {
-            int[] diamonds = TransactionsListener.getDiamonds(p.getInventory(), DiorePlugin.getInstance());
+            int[] diamonds = TransactionsListener.getDiamonds(p.getInventory());
 
             int diamondGems = diamonds[0];
             int diamondNuggets = diamonds[1];
@@ -68,7 +68,7 @@ public class DepositMenu extends DioreDataMenu {
             rawOresAmount = diamondGems + (diamondNuggets / 10.0);
         }
         else {
-            int[] ores = TransactionsListener.getDiamondOres(p.getInventory(), DiorePlugin.getInstance());
+            int[] ores = TransactionsListener.getDiamondOres(p.getInventory());
 
             int diamondOres = ores[0];
             int deepslateDiamondOres = ores[1];

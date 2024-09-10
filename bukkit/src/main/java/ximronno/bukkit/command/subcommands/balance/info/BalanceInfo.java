@@ -4,7 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.Nullable;
+import ximronno.bukkit.Permissions;
 import ximronno.bukkit.command.DioreSubcommand;
+import ximronno.bukkit.command.subcommands.SubCommands;
 import ximronno.bukkit.menu.yap.MainMenu;
 import ximronno.bukkit.message.type.CommandMessagesPaths;
 import ximronno.diore.api.DioreAPI;
@@ -20,12 +22,12 @@ public class BalanceInfo extends DioreSubcommand {
 
     @Override
     public String getName() {
-        return "info";
+        return SubCommands.BALANCE_INFO.getName();
     }
 
     @Override
     public Permission getSubCommandPermission() {
-        return Bukkit.getPluginManager().getPermission("diore.balance.info");
+        return Permissions.BALANCE_INFO.getPermission();
     }
 
     @Override

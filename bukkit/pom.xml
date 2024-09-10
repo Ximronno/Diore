@@ -6,7 +6,7 @@
 
     <groupId>lv.ximronno</groupId>
     <artifactId>bukkit</artifactId>
-    <version>0.3.5</version>
+    <version>0.3.6</version>
     <packaging>jar</packaging>
 
     <name>DioreBukkit</name>

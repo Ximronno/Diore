@@ -4,7 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.Nullable;
+import ximronno.bukkit.Permissions;
 import ximronno.bukkit.command.DioreSubcommand;
+import ximronno.bukkit.command.subcommands.SubCommands;
 import ximronno.bukkit.message.type.CommandMessagesPaths;
 import ximronno.diore.api.DioreAPI;
 import ximronno.diore.api.account.Account;
@@ -20,12 +22,12 @@ public class BalanceLocale extends DioreSubcommand {
 
     @Override
     public String getName() {
-        return "lang";
+        return SubCommands.BALANCE_LOCALE.getName();
     }
 
     @Override
     public Permission getSubCommandPermission() {
-        return Bukkit.getPluginManager().getPermission("diore.balance.locale");
+        return Permissions.BALANCE_LOCALE.getPermission();
     }
 
     @Override

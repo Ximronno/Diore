@@ -4,7 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.Nullable;
+import ximronno.bukkit.Permissions;
 import ximronno.bukkit.command.DioreSubcommand;
+import ximronno.bukkit.command.subcommands.SubCommands;
 import ximronno.bukkit.message.type.CommandMessagesPaths;
 import ximronno.diore.api.DioreAPI;
 import ximronno.diore.api.DiorePlugin;
@@ -14,21 +16,18 @@ import java.util.Locale;
 
 public class  BalanceDeposit extends DioreSubcommand {
 
-    private final DiorePlugin plugin;
-
-    public BalanceDeposit(DioreAPI api, DiorePlugin plugin) {
+    public BalanceDeposit(DioreAPI api) {
         super(api);
-        this.plugin = plugin;
     }
 
     @Override
     public String getName() {
-        return "deposit";
+        return SubCommands.BALANCE_DEPOSIT.getName();
     }
 
     @Override
     public Permission getSubCommandPermission() {
-        return Bukkit.getPluginManager().getPermission("diore.balance.deposit");
+        return Permissions.BALANCE_DEPOSIT.getPermission();
     }
 
     @Override

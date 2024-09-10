@@ -5,6 +5,7 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
+import ximronno.bukkit.Permissions;
 import ximronno.bukkit.message.type.CommandMessagesPaths;
 import ximronno.bukkit.message.type.ErrorMessagesPaths;
 import ximronno.bukkit.message.type.LanguagePath;
@@ -41,7 +42,7 @@ public class DioreAccountController implements AccountController {
 
     @Override
     public boolean setLocale(Player p, Account acc, Locale locale) {
-
+        if(!p.hasPermission(Permissions.BALANCE_LOCALE.getPermission())) return false;
         if(!messageManager.getMessageProvider().getProvidedLanguages().contains(locale)) {
             p.sendMessage(messageManager.getMessage(ErrorMessagesPaths.LOCALE_NOT_FOUND, acc.getLocale(), true));
             return false;
@@ -57,6 +58,7 @@ public class DioreAccountController implements AccountController {
 
     @Override
     public boolean setPrivateBalance(Player p, Account acc, Locale locale, boolean privateToSet) {
+        if(!p.hasPermission(Permissions.BALANCE_PRIVACY.getPermission())) return false;
         acc.setPrivateBalance(privateToSet);
         p.sendMessage(messageManager.getMessage(CommandMessagesPaths.BALANCE_PRIVATE_BALANCE_SET, locale, true, Map.of(
                 "{balance_status}",api.getAccountInfoFormatter().getFormattedBalanceStatus(acc, locale)
@@ -66,6 +68,7 @@ public class DioreAccountController implements AccountController {
 
     @Override
     public boolean withdraw(Player p, Account acc, Locale locale, double amount) {
+        if(!p.hasPermission(Permissions.BALANCE_WITHDRAW.getPermission())) return false;
         if(amount <= 0) {
             p.sendMessage(messageManager.getMessage(CommandMessagesPaths.BALANCE_INVALID_AMOUNT, locale, true));
             return false;
@@ -119,6 +122,7 @@ public class DioreAccountController implements AccountController {
 
     @Override
     public boolean deposit(Player p, Account acc, Locale locale, double amount) {
+        if(!p.hasPermission(Permissions.BALANCE_DEPOSIT.getPermission())) return false;
         if (amount <= 0) {
             p.sendMessage(messageManager.getMessage(CommandMessagesPaths.BALANCE_INVALID_AMOUNT, locale, true));
             return false;
@@ -168,6 +172,7 @@ public class DioreAccountController implements AccountController {
 
     @Override
     public boolean transfer(Player sender, OfflinePlayer target, Account from, Account to, Locale senderLocale, double amount) {
+        if(!sender.hasPermission(Permissions.BALANCE_TRANSFER.getPermission())) return false;
         if(amount <= 0) {
             sender.sendMessage(messageManager.getMessage(CommandMessagesPaths.BALANCE_INVALID_AMOUNT, senderLocale, true));
             return false;

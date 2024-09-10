@@ -21,6 +21,7 @@ import ximronno.bukkit.util.PluginRegistrationUtil;
 import ximronno.diore.api.DioreAPI;
 import ximronno.diore.api.DiorePlugin;
 import ximronno.diore.api.account.Account;
+import ximronno.diore.api.config.MainConfig;
 import ximronno.diore.api.hook.HookManager;
 import ximronno.diore.api.item.ItemBuilder;
 import ximronno.diore.api.menu.Menu;
@@ -143,10 +144,27 @@ public final class Diore extends JavaPlugin implements DiorePlugin {
     }
 
     public static ItemStack getDiamondNugget(int amount) {
+        MainConfig config = DioreAPI.getInstance().getMainConfig();
+        if(!config.useDiamondsNuggets() && !config.useDiamonds()) {
+            return ItemBuilder.builder()
+                    .setMaterial(Material.DIAMOND)
+                    .setAmount(amount)
+                    .build();
+        }
         return ItemBuilder.builder()
                 .setMaterial(Material.TUBE_CORAL)
                 .setAmount(amount)
-                .setDisplayName(DioreAPI.getInstance().getMainConfig().getDiamondNuggetName())
+                .setDisplayName(config.getDiamondNuggetName())
+                .addPersistentData(DiorePlugin.getKey(), "diamond_nugget")
+                .build();
+    }
+
+    public static ItemStack getDiamondNuggetRaw(int amount) {
+        MainConfig config = DioreAPI.getInstance().getMainConfig();
+        return ItemBuilder.builder()
+                .setMaterial(Material.TUBE_CORAL)
+                .setAmount(amount)
+                .setDisplayName(config.getDiamondNuggetName())
                 .addPersistentData(DiorePlugin.getKey(), "diamond_nugget")
                 .build();
     }
