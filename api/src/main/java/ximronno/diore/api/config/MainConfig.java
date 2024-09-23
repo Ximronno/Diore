@@ -28,4 +28,6 @@ public interface MainConfig {
 
     boolean useDiamondsNuggets();
 
+    HooksConfig getHooksConfig();
+
 }

@@ -22,6 +22,8 @@ public class MainMenu extends DioreMenu {
 
     private final int PLAYER_HEAD_SLOT = 4;
 
+    private final int LEADERBOARD_SLOT = 8;
+
     private final int GITHUB_ISSUES_SLOT = 20;
 
     @Override
@@ -40,6 +42,12 @@ public class MainMenu extends DioreMenu {
                         Map.of("{balance}", api.getAccountInfoFormatter().getFormattedBalance(acc, locale),
                                 "{lang_name}", messageManager.getMessage(LanguagePath.NAME, locale, true))))
                 .setProfile(p.getPlayerProfile())
+                .build());
+
+        inventory.setItem(LEADERBOARD_SLOT, ItemBuilder.builder()
+                .setMaterial(Material.PLAYER_HEAD)
+                .setDisplayName(messageManager.getMessage(MenuItemNamesPaths.LEADERBOARD_HEAD, locale, true))
+                .setLore(messageManager.getList(MenuItemLorePaths.LEADERBOARD_HEAD, locale, true))
                 .build());
 
         inventory.setItem(GITHUB_ISSUES_SLOT, ItemBuilder.builder()
@@ -62,6 +70,10 @@ public class MainMenu extends DioreMenu {
             case PLAYER_HEAD_SLOT:
                 close(p);
                 new AccountMenu().open(p);
+                break;
+            case LEADERBOARD_SLOT:
+                close(p);
+                new LeaderBoardMenu().open(p);
                 break;
             case GITHUB_ISSUES_SLOT:
                 TextComponent component = new TextComponent(api.getMessageManager().getMessage(CommandMessagesPaths.ISSUES_LINK, locale, true));

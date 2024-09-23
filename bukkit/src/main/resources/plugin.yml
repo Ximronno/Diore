@@ -1,6 +1,7 @@
 name: Diore
 version: '${project.version}'
 main: ximronno.bukkit.Diore
+folia-supported: true
 author: Ximronno
 softdepend:
   - Vault
@@ -28,7 +29,7 @@ permissions:
     default: true
   diore.balance.help:
     default: true
-  diore.balance.info:
+  diore.balance.leaderboard:
     default: true
   diore.balance.locale:
     default: true

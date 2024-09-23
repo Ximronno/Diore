@@ -13,6 +13,7 @@ import ximronno.diore.api.account.Transaction;
 import ximronno.diore.api.polyglot.Path;
 
 import java.io.File;
+import java.sql.SQLException;
 import java.util.*;
 import java.util.logging.Logger;
 
@@ -31,32 +32,12 @@ public class DioreAccountLoader implements AccountLoader {
 
     @Override
     public Account getAccountFromCFG(UUID uuid) {
-
-        File file = api.getConfigLoader().getFile(Path.of(DirectoriesPaths.ACCOUNTS.path() + uuid.toString() + ".yml"));
-
-        if(!file.exists()) return null;
-
-        FileConfiguration dataConfig = api.getConfigLoader().getFileConfiguration(file);
-
-        List<Transaction> list = new ArrayList<>();
-
-        dataConfig.getMapList(AccountConfigPaths.RECENT_TRANSACTIONS.path()).forEach(m -> m.forEach((k, v) -> list.add(new Transaction(Double.parseDouble(k.toString()), Long.parseLong(v.toString())))));
-
-        double balance = dataConfig.getDouble(AccountConfigPaths.BALANCE.path());
-        Locale locale = new Locale(dataConfig.getString(AccountConfigPaths.LOCALE.path()));
-        boolean isPublicBalance = dataConfig.getBoolean(AccountConfigPaths.PRIVATE_BALANCE.path());
-
-        if(logger != null) {
-            logger.info("Loaded account for: " + uuid);
+        try {
+            return api.getDataBase().getAccountFromTable(uuid);
+        } catch (SQLException e) {
+            return null;
         }
 
-        return DioreAccount.builder()
-                .setRecentTransactions(list)
-                .setUuid(uuid)
-                .setBalance(balance)
-                .setLocale(locale)
-                .setPrivateBalance(isPublicBalance)
-                .build();
     }
 
     @Override

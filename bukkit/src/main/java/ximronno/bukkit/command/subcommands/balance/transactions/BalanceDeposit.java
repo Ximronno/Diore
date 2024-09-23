@@ -37,7 +37,7 @@ public class  BalanceDeposit extends DioreSubcommand {
 
     @Override
     public String getSyntax() {
-        return "/balance deposit [(amount)]";
+        return "/balance deposit <amount>";
     }
 
     @Override

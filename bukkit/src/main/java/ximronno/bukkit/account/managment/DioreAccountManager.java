@@ -10,11 +10,12 @@ import ximronno.diore.api.account.managment.AccountManager;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
 public class DioreAccountManager implements AccountManager {
 
-    private final HashMap<UUID, Account> accounts = new HashMap<>();
+    private final ConcurrentHashMap<UUID, Account> accounts = new ConcurrentHashMap<>();
 
     private Logger logger;
 

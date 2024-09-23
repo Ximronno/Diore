@@ -76,7 +76,9 @@ public final class Diore extends JavaPlugin implements DiorePlugin {
         HookManagerRegistrationUtil.register(manager);
 
         if(Bukkit.getPluginManager().getPlugin("Vault") != null) {
-            manager.registerVault();
+            if(api.getMainConfig().getHooksConfig().useVault()) {
+                manager.registerVault();
+            }
         }
 
         new UpdateChecker(this, UpdateCheckSource.SPIGET, "117800")
@@ -89,6 +91,8 @@ public final class Diore extends JavaPlugin implements DiorePlugin {
 
     @Override
     public void onDisable() {
+        HookManagerRegistrationUtil.unregister();
+        KeyRegistrationUtil.unregister();
         PluginRegistrationUtil.unregister();
 
         for(Player target : getServer().getOnlinePlayers()) {

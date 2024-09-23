@@ -22,6 +22,9 @@ commands:
     deposit_insufficient: "&bNot enough ores to deposit"
     transfer_insufficient: "&bNot enough ores to transfer"
     withdraw_insufficient: "&bNot enough ores to withdraw"
+    leaderboard_description: "&bShows top 5 richest players"
+    leaderboard_header: "&bLeaderboard:"
+    leaderboard_format: "&b{i}: {target_name} -> {balance}"
   issues_link: "&b&oClick here to open GitHub Issues"
 format:
     amount_format: "&a{amount} &bores"
@@ -57,6 +60,10 @@ menu:
         lore:
           - "&bIf you encounter issues, please report it!"
           - "&bClick to open GitHub issues link"
+      leaderboard_head:
+        name: "&bLeaderboard"
+        lore:
+          - "&bClick to see leaders"
   item:
     back_button:
       name: "&bReturn"
@@ -82,6 +89,37 @@ menu:
       privacy_setter:
         lore:
           - "&bClick to change"
+  leaderboard_menu:
+    name: "Leaderboard"
+    item:
+      leaderboard_top_one:
+        name: "&bFirst place -> {target_name}"
+        lore:
+          - "&bHis balance: {balance}"
+      leaderboard_top_two:
+        name: "&bSecond place -> {target_name}"
+        lore:
+          - "&bHis balance: {balance}"
+      leaderboard_top_three:
+        name: "&bThird place -> {target_name}"
+        lore:
+          - "&bHis balance: {balance}"
+      leaderboard_sender:
+        name: "&bYou are in {place}. place"
+        no_place: "&bYou don't have a place!"
+        lore:
+          - "&bYour balance is: {balance}"
+      leaderboard_no_leaders:
+        name: "&bNo leaders"
+        lore:
+          - "&bCurrently, no leaders found"
+      leaderboard_sort:
+        name: "&bSort:"
+        arrow_format: "->"
+        lore:
+          - "&b{no_sort} No sort"
+          - "&b{sort_offline_players} Offline players"
+          - "&b{sort_online_players} Online accounts"
   locale_setter_menu:
     name: "Languages"
     item:

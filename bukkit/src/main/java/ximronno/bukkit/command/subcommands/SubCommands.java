@@ -8,7 +8,8 @@ public enum SubCommands {
     BALANCE_PRIVACY("privacy"),
     BALANCE_DEPOSIT("deposit"),
     BALANCE_TRANSFER("transfer"),
-    BALANCE_WITHDRAW("withdraw"),;
+    BALANCE_WITHDRAW("withdraw"),
+    BALANCE_LEADERBOARD("leaderboard");
 
     private final String name;
 

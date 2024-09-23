@@ -20,6 +20,7 @@ public enum MainConfigPaths implements Path {
     SQL_DATABASE(MainConfigCategories.SQL, "database"),
     SQL_USERNAME(MainConfigCategories.SQL, "username"),
     SQL_PASSWORD(MainConfigCategories.SQL, "password"),
+    HOOKS_USE_VAULT(MainConfigCategories.HOOKS, "vault"),
     USE_DIAMONDS,
     USE_DIAMOND_NUGGETS;
 

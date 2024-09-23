@@ -26,7 +26,10 @@ public enum CommandMessagesPaths implements Path {
     BALANCE_TRANSFER_DESCRIPTION(Commands.BALANCE, "transfer_description"),
     BALANCE_TRANSFER_SUCCESS(Commands.BALANCE, "transfer_success"),
     BALANCE_TRANSFER_INSUFFICIENT(Commands.BALANCE, "transfer_insufficient"),
-    BALANCE_TRANSFER_RECEIVED(Commands.BALANCE, "transfer_received"),;
+    BALANCE_TRANSFER_RECEIVED(Commands.BALANCE, "transfer_received"),
+    BALANCE_LEADERBOARD_DESCRIPTION(Commands.BALANCE, "leaderboard_description"),
+    BALANCE_LEADERBOARD_HEADER(Commands.BALANCE, "leaderboard_header"),
+    BALANCE_LEADERBOARD_FORMAT(Commands.BALANCE, "leaderboard_format"),;
 
 
     private final String path;

@@ -37,7 +37,7 @@ public class BalanceLocale extends DioreSubcommand {
 
     @Override
     public String getSyntax() {
-        return "/balance lang [(language)]";
+        return "/balance locale <language>";
     }
 
     @Override

@@ -6,7 +6,7 @@ commands:
     info_description: "&bПоказывает информацию о балансе"
     info_list:
       - "&bВаш баланс: {balance}"
-      - "&bВаш публичный баланс: {private_balance}"
+      - "&bВаш публичный баланс: {balance_status}"
     locale_description: "&bИзменяет язык вашего аккаунта"
     locale_set: "&bЯзык установлен на {locale}"
     private_balance_description: "&bУстанавливает приватность вашего баланса"
@@ -22,6 +22,9 @@ commands:
     deposit_insufficient: "&bНедостаточно руд чтобы положить"
     transfer_insufficient: "&bНедостаточно руд чтобы перевести"
     withdraw_insufficient: "&bНедостаточно руд чтобы вывести"
+    leaderboard_descriptions: ""
+    leaderboard_header: "&bТоп балансов:"
+    leaderboard_format: "&b{i}: {target_name} -> {balance}"
   issues_link: "&b&oНажмите сюда чтобы открыть Github Issues"
 format:
   amount_format: "&a{amount} &bруд"

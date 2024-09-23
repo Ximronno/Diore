@@ -12,6 +12,7 @@ import ximronno.diore.api.polyglot.Path;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -35,26 +36,13 @@ public class DioreAccountSaver implements AccountSaver {
 
     @Override
     public boolean saveAccountToCFG(Account account) {
-        File file = api.getConfigLoader().getFile(Path.of(DirectoriesPaths.ACCOUNTS.path() + account.getUuid().toString() + ".yml"));
-
-        FileConfiguration dataConfig = api.getConfigLoader().getFileConfiguration(file);
-
-        dataConfig.set(AccountConfigPaths.UUID.path(), account.getUuid().toString());
-        dataConfig.set(AccountConfigPaths.BALANCE.path(), account.getBalance());
-        dataConfig.set(AccountConfigPaths.LOCALE.path(), account.getLocale().toString());
-        dataConfig.set(AccountConfigPaths.PRIVATE_BALANCE.path(), account.isPrivateBalance());
-
-        List<Map<?,?>> mapList = new ArrayList<>();
-        account.getRecentTransactions().forEach(t -> mapList.add(t.serialize()));
-
-        dataConfig.set(AccountConfigPaths.RECENT_TRANSACTIONS.path(), mapList);
-
         try {
-            dataConfig.save(file);
+            api.getDataBase().putAccountIntoTable(account);
             return true;
-        } catch (IOException e) {
+        } catch (SQLException | IOException e) {
             if(api.getMainConfig().useLogger()) {
                 logger.info("Error while saving account " + account.getUuid());
+                e.printStackTrace();
             }
             return false;
         }

@@ -40,7 +40,7 @@ public class BalanceTransfer extends DioreSubcommand {
 
     @Override
     public String getSyntax() {
-        return "/balance transfer [(player)] [(amount)]";
+        return "/balance transfer <player> <amount>";
     }
 
     @Override

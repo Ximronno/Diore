@@ -3,6 +3,7 @@ package ximronno.bukkit.command.manager;
 import ximronno.bukkit.command.Commands;
 import ximronno.bukkit.command.subcommands.balance.info.BalanceHelp;
 import ximronno.bukkit.command.subcommands.balance.info.BalanceInfo;
+import ximronno.bukkit.command.subcommands.balance.info.BalanceLeaderBoard;
 import ximronno.bukkit.command.subcommands.balance.settings.BalanceLocale;
 import ximronno.bukkit.command.subcommands.balance.settings.BalancePrivacy;
 import ximronno.bukkit.command.subcommands.balance.transactions.BalanceDeposit;
@@ -29,6 +30,8 @@ public class BalanceCommand extends BaseCommand {
         subCommands.add(new BalanceWithdraw(api));
         subCommands.add(new BalanceDeposit(api));
         subCommands.add(new BalanceTransfer(api));
+
+        subCommands.add(new BalanceLeaderBoard(api));
 
         noLengthCommand = balanceInfo;
         helpCommand = balanceHelp;

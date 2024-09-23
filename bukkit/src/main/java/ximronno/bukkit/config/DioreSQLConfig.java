@@ -6,7 +6,7 @@ import ximronno.diore.api.config.SQLConfig;
 
 public class DioreSQLConfig implements SQLConfig {
 
-    private JavaPlugin plugin;
+    private final JavaPlugin plugin;
 
     public DioreSQLConfig(JavaPlugin plugin) {
         this.plugin = plugin;

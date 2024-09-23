@@ -20,8 +20,6 @@ public class MySQLDataBase implements DataBase {
 
     private final Logger logger;
 
-    private final DioreAPI api;
-
     private Connection connection;
 
     private final boolean useLogger;
@@ -29,7 +27,6 @@ public class MySQLDataBase implements DataBase {
     public MySQLDataBase(DioreAPI api, Logger logger) {
         this.sqlConfig = api.getMainConfig().getSQLConfig();
         this.logger = logger;
-        this.api = api;
         this.useLogger = api.getMainConfig().useLogger();
     }
 
@@ -93,10 +90,6 @@ public class MySQLDataBase implements DataBase {
 
             preparedStatement.execute();
             preparedStatement.close();
-        }
-
-        if(useLogger) {
-            logger.info("Saved account: " + uuid + " in MySQL database");
         }
 
         set.close();

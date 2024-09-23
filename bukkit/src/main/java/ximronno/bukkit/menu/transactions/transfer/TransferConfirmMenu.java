@@ -45,7 +45,7 @@ public class TransferConfirmMenu extends DioreMenu {
 
     @Override
     public String getTitle(Locale locale) {
-        return messageManager.getMessage(MenuNamesPaths.TRANFER_CONFIRM_MENU_NAME, locale, true);
+        return messageManager.getMessage(MenuNamesPaths.TRANSFER_CONFIRM_MENU_NAME, locale, true);
     }
 
     @Override

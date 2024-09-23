@@ -2,6 +2,7 @@ package ximronno.bukkit.config;
 
 import org.bukkit.plugin.java.JavaPlugin;
 import ximronno.bukkit.message.type.MainConfigPaths;
+import ximronno.diore.api.config.HooksConfig;
 import ximronno.diore.api.config.MainConfig;
 import ximronno.diore.api.config.SQLConfig;
 
@@ -11,7 +12,9 @@ public class DioreMainConfig implements MainConfig {
 
     private final JavaPlugin plugin;
 
-    private DioreSQLConfig sqlConfig;
+    private SQLConfig sqlConfig;
+
+    private HooksConfig hooksConfig;
 
     public DioreMainConfig(JavaPlugin plugin) {
         this.plugin = plugin;
@@ -68,6 +71,14 @@ public class DioreMainConfig implements MainConfig {
     }
 
     @Override
+    public HooksConfig getHooksConfig() {
+        if(hooksConfig == null) {
+            hooksConfig = new DioreHooksConfig(plugin);
+        }
+        return hooksConfig;
+    }
+
+    @Override
     public String getDiamondNuggetName() {
         return plugin.getConfig().getString(MainConfigPaths.DIAMOND_NUGGET_NAME.path());
     }
@@ -81,4 +92,5 @@ public class DioreMainConfig implements MainConfig {
     public boolean useDiamondsNuggets() {
         return plugin.getConfig().getBoolean(MainConfigPaths.USE_DIAMOND_NUGGETS.path());
     }
+
 }

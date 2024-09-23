@@ -2,6 +2,7 @@ package ximronno.diore.api;
 
 
 import ximronno.diore.api.account.Account;
+import ximronno.diore.api.account.AccountLeaderBoard;
 import ximronno.diore.api.account.managment.AccountController;
 import ximronno.diore.api.account.managment.AccountInfoFormatter;
 import ximronno.diore.api.account.storage.AccountLoader;
@@ -21,6 +22,8 @@ public interface DioreAPI {
     Account getAccount(UUID uuid);
 
     AccountManager getAccountManager();
+
+    AccountLeaderBoard getAccountLeaderBoard();
 
     AccountController getAccountController();
 

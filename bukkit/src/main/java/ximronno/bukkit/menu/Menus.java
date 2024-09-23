@@ -12,7 +12,8 @@ public enum Menus {
     TRANSFER_SELECTOR_MENU,
     TRANSFER_SUM_SELECTOR_MENU,
     TRANSFER_CONFIRM_MENU,
-    RECENT_TRANSACTIONS_MENU,;
+    RECENT_TRANSACTIONS_MENU,
+    LEADERBOARD_MENU;
 
     public String getName() {
         return name().toLowerCase();

@@ -36,7 +36,7 @@ public class BalanceWithdraw extends DioreSubcommand {
 
     @Override
     public String getSyntax() {
-        return "/balance withdraw [(amount)]";
+        return "/balance withdraw <amount>";
     }
 
     @Override

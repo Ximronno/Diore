@@ -105,13 +105,19 @@ public abstract class DioreMenu extends Menu {
 
         int slot = 0;
 
-        if(getSize() == MenuSizes.THREE_ROWS) {
-            addThreeRowBorder(item1, item2);
-            slot = 24;
-        }
-        else if(getSize() == MenuSizes.SIX_ROWS) {
-            addSixRowBorder(item1, item2);
-            slot = 51;
+        switch (getSize()) {
+            case THREE_ROWS:
+                addThreeRowBorder(item1, item2);
+                slot = 24;
+                break;
+            case FOUR_ROWS:
+                addFourRowBorder(item1, item2);
+                slot = 33;
+                break;
+            case SIX_ROWS:
+                addSixRowBorder(item1, item2);
+                slot = 51;
+                break;
         }
         if (addBackButton) {
             BACK_BUTTON_SLOT = slot;
@@ -138,6 +144,19 @@ public abstract class DioreMenu extends Menu {
             inventory.setItem(slot, item2);
         }
 
+    }
+
+    private void addFourRowBorder(ItemStack item1, ItemStack item2) {
+        int[] item1Slots = {0, 1, 7, 8, 9, 17, 18, 26, 27, 28, 34, 35};
+        int[] item2Slots = {2, 3, 4, 5, 6, 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 29, 30, 31, 32, 33};
+
+        for (int slot : item1Slots) {
+            inventory.setItem(slot, item1);
+        }
+
+        for (int slot : item2Slots) {
+            inventory.setItem(slot, item2);
+        }
     }
 
     private void addSixRowBorder(ItemStack item1, ItemStack item2) {

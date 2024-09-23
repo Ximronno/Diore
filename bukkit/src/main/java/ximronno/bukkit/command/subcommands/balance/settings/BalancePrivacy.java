@@ -36,7 +36,7 @@ public class BalancePrivacy extends DioreSubcommand {
 
     @Override
     public String getSyntax() {
-        return "/balance private [true|false]";
+        return "/balance private <boolean>";
     }
 
     @Override

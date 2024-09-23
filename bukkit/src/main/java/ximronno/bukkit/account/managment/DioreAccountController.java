@@ -10,7 +10,6 @@ import ximronno.bukkit.message.type.CommandMessagesPaths;
 import ximronno.bukkit.message.type.ErrorMessagesPaths;
 import ximronno.bukkit.message.type.LanguagePath;
 import ximronno.diore.api.DioreAPI;
-import ximronno.diore.api.DiorePlugin;
 import ximronno.diore.api.account.Account;
 import ximronno.diore.api.account.AccountResponse;
 import ximronno.diore.api.account.Transaction;
@@ -100,17 +99,16 @@ public class DioreAccountController implements AccountController {
             case SUCCESS -> {
                 acc.withdraw(amount);
                 Transaction transaction = Transaction.of(-amount, System.currentTimeMillis());
-                if(api.getMainConfig().getSQLConfig().isEnabled()) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                api.getDataBase().addRecentTransaction(acc.getUuid(), transaction);
-                            } catch (SQLException exp) {
-                            }
+
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            api.getDataBase().addRecentTransaction(acc.getUuid(), transaction);
+                        } catch (SQLException ignored) {
                         }
-                    }.runTaskAsynchronously(plugin);
-                }
+                    }
+                }.runTaskAsynchronously(plugin);
 
                 acc.addRecentTransaction(transaction);
                 p.sendMessage(messageManager.getMessage(CommandMessagesPaths.BALANCE_WITHDRAW_SUCCESS, locale, true,
@@ -150,18 +148,17 @@ public class DioreAccountController implements AccountController {
             case SUCCESS -> {
                 acc.deposit(amount);
                 Transaction transaction = Transaction.of(amount, System.currentTimeMillis());
-                if(api.getMainConfig().getSQLConfig().isEnabled()) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                api.getDataBase().addRecentTransaction(acc.getUuid(), transaction);
-                            } catch (SQLException exp) {
-                            }
-                        }
-                    }.runTaskAsynchronously(plugin);
 
-                }
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            api.getDataBase().addRecentTransaction(acc.getUuid(), transaction);
+                        } catch (SQLException ignored) {
+                        }
+                    }
+                }.runTaskAsynchronously(plugin);
+
                 acc.addRecentTransaction(transaction);
                 p.sendMessage(messageManager.getMessage(CommandMessagesPaths.BALANCE_DEPOSIT_SUCCESS, locale, true,
                         Map.of("{amount}", api.getAccountInfoFormatter().getFormattedAmount(amount, locale))));
@@ -203,19 +200,18 @@ public class DioreAccountController implements AccountController {
                 from.transfer(to, amount);
                 Transaction fromTransaction = Transaction.of(-amount, System.currentTimeMillis());
                 Transaction toTransaction = Transaction.of(amount, System.currentTimeMillis());
-                if(api.getMainConfig().getSQLConfig().isEnabled()) {
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                api.getDataBase().addRecentTransaction(from.getUuid(), fromTransaction);
-                                api.getDataBase().addRecentTransaction(to.getUuid(), toTransaction);
-                            } catch (SQLException exp) {
-                            }
-                        }
-                    }.runTaskAsynchronously(plugin);
 
-                }
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            api.getDataBase().addRecentTransaction(from.getUuid(), fromTransaction);
+                            api.getDataBase().addRecentTransaction(to.getUuid(), toTransaction);
+                        } catch (SQLException ignored) {
+                        }
+                    }
+                }.runTaskAsynchronously(plugin);
+
                 from.addRecentTransaction(fromTransaction);
                 to.addRecentTransaction(toTransaction);
                 sender.sendMessage(messageManager.getMessage(CommandMessagesPaths.BALANCE_TRANSFER_SUCCESS, senderLocale, true,

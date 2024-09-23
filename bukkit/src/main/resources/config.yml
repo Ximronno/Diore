@@ -19,3 +19,5 @@ sql: #Only MySQL is supported!
   database: diore #Must be created before using it!
   username: root
   password: pass
+hooks:
+  vault: true

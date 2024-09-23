@@ -14,7 +14,8 @@ public enum Permissions {
     BALANCE_PRIVACY(Commands.BALANCE, SubCommands.BALANCE_PRIVACY),
     BALANCE_DEPOSIT(Commands.BALANCE, SubCommands.BALANCE_DEPOSIT),
     BALANCE_TRANSFER(Commands.BALANCE, SubCommands.BALANCE_TRANSFER),
-    BALANCE_WITHDRAW(Commands.BALANCE, SubCommands.BALANCE_WITHDRAW);
+    BALANCE_WITHDRAW(Commands.BALANCE, SubCommands.BALANCE_WITHDRAW),
+    BALANCE_LEADERBOARD(Commands.BALANCE, SubCommands.BALANCE_LEADERBOARD);
 
     private final Permission permission;
 
