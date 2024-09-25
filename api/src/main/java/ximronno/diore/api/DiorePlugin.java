@@ -5,6 +5,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import ximronno.diore.api.account.Account;
+import ximronno.diore.api.hook.HookManager;
 import ximronno.diore.api.polyglot.Path;
 
 import java.util.Locale;
@@ -22,6 +23,8 @@ public interface DiorePlugin {
     JavaPlugin getJavaPlugin();
 
     NamespacedKey getNamespacedKey();
+
+    boolean usingPlaceholderAPI();
 
     static NamespacedKey getKey() {
         return DioreKeysProvider.getKey();

@@ -32,11 +32,9 @@ public class DioreAccountManager implements AccountManager {
 
     @Override
     public void addAccount(Account account) {
-        if(!accounts.containsKey(account.getUuid())) {
-            accounts.put(account.getUuid(), account);
-            if (logger != null) {
-                logger.info("Added account " + account.getUuid());
-            }
+        accounts.put(account.getUuid(), account);
+        if (logger != null) {
+            logger.info("Added account " + account.getUuid());
         }
     }
 

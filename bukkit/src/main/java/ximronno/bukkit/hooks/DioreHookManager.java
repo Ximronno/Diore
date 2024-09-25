@@ -7,6 +7,8 @@ public class DioreHookManager implements HookManager {
 
     private VaultHook vaultHook;
 
+    private PlaceholderHook placeholderHook;
+
     private final DiorePlugin plugin;
 
     public DioreHookManager(DiorePlugin plugin) {
@@ -31,4 +33,25 @@ public class DioreHookManager implements HookManager {
         }
 
     }
+
+    @Override
+    public void registerPlaceholders() {
+
+        if(this.placeholderHook == null) {
+            this.placeholderHook = new PlaceholderHook(plugin.getAPI());
+        }
+
+    }
+
+    @Override
+    public void unregisterPlaceholders() {
+
+        if(this.placeholderHook != null) {
+            this.placeholderHook.unregister();
+            this.placeholderHook = null;
+        }
+
+    }
+
+
 }

@@ -25,14 +25,10 @@ public class DioreAccountInfoFormatter implements AccountInfoFormatter {
     @Override
     public String getFormattedBalance(Account sender, Account target, Locale senderLocale) {
         if(target.isPrivateBalance()) {
-
             return formattedBalanceStatus(true, senderLocale);
-
         }
         else {
-
             return getFormattedBalance(target, senderLocale);
-
         }
     }
 

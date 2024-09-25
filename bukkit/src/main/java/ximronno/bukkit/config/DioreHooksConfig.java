@@ -17,4 +17,8 @@ public class DioreHooksConfig implements HooksConfig {
         return plugin.getConfig().getBoolean(MainConfigPaths.HOOKS_USE_VAULT.path());
     }
 
+    @Override
+    public boolean usePlaceholderAPI() {
+        return plugin.getConfig().getBoolean(MainConfigPaths.HOOKS_USE_PLACEHOLDERAPI.path());
+    }
 }

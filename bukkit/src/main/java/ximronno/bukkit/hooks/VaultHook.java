@@ -24,8 +24,8 @@ public class VaultHook implements Economy {
     public VaultHook(DioreAPI api, JavaPlugin plugin) {
         this.api = api;
         this.accManager = api.getAccountManager();
-        Bukkit.getServer().getServicesManager().register(Economy.class, this, plugin , ServicePriority.Highest);
-        Bukkit.getLogger().log(Level.INFO,"Hooked into Vault");
+        plugin.getServer().getServicesManager().register(Economy.class, this, plugin , ServicePriority.Highest);
+        plugin.getLogger().log(Level.INFO,"Hooked into Vault");
     }
 
     public void unregister() {
@@ -137,9 +137,9 @@ public class VaultHook implements Economy {
         Account acc = accManager.getAccount(player.getUniqueId());
         if(acc.canWithdraw(amount)) {
             acc.withdraw(amount);
-            return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.SUCCESS, null);
+            return new EconomyResponse(amount, acc.getBalance() - amount, EconomyResponse.ResponseType.SUCCESS, null);
         }
-        return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, null);
+        return new EconomyResponse(amount, acc.getBalance(), EconomyResponse.ResponseType.FAILURE, null);
     }
 
     @Override
@@ -161,7 +161,7 @@ public class VaultHook implements Economy {
     public EconomyResponse depositPlayer(OfflinePlayer player, double amount) {
         Account acc = accManager.getAccount(player.getUniqueId());
         acc.deposit(amount);
-        return new EconomyResponse(amount, 0, EconomyResponse.ResponseType.SUCCESS, null);
+        return new EconomyResponse(amount, acc.getBalance() + amount, EconomyResponse.ResponseType.SUCCESS, null);
     }
 
     @Override

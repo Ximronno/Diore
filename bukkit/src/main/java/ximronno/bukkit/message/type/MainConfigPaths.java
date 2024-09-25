@@ -15,12 +15,15 @@ public enum MainConfigPaths implements Path {
     MAX_SAVED_RECENT_TRANSACTIONS(MainConfigCategories.SAVE, "max_saved_transactions"),
     SAVE_MISSING_PATHS(MainConfigCategories.SAVE, "save_missing_paths"),
     SQL_ENABLED(MainConfigCategories.SQL, "enabled"),
+    SQL_ALWAYS_LOAD_ON_JOIN(MainConfigCategories.SQL, "always_load_on_join"),
     SQL_HOST(MainConfigCategories.SQL, "host"),
     SQL_PORT(MainConfigCategories.SQL, "port"),
     SQL_DATABASE(MainConfigCategories.SQL, "database"),
     SQL_USERNAME(MainConfigCategories.SQL, "username"),
     SQL_PASSWORD(MainConfigCategories.SQL, "password"),
-    HOOKS_USE_VAULT(MainConfigCategories.HOOKS, "vault"),
+    SQL_LOAD_DELAY(MainConfigCategories.SQL, "load_delay"),
+    HOOKS_USE_VAULT(MainConfigCategories.HOOKS, "vault.enabled"),
+    HOOKS_USE_PLACEHOLDERAPI(MainConfigCategories.HOOKS, "placeholderapi.enabled"),
     USE_DIAMONDS,
     USE_DIAMOND_NUGGETS;
 

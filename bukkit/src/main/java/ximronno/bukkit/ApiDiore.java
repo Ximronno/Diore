@@ -75,8 +75,7 @@ public class ApiDiore implements DioreAPI {
             dataBase = new YMLDataBase(this, plugin.getLogger());
         }
 
-
-        accountLoader = new DioreAccountLoader(this, plugin.getLogger());
+        accountLoader = new DioreAccountLoader(this);
         accountSaver = new DioreAccountSaver(this, plugin, plugin.getLogger());
 
         configLoader = new DioreConfigLoader(plugin);

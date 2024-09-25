@@ -41,4 +41,14 @@ public class DioreSQLConfig implements SQLConfig {
     public String getPassword() {
         return plugin.getConfig().getString(MainConfigPaths.SQL_PASSWORD.path());
     }
+
+    @Override
+    public long getLoadDelay() {
+        return plugin.getConfig().getLong(MainConfigPaths.SQL_LOAD_DELAY.path());
+    }
+
+    @Override
+    public boolean alwaysLoadOnJoin() {
+        return plugin.getConfig().getBoolean(MainConfigPaths.SQL_ENABLED.path());
+    }
 }

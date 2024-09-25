@@ -28,29 +28,35 @@ public class OnPlayerJoinListener implements Listener {
 
         Player target = e.getPlayer();
 
-        if(!api.getAccountManager().hasAccount(target.getUniqueId())) {
-            Account acc = api.getAccountLoader().getAccountFromCFG(target.getUniqueId());
-            if(acc == null) {
-                acc = api.getAccountManager().createNewAccount(target.getUniqueId());
+        if(!api.getAccountManager().hasAccount(target.getUniqueId()) || api.getMainConfig().getSQLConfig().alwaysLoadOnJoin()) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    Account acc = api.getAccountLoader().getAccountFromCFG(target.getUniqueId());
+                    if(acc == null) {
+                        acc = api.getAccountManager().createNewAccount(target.getUniqueId());
 
-                if(api.getMainConfig().useLocateClientLocale()) {
-                    Account finalAcc = acc;
+                        if(api.getMainConfig().useLocateClientLocale()) {
+                            Account finalAcc = acc;
 
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            Locale targetLocale = new Locale(target.getLocale());
+                            new BukkitRunnable() {
+                                @Override
+                                public void run() {
+                                    Locale targetLocale = new Locale(target.getLocale());
 
-                            if(api.getMessageManager().getMessageProvider().getProvidedLanguages().contains(targetLocale)) {
-                                finalAcc.setLocale(targetLocale);
-                            }
+                                    if(api.getMessageManager().getMessageProvider().getProvidedLanguages().contains(targetLocale)) {
+                                        finalAcc.setLocale(targetLocale);
+                                    }
+                                }
+                            }.runTaskLater(plugin, 100L);
                         }
-                    }.runTaskLater(plugin, 100L);
+
+                    }
+
+                    api.getAccountManager().addAccount(acc);
                 }
+            }.runTaskLater(plugin, api.getMainConfig().getSQLConfig().getLoadDelay());
 
-            }
-
-            api.getAccountManager().addAccount(acc);
         }
 
 

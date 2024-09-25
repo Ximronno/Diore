@@ -6,7 +6,6 @@ import java.util.UUID;
 
 public abstract class Account {
 
-
     protected final UUID uuid;
 
     private Locale locale;

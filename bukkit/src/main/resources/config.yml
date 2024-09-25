@@ -1,3 +1,5 @@
+# Thanks for using Diore!
+# For more info, check wiki https://github.com/Ximronno/Diore/wiki
 diamond_nugget_name: "Diamond nugget" #Diamond nugget item name
 use_diamonds: false #Use diamonds instead of diamonds ores
 use_diamond_nuggets: true #Use diamonds nuggets instead of regular diamonds, doesn't work if use_diamonds is true
@@ -19,5 +21,10 @@ sql: #Only MySQL is supported!
   database: diore #Must be created before using it!
   username: root
   password: pass
+  load_delay: 0
+  always_load_on_join: false
 hooks:
-  vault: true
+  vault:
+    enabled: true
+  placeholderapi:
+    enabled: true

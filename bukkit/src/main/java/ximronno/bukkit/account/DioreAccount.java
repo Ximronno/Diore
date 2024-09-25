@@ -14,8 +14,6 @@ public class DioreAccount extends Account {
 
     private List<Transaction> recentTransactions;
 
-    private boolean isOnline = true;
-
     private final int maxTransactions;
 
     public DioreAccount(UUID uuid, Locale locale, double balance, boolean publicBalance, List<Transaction> recentTransactions) {

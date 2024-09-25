@@ -4,6 +4,8 @@ public interface SQLConfig {
 
     boolean isEnabled();
 
+    boolean alwaysLoadOnJoin();
+
     String getHost();
 
     String getPort();
@@ -13,5 +15,7 @@ public interface SQLConfig {
     String getUsername();
 
     String getPassword();
+
+    long getLoadDelay();
 
 }

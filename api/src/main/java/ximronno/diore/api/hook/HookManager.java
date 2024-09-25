@@ -6,6 +6,10 @@ public interface HookManager {
 
     void unregisterVault();
 
+    void registerPlaceholders();
+
+    void unregisterPlaceholders();
+
     static HookManager getInstance() {
         return HookManagerProvider.getInstance();
     }

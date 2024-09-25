@@ -5,6 +5,7 @@ folia-supported: true
 author: Ximronno
 softdepend:
   - Vault
+  - PlaceholderAPI
 api-version: '1.19'
 commands:
   balance:

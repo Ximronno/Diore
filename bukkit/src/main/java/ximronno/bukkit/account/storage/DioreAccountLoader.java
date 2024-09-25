@@ -2,32 +2,19 @@ package ximronno.bukkit.account.storage;
 
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.configuration.file.FileConfiguration;
-import ximronno.bukkit.account.DioreAccount;
-import ximronno.bukkit.message.type.AccountConfigPaths;
-import ximronno.bukkit.message.type.DirectoriesPaths;
 import ximronno.diore.api.DioreAPI;
 import ximronno.diore.api.account.Account;
 import ximronno.diore.api.account.storage.AccountLoader;
-import ximronno.diore.api.account.Transaction;
-import ximronno.diore.api.polyglot.Path;
 
-import java.io.File;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.logging.Logger;
 
 public class DioreAccountLoader implements AccountLoader {
 
-    protected final DioreAPI api;
+    private final DioreAPI api;
 
-    protected Logger logger;
-
-    public DioreAccountLoader(DioreAPI api, Logger logger) {
+    public DioreAccountLoader(DioreAPI api) {
         this.api = api;
-        if(api.getMainConfig().useLogger()) {
-            this.logger = logger;
-        }
     }
 
     @Override
