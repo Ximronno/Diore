@@ -82,11 +82,9 @@ public final class Diore extends JavaPlugin implements DiorePlugin {
                 manager.registerVault();
             }
         }
-        System.out.println("lola");
+
         if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
-            System.out.println("Giga");
             if(api.getMainConfig().getHooksConfig().usePlaceholderAPI()) {
-                System.out.println("lala");
                 this.installedPlaceholderAPI = true;
                 manager.registerPlaceholders();
             }

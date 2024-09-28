@@ -3,6 +3,7 @@ version: '${project.version}'
 main: ximronno.bukkit.Diore
 folia-supported: true
 author: Ximronno
+load: STARTUP
 softdepend:
   - Vault
   - PlaceholderAPI

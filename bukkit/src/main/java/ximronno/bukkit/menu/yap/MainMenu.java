@@ -50,12 +50,14 @@ public class MainMenu extends DioreMenu {
                 .setLore(messageManager.getList(MenuItemLorePaths.LEADERBOARD_HEAD, locale, true))
                 .build());
 
-        inventory.setItem(GITHUB_ISSUES_SLOT, ItemBuilder.builder()
-                .setMaterial(Material.PLAYER_HEAD)
-                .setDisplayName(messageManager.getMessage(MenuItemNamesPaths.GITHUB_ISSUES, locale, true))
-                .setLore(messageManager.getList(MenuItemLorePaths.GITHUB_ISSUES, locale, true))
-                .setProfileFromURL("https://textures.minecraft.net/texture/26e27da12819a8b053da0cc2b62dec4cda91de6eeec21ccf3bfe6dd8d4436a7")
-                .build());
+        if(p.isOp()) {
+            inventory.setItem(GITHUB_ISSUES_SLOT, ItemBuilder.builder()
+                    .setMaterial(Material.PLAYER_HEAD)
+                    .setDisplayName(messageManager.getMessage(MenuItemNamesPaths.GITHUB_ISSUES, locale, true))
+                    .setLore(messageManager.getList(MenuItemLorePaths.GITHUB_ISSUES, locale, true))
+                    .setProfileFromURL("https://textures.minecraft.net/texture/26e27da12819a8b053da0cc2b62dec4cda91de6eeec21ccf3bfe6dd8d4436a7")
+                    .build());
+        }
     }
 
     @Override
@@ -76,12 +78,15 @@ public class MainMenu extends DioreMenu {
                 new LeaderBoardMenu().open(p);
                 break;
             case GITHUB_ISSUES_SLOT:
-                TextComponent component = new TextComponent(api.getMessageManager().getMessage(CommandMessagesPaths.ISSUES_LINK, locale, true));
+                if(p.isOp()) {
 
-                component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/Ximronno/Diore/issues"));
+                    TextComponent component = new TextComponent(api.getMessageManager().getMessage(CommandMessagesPaths.ISSUES_LINK, locale, true));
 
-                p.spigot().sendMessage(component);
-                close(p);
+                    component.setClickEvent(new ClickEvent(ClickEvent.Action.OPEN_URL, "https://github.com/Ximronno/Diore/issues"));
+
+                    p.spigot().sendMessage(component);
+                    close(p);
+                }
                 break;
         }
         if(slot == BACK_BUTTON_SLOT) {

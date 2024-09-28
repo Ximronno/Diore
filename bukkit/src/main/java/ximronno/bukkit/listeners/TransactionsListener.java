@@ -197,6 +197,7 @@ public class TransactionsListener implements Listener {
 
         return new int[]{diamondOres, deepslateDiamondOres, diamondNuggets};
     }
+
     public static int[] getDiamonds(Inventory inv) {
         int diamonds = 0;
         int diamondNuggets = 0;
