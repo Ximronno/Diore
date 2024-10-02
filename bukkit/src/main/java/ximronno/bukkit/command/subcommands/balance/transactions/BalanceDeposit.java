@@ -1,6 +1,5 @@
 package ximronno.bukkit.command.subcommands.balance.transactions;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.Nullable;
@@ -9,7 +8,6 @@ import ximronno.bukkit.command.DioreSubcommand;
 import ximronno.bukkit.command.subcommands.SubCommands;
 import ximronno.bukkit.message.type.CommandMessagesPaths;
 import ximronno.diore.api.DioreAPI;
-import ximronno.diore.api.DiorePlugin;
 import ximronno.diore.api.account.Account;
 
 import java.util.Locale;
@@ -26,7 +24,7 @@ public class  BalanceDeposit extends DioreSubcommand {
     }
 
     @Override
-    public Permission getSubCommandPermission() {
+    public Permission getPermission() {
         return Permissions.BALANCE_DEPOSIT.getPermission();
     }
 

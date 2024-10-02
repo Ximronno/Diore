@@ -83,7 +83,7 @@ public class TransferConfirmMenu extends DioreMenu {
     public void handleMenu(Player p, Account acc, Locale locale, InventoryClickEvent e, int slot) {
         switch (slot) {
             case CONFIRM_BUTTON:
-                api.getAccountController().transfer(p, target, acc, targetAcc, locale, amount);
+                api.getAccountController().transfer(p, target, acc, targetAcc, locale, targetAcc.getLocale(), amount);
                 close(p);
                 new TransactionsMenu().open(p);
                 break;

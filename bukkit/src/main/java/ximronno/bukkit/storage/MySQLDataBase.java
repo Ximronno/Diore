@@ -52,7 +52,8 @@ public class MySQLDataBase implements DataBase {
 
         final Statement statement = conn.createStatement();
         statement.execute("CREATE TABLE IF NOT EXISTS account_data(uuid varchar(36) primary key, locale text, balance double, privateBalance boolean)");
-        statement.execute("CREATE TABLE IF NOT EXISTS account_transactions(transactionID int AUTO_INCREMENT primary key, uuid varchar(36), amount double, time long)");
+        statement.execute("CREATE TABLE IF NOT EXISTS account_operations(transactionID int AUTO_INCREMENT primary key, uuid varchar(36), amount double, time long, typeId int)");
+
     }
 
     @Override
@@ -102,13 +103,15 @@ public class MySQLDataBase implements DataBase {
 
         double amount = transaction.amount();
         long time = transaction.time();
+        int typeId = transaction.type().getId();
 
         final PreparedStatement preparedStatement = conn
-                .prepareStatement("INSERT INTO account_transactions(uuid, amount, time) VALUES(?,?,?)");
+                .prepareStatement("INSERT INTO account_operations(uuid, amount, time, typeId) VALUES(?,?,?,?)");
 
         preparedStatement.setString(1, uuid.toString());
         preparedStatement.setDouble(2, amount);
         preparedStatement.setLong(3, time);
+        preparedStatement.setInt(4, typeId);
 
         preparedStatement.execute();
         preparedStatement.close();
@@ -119,15 +122,16 @@ public class MySQLDataBase implements DataBase {
         Connection conn = getConnection();
 
         final Statement statement1 = conn.createStatement();
-        ResultSet set1 = statement1.executeQuery("SELECT amount, time FROM account_transactions WHERE uuid = '" + uuid + "'");
+        ResultSet set1 = statement1.executeQuery("SELECT amount, time, typeId FROM account_operations WHERE uuid = '" + uuid + "'");
 
         List<Transaction> recentTransactions = new ArrayList<>();
 
         while(set1.next()) {
             double amount = set1.getDouble("amount");
             long time = set1.getLong("time");
+            int typeId = set1.getInt("typeId");
 
-            recentTransactions.add(Transaction.of(amount, time));
+            recentTransactions.add(Transaction.valueOf(amount, time, typeId));
         }
 
         set1.close();
@@ -164,6 +168,35 @@ public class MySQLDataBase implements DataBase {
     @Override
     public void initializeDataBase() throws SQLException {
         createDioreTables();
+
+        Connection conn = getConnection();
+
+        Statement statement = conn.createStatement();
+
+        ResultSet set = statement.executeQuery("SELECT * FROM information_schema.tables WHERE table_schema ='" + sqlConfig.getDataBase() + "' AND table_name = 'account_transactions'");
+
+        if(set.next()) {
+
+            ResultSet set2 = statement.executeQuery("SELECT uuid, amount, time FROM account_transactions");
+
+            while(set2.next()) {
+
+                UUID uuid = UUID.fromString(set2.getString("uuid"));
+
+                double amount = set2.getDouble("amount");
+
+                long time = set2.getLong("time");
+
+                addRecentTransaction(uuid, Transaction.valueOf(amount, time));
+
+            }
+
+            statement.execute("DROP TABLE account_transactions");
+
+        }
+
+        statement.close();
+
     }
 
 }

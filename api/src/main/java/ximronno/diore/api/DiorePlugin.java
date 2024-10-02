@@ -2,10 +2,8 @@ package ximronno.diore.api;
 
 
 import org.bukkit.NamespacedKey;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 import ximronno.diore.api.account.Account;
-import ximronno.diore.api.hook.HookManager;
 import ximronno.diore.api.polyglot.Path;
 
 import java.util.Locale;

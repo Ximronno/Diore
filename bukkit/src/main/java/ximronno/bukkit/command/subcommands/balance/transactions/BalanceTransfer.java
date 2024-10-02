@@ -1,7 +1,6 @@
 package ximronno.bukkit.command.subcommands.balance.transactions;
 
 import org.bukkit.Bukkit;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.Nullable;
@@ -15,7 +14,6 @@ import ximronno.diore.api.account.Account;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class BalanceTransfer extends DioreSubcommand {
 
@@ -29,7 +27,7 @@ public class BalanceTransfer extends DioreSubcommand {
     }
 
     @Override
-    public Permission getSubCommandPermission() {
+    public Permission getPermission() {
         return Permissions.BALANCE_TRANSFER.getPermission();
     }
 
@@ -60,7 +58,7 @@ public class BalanceTransfer extends DioreSubcommand {
         Player target = Bukkit.getPlayer(args[1]);
 
         if(target == null) {
-            p.sendMessage(api.getMessageManager().getDefaultMessage(ErrorMessagesPaths.PLAYER_NOT_FOUND, true));
+            p.sendMessage(api.getMessageManager().getMessage(ErrorMessagesPaths.PLAYER_NOT_FOUND, accLocale, true));
             return true;
         }
 
@@ -72,7 +70,7 @@ public class BalanceTransfer extends DioreSubcommand {
         } catch (Exception ignored) {
         }
 
-        api.getAccountController().transfer(p, target, acc, targetAcc, accLocale, amount);
+        api.getAccountController().transfer(p, target, acc, targetAcc, accLocale, targetAcc.getLocale(), amount);
         return true;
     }
 }

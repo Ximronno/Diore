@@ -3,6 +3,7 @@ package ximronno.bukkit.message;
 import org.bukkit.ChatColor;
 import ximronno.bukkit.message.type.FormatPaths;
 import ximronno.diore.api.DioreAPI;
+import ximronno.diore.api.DiorePlugin;
 import ximronno.diore.api.message.MessageManager;
 import ximronno.diore.api.message.MessageProvider;
 import ximronno.diore.api.polyglot.Path;
@@ -20,14 +21,17 @@ public class DioreMessageManager implements MessageManager {
 
     private final MessageProvider messageProvider;
 
+    private final DiorePlugin plugin;
+
     private final DioreAPI api;
 
     private Logger logger;
 
-    public DioreMessageManager(PolyglotConfig polyglotConfig, Logger logger, DioreAPI api) {
+    public DioreMessageManager(PolyglotConfig polyglotConfig, Logger logger, DioreAPI api, DiorePlugin plugin) {
 
         messageProvider = new MessageProvider(polyglotConfig);
 
+        this.plugin = plugin;
         this.api = api;
 
         if(api.getMainConfig().useLogger()) {
@@ -175,10 +179,7 @@ public class DioreMessageManager implements MessageManager {
     }
 
     private List<String> function(List<String> list, boolean useChatColor) {
-        list = list.stream().map(this::addChatColor).toList();
-        if(!useChatColor) {
-            list = list.stream().map(this::stripChatColor).toList();
-        }
+        list = list.stream().map(message -> function(message, useChatColor)).toList();
         return list;
     }
 

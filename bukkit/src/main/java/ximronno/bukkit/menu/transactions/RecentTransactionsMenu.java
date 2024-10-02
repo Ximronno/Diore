@@ -63,6 +63,9 @@ public class RecentTransactionsMenu extends DiorePaginatedMenu {
                             .setDisplayName(messageManager.getMessage(MenuItemAdditionsPaths.RECENT_TRANSACTIONS, locale, true,
                                     Map.of("{formatted_amount}", api.getAccountInfoFormatter().getFormattedAmount(transaction.amount(), locale),
                                             "{formatted_time}", messageManager.getFormattedTime(locale, transaction.time()))))
+                            .setLore(List.of(messageManager.getMessage(MenuItemAdditionsPaths.RECENT_TRANSACTION_TYPE, locale, true, Map.of(
+                                    "{type}", transaction.type().name()
+                            ))))
                             .build());
 
                     if((iterator + 2) % 9 == 0) iterator += 2;

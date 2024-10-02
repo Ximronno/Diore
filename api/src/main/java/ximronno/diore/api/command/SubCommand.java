@@ -11,7 +11,7 @@ public abstract class SubCommand {
 
     public abstract String getName();
 
-    public abstract Permission getSubCommandPermission();
+    public abstract Permission getPermission();
 
     public abstract String getDescription(@Nullable Locale locale);
 

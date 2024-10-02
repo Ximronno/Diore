@@ -5,6 +5,7 @@ import com.jeff_media.updatechecker.UpdateChecker;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
@@ -12,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import ximronno.bukkit.command.manager.BalanceCommand;
 import ximronno.bukkit.hooks.DioreHookManager;
 import ximronno.bukkit.listeners.InventoryListener;
+import ximronno.bukkit.listeners.OnPlayerDeath;
 import ximronno.bukkit.listeners.OnPlayerJoinListener;
 import ximronno.bukkit.listeners.TransactionsListener;
 import ximronno.bukkit.util.ApiRegistrationUtil;
@@ -21,6 +23,7 @@ import ximronno.bukkit.util.PluginRegistrationUtil;
 import ximronno.diore.api.DioreAPI;
 import ximronno.diore.api.DiorePlugin;
 import ximronno.diore.api.account.Account;
+import ximronno.diore.api.account.Transaction;
 import ximronno.diore.api.config.MainConfig;
 import ximronno.diore.api.hook.HookManager;
 import ximronno.diore.api.item.ItemBuilder;
@@ -40,6 +43,8 @@ public final class Diore extends JavaPlugin implements DiorePlugin {
 
     @Override
     public void onEnable() {
+
+        ConfigurationSerialization.registerClass(Transaction.class);
 
         api = new ApiDiore(this);
         ApiRegistrationUtil.register(api);
@@ -129,6 +134,9 @@ public final class Diore extends JavaPlugin implements DiorePlugin {
         pM.registerEvents(new OnPlayerJoinListener(api, this), this);
         pM.registerEvents(new TransactionsListener(this), this);
         pM.registerEvents(new InventoryListener(), this);
+        if(api.getMainConfig().stealOnKill()) {
+            pM.registerEvents(new OnPlayerDeath(api), this);
+        }
     }
 
     @Override

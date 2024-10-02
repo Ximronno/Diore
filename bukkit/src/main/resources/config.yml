@@ -3,6 +3,13 @@
 diamond_nugget_name: "Diamond nugget" #Diamond nugget item name
 use_diamonds: false #Use diamonds instead of diamonds ores
 use_diamond_nuggets: true #Use diamonds nuggets instead of regular diamonds, doesn't work if use_diamonds is true
+general:
+  max_withdraw: 25000
+  default_balance: 0.0
+on_death:
+  killer_steal: false
+  steal_perc: 33
+  min_amount_to_steal: 0.1
 save:
   enabled: true #Enables auto saving
   cooldown_minutes: 5 #Auto save interval in minutes

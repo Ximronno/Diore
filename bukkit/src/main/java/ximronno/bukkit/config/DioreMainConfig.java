@@ -53,6 +53,31 @@ public class DioreMainConfig implements MainConfig {
     }
 
     @Override
+    public double getMaxWithdraw() {
+        return plugin.getConfig().getDouble(MainConfigPaths.GENERAL_MAX_WITHDRAW.path());
+    }
+
+    @Override
+    public boolean stealOnKill() {
+        return plugin.getConfig().getBoolean(MainConfigPaths.STEAL_ON_KILL.path());
+    }
+
+    @Override
+    public double stealPercentage() {
+        return plugin.getConfig().getDouble(MainConfigPaths.STEAL_PERCENTAGE.path());
+    }
+
+    @Override
+    public double minimumSteal() {
+        return plugin.getConfig().getDouble(MainConfigPaths.MINIMUM_STEAL.path());
+    }
+
+    @Override
+    public double getDefaultBalance() {
+        return plugin.getConfig().getDouble(MainConfigPaths.GENERAL_DEFAULT_BALANCE.path());
+    }
+
+    @Override
     public boolean loadSavedAccounts() {
         return plugin.getConfig().getBoolean(MainConfigPaths.LOAD_SAVED_ACCOUNTS.path());
     }

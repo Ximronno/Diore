@@ -24,6 +24,11 @@ public enum MainConfigPaths implements Path {
     SQL_LOAD_DELAY(MainConfigCategories.SQL, "load_delay"),
     HOOKS_USE_VAULT(MainConfigCategories.HOOKS, "vault.enabled"),
     HOOKS_USE_PLACEHOLDERAPI(MainConfigCategories.HOOKS, "placeholderapi.enabled"),
+    GENERAL_MAX_WITHDRAW(MainConfigCategories.GENERAL, "max_withdraw"),
+    GENERAL_DEFAULT_BALANCE(MainConfigCategories.GENERAL, "default_balance"),
+    STEAL_ON_KILL(MainConfigCategories.ON_DEATH, "killer_steal"),
+    STEAL_PERCENTAGE(MainConfigCategories.ON_DEATH, "steal_perc"),
+    MINIMUM_STEAL(MainConfigCategories.ON_DEATH, "min_amount_to_steal"),
     USE_DIAMONDS,
     USE_DIAMOND_NUGGETS;
 

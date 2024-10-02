@@ -4,11 +4,11 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 import ximronno.diore.api.DioreAPI;
 import ximronno.diore.api.account.Account;
+import ximronno.diore.api.account.Transaction;
 import ximronno.diore.api.account.managment.AccountManager;
 
 import java.util.Collections;
@@ -135,8 +135,12 @@ public class VaultHook implements Economy {
     @Override
     public EconomyResponse withdrawPlayer(OfflinePlayer player, double amount) {
         Account acc = accManager.getAccount(player.getUniqueId());
+        if(acc == null) {
+            return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "No account found");
+        }
         if(acc.canWithdraw(amount)) {
             acc.withdraw(amount);
+            acc.addRecentTransaction(Transaction.valueOf(amount, System.currentTimeMillis(), Transaction.TransactionType.VAULT_WITHDRAW));
             return new EconomyResponse(amount, acc.getBalance() - amount, EconomyResponse.ResponseType.SUCCESS, null);
         }
         return new EconomyResponse(amount, acc.getBalance(), EconomyResponse.ResponseType.FAILURE, null);
@@ -161,9 +165,10 @@ public class VaultHook implements Economy {
     public EconomyResponse depositPlayer(OfflinePlayer player, double amount) {
         Account acc = accManager.getAccount(player.getUniqueId());
         if(acc == null) {
-            return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, null);
+            return new EconomyResponse(0, 0, EconomyResponse.ResponseType.FAILURE, "No account found");
         }
         acc.deposit(amount);
+        acc.addRecentTransaction(Transaction.valueOf(amount, System.currentTimeMillis(), Transaction.TransactionType.VAULT_DEPOSIT));
         return new EconomyResponse(amount, acc.getBalance() + amount, EconomyResponse.ResponseType.SUCCESS, null);
     }
 

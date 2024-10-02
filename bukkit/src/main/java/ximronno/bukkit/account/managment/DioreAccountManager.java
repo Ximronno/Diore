@@ -1,14 +1,12 @@
 package ximronno.bukkit.account.managment;
 
 
-
 import ximronno.bukkit.account.DioreAccount;
 import ximronno.diore.api.DioreAPI;
 import ximronno.diore.api.account.Account;
 import ximronno.diore.api.account.managment.AccountManager;
+import ximronno.diore.api.config.MainConfig;
 
-import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
@@ -17,9 +15,12 @@ public class DioreAccountManager implements AccountManager {
 
     private final ConcurrentHashMap<UUID, Account> accounts = new ConcurrentHashMap<>();
 
+    private final MainConfig mainConfig;
+
     private Logger logger;
 
     public DioreAccountManager(Logger logger, DioreAPI api) {
+        this.mainConfig = api.getMainConfig();
         if(api.getMainConfig().useLogger()) {
             this.logger = logger;
         }
@@ -64,6 +65,7 @@ public class DioreAccountManager implements AccountManager {
     @Override
     public Account createNewAccount(UUID uuid) {
         Account acc = DioreAccount.builder()
+                .setBalance(mainConfig.getDefaultBalance())
                 .setUuid(uuid)
                 .build();
         if (logger != null) {

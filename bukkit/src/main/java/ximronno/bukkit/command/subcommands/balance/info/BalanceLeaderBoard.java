@@ -38,7 +38,7 @@ public class BalanceLeaderBoard extends DioreSubcommand {
     }
 
     @Override
-    public Permission getSubCommandPermission() {
+    public Permission getPermission() {
         return Permissions.BALANCE_LEADERBOARD.getPermission();
     }
 

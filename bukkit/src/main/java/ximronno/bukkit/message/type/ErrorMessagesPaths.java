@@ -8,7 +8,9 @@ public enum ErrorMessagesPaths implements Path {
     SENDER_NO_ACCOUNT,
     TARGET_NO_ACCOUNT,
     LOCALE_NOT_FOUND,
-    PLAYER_NOT_FOUND,;
+    PLAYER_NOT_FOUND,
+    SENDER_EQUALS_TARGET,
+    UNKNOWN_ERROR;
 
     private final String path;
 

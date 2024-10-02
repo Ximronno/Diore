@@ -27,6 +27,10 @@ permissions:
       diore.balance.deposit: true
       diore.balance.transfer: true
       diore.balance.withdraw: true
+      diore.balance.admin: true
+      diore.balance.admin.help: true
+      diore.balance.admin.add: true
+      diore.balance.admin.set: true
   diore.balance:
     default: true
   diore.balance.help:
@@ -43,3 +47,11 @@ permissions:
     default: true
   diore.balance.withdraw:
     default: true
+  diore.balance.admin:
+    default: op
+  diore.balance.admin.help:
+    default: op
+  diore.balance.admin.add:
+    default: op
+  diore.balance.admin.set:
+    default: op

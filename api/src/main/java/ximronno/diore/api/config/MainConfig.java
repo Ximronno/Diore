@@ -20,6 +20,14 @@ public interface MainConfig {
 
     int getMaxSavedRecentTransactions();
 
+    double getMaxWithdraw();
+
+    double stealPercentage();
+
+    double minimumSteal();
+
+    double getDefaultBalance();
+
     SQLConfig getSQLConfig();
 
     String getDiamondNuggetName();
@@ -27,6 +35,8 @@ public interface MainConfig {
     boolean useDiamonds();
 
     boolean useDiamondsNuggets();
+
+    boolean stealOnKill();
 
     HooksConfig getHooksConfig();
 

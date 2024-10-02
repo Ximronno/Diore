@@ -1,6 +1,7 @@
 package ximronno.bukkit.command.manager;
 
 import ximronno.bukkit.command.Commands;
+import ximronno.bukkit.command.subcommands.balance.admin.BalanceAdmin;
 import ximronno.bukkit.command.subcommands.balance.info.BalanceHelp;
 import ximronno.bukkit.command.subcommands.balance.info.BalanceInfo;
 import ximronno.bukkit.command.subcommands.balance.info.BalanceLeaderBoard;
@@ -32,6 +33,7 @@ public class BalanceCommand extends BaseCommand {
         subCommands.add(new BalanceTransfer(api));
 
         subCommands.add(new BalanceLeaderBoard(api));
+        subCommands.add(new BalanceAdmin(api));
 
         noLengthCommand = balanceInfo;
         helpCommand = balanceHelp;

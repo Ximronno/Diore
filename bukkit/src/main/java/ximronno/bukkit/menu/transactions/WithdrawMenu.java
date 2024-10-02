@@ -10,7 +10,6 @@ import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import ximronno.bukkit.listeners.TransactionsListener;
 import ximronno.bukkit.menu.DioreDataMenu;
 import ximronno.bukkit.message.type.CommandMessagesPaths;
 import ximronno.bukkit.message.type.menu.MenuItemLorePaths;
@@ -23,7 +22,6 @@ import ximronno.diore.api.menu.Menu;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;

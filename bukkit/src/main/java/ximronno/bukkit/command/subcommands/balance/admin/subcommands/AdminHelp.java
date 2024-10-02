@@ -1,4 +1,4 @@
-package ximronno.bukkit.command.subcommands.balance.info;
+package ximronno.bukkit.command.subcommands.balance.admin.subcommands;
 
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
@@ -11,42 +11,42 @@ import ximronno.diore.api.DioreAPI;
 import ximronno.diore.api.account.Account;
 import ximronno.diore.api.command.SubCommand;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class BalanceHelp extends DioreSubcommand {
+public class AdminHelp extends DioreSubcommand {
 
-    private final ArrayList<SubCommand> subCommands;
+    private final List<SubCommand> subCommands;
 
-    public BalanceHelp(ArrayList<SubCommand> subCommands, DioreAPI api) {
+    public AdminHelp(List<SubCommand> subCommandList, DioreAPI api) {
         super(api);
-        this.subCommands = subCommands;
+        this.subCommands = subCommandList;
     }
 
     @Override
     public String getName() {
-        return SubCommands.BALANCE_HELP.getName();
+        return SubCommands.ADMIN_HELP.getName();
     }
 
     @Override
     public Permission getPermission() {
-        return Permissions.BALANCE_HELP.getPermission();
+        return Permissions.ADMIN_HELP.getPermission();
     }
 
     @Override
     public String getDescription(@Nullable Locale locale) {
-        return api.getMessageManager().getMessage(CommandMessagesPaths.BALANCE_HELP_DESCRIPTION, locale, true);
+        return api.getMessageManager().getMessage(CommandMessagesPaths.BALANCE_ADMIN_HELP_DESCRIPTION, locale, true);
     }
 
     @Override
     public String getSyntax() {
-        return "/balance help";
+        return "/balance admin help";
     }
 
     @Override
     public boolean perform(Player p, Account acc, Locale accLocale, String[] args) {
-        p.sendMessage(api.getMessageManager().getMessage(CommandMessagesPaths.BALANCE_HELP_TITLE, accLocale, true));
+        p.sendMessage(api.getMessageManager().getMessage(CommandMessagesPaths.BALANCE_ADMIN_HELP_TITLE, accLocale, true));
 
         for(SubCommand subCommand : subCommands) {
             if(p.hasPermission(subCommand.getPermission())) {

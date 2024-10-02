@@ -1,16 +1,16 @@
 package ximronno.bukkit;
 
 import ximronno.bukkit.account.DioreAccountLeaderBoard;
+import ximronno.bukkit.account.managment.DioreAccountController;
 import ximronno.bukkit.account.managment.DioreAccountInfoFormatter;
-import ximronno.bukkit.account.storage.DioreAccountLoader;
 import ximronno.bukkit.account.managment.DioreAccountManager;
+import ximronno.bukkit.account.storage.DioreAccountLoader;
 import ximronno.bukkit.account.storage.DioreAccountSaver;
 import ximronno.bukkit.config.DioreConfigLoader;
 import ximronno.bukkit.config.DioreConfigSaver;
 import ximronno.bukkit.config.DioreMainConfig;
 import ximronno.bukkit.message.DioreMessageLoader;
 import ximronno.bukkit.message.DioreMessageManager;
-import ximronno.bukkit.account.managment.DioreAccountController;
 import ximronno.bukkit.storage.MySQLDataBase;
 import ximronno.bukkit.storage.YMLDataBase;
 import ximronno.diore.api.DioreAPI;
@@ -18,8 +18,8 @@ import ximronno.diore.api.account.Account;
 import ximronno.diore.api.account.AccountLeaderBoard;
 import ximronno.diore.api.account.managment.AccountController;
 import ximronno.diore.api.account.managment.AccountInfoFormatter;
-import ximronno.diore.api.account.storage.AccountLoader;
 import ximronno.diore.api.account.managment.AccountManager;
+import ximronno.diore.api.account.storage.AccountLoader;
 import ximronno.diore.api.account.storage.AccountSaver;
 import ximronno.diore.api.config.ConfigLoader;
 import ximronno.diore.api.config.ConfigSaver;
@@ -85,7 +85,7 @@ public class ApiDiore implements DioreAPI {
 
         messageLoader = new DioreMessageLoader(this);
 
-        messageManager = new DioreMessageManager(messageLoader.generatePolyglotConfig(), plugin.getLogger(), this);
+        messageManager = new DioreMessageManager(messageLoader.generatePolyglotConfig(), plugin.getLogger(), this, plugin);
 
         accountManager = new DioreAccountManager(plugin.getLogger(), this);
 

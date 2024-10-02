@@ -60,10 +60,7 @@ public class YMLDataBase implements DataBase {
         dataConfig.set(AccountConfigPaths.LOCALE.path(), acc.getLocale().toString());
         dataConfig.set(AccountConfigPaths.PRIVATE_BALANCE.path(), acc.isPrivateBalance());
 
-        List<Map<?,?>> mapList = new ArrayList<>();
-        acc.getRecentTransactions().forEach(t -> mapList.add(t.serialize()));
-
-        dataConfig.set(AccountConfigPaths.RECENT_TRANSACTIONS.path(), mapList);
+        dataConfig.set(AccountConfigPaths.RECENT_TRANSACTIONS.path(), acc.getRecentTransactions());
 
         dataConfig.save(file);
     }
@@ -78,7 +75,17 @@ public class YMLDataBase implements DataBase {
 
         List<Transaction> list = new ArrayList<>();
 
-        dataConfig.getMapList(AccountConfigPaths.RECENT_TRANSACTIONS.path()).forEach(m -> m.forEach((k, v) -> list.add(new Transaction(Double.parseDouble(k.toString()), Long.parseLong(v.toString())))));
+        List<?> unknownList = dataConfig.getList(AccountConfigPaths.RECENT_TRANSACTIONS.path());
+        if(unknownList != null) {
+            unknownList.forEach(e -> {
+                if(e instanceof Transaction transaction) {
+                    list.add(transaction);
+                }
+                else if(e instanceof Map<?,?> map) {
+                    map.forEach((k, v) -> list.add(Transaction.valueOf(Double.parseDouble(k.toString()), Long.parseLong(v.toString()))));
+                }
+            });
+        }
 
         double balance = dataConfig.getDouble(AccountConfigPaths.BALANCE.path());
         Locale locale = new Locale(dataConfig.getString(AccountConfigPaths.LOCALE.path()));

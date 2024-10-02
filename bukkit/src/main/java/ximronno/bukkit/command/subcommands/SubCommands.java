@@ -9,7 +9,11 @@ public enum SubCommands {
     BALANCE_DEPOSIT("deposit"),
     BALANCE_TRANSFER("transfer"),
     BALANCE_WITHDRAW("withdraw"),
-    BALANCE_LEADERBOARD("leaderboard");
+    BALANCE_LEADERBOARD("leaderboard"),
+    BALANCE_ADMIN("admin"),
+    ADMIN_ADD("add"),
+    ADMIN_HELP("help"),
+    ADMIN_SET("set");
 
     private final String name;
 

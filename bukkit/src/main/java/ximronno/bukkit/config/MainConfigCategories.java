@@ -6,7 +6,9 @@ public enum MainConfigCategories {
     CONSOLE,
     LANG,
     SQL,
-    HOOKS,;
+    HOOKS,
+    GENERAL,
+    ON_DEATH;
 
     public String getName() {
         return name().toLowerCase();

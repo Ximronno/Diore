@@ -1,6 +1,5 @@
 package ximronno.bukkit.command.subcommands.balance.transactions;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +24,7 @@ public class BalanceWithdraw extends DioreSubcommand {
     }
 
     @Override
-    public Permission getSubCommandPermission() {
+    public Permission getPermission() {
         return Permissions.BALANCE_WITHDRAW.getPermission();
     }
 

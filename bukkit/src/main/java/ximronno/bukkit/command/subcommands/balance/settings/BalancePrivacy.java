@@ -1,6 +1,5 @@
 package ximronno.bukkit.command.subcommands.balance.settings;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.Permission;
 import org.jetbrains.annotations.Nullable;
@@ -25,7 +24,7 @@ public class BalancePrivacy extends DioreSubcommand {
     }
 
     @Override
-    public Permission getSubCommandPermission() {
+    public Permission getPermission() {
         return Permissions.BALANCE_PRIVACY.getPermission();
     }
 

@@ -4,7 +4,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import ximronno.diore.api.polyglot.Path;
 
 import java.io.File;
-import java.util.UUID;
 
 public interface ConfigLoader {
 

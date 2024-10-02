@@ -18,12 +18,15 @@ import ximronno.diore.api.event.DepositEvent;
 import ximronno.diore.api.event.TransferEvent;
 import ximronno.diore.api.event.WithdrawEvent;
 import ximronno.diore.api.message.MessageManager;
+import ximronno.diore.api.storage.DataBase;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 
 public class DioreAccountController implements AccountController {
 
@@ -98,22 +101,20 @@ public class DioreAccountController implements AccountController {
             }
             case SUCCESS -> {
                 acc.withdraw(amount);
-                Transaction transaction = Transaction.of(-amount, System.currentTimeMillis());
+                Transaction transaction = Transaction.valueOf(-amount, System.currentTimeMillis(), Transaction.TransactionType.WITHDRAW);
 
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            api.getDataBase().addRecentTransaction(acc.getUuid(), transaction);
-                        } catch (SQLException ignored) {
-                        }
-                    }
-                }.runTaskAsynchronously(plugin);
+                saveTransactionsAsync(Map.of(
+                        acc.getUuid(), List.of(transaction)
+                ));
 
                 acc.addRecentTransaction(transaction);
                 p.sendMessage(messageManager.getMessage(CommandMessagesPaths.BALANCE_WITHDRAW_SUCCESS, locale, true,
                         Map.of("{amount}", api.getAccountInfoFormatter().getFormattedAmount(amount, locale))));
                 yield true;
+            }
+            default -> {
+                p.sendMessage(messageManager.getMessage(ErrorMessagesPaths.UNKNOWN_ERROR, locale, true));
+                yield false;
             }
         };
     }
@@ -147,35 +148,37 @@ public class DioreAccountController implements AccountController {
             }
             case SUCCESS -> {
                 acc.deposit(amount);
-                Transaction transaction = Transaction.of(amount, System.currentTimeMillis());
+                Transaction transaction = Transaction.valueOf(amount, System.currentTimeMillis(), Transaction.TransactionType.DEPOSIT);
 
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            api.getDataBase().addRecentTransaction(acc.getUuid(), transaction);
-                        } catch (SQLException ignored) {
-                        }
-                    }
-                }.runTaskAsynchronously(plugin);
+                saveTransactionsAsync(Map.of(
+                        acc.getUuid(), List.of(transaction)
+                ));
 
                 acc.addRecentTransaction(transaction);
                 p.sendMessage(messageManager.getMessage(CommandMessagesPaths.BALANCE_DEPOSIT_SUCCESS, locale, true,
                         Map.of("{amount}", api.getAccountInfoFormatter().getFormattedAmount(amount, locale))));
                 yield true;
             }
+            default -> {
+                p.sendMessage(messageManager.getMessage(ErrorMessagesPaths.UNKNOWN_ERROR, locale, true));
+                yield false;
+            }
         };
     }
 
     @Override
-    public boolean transfer(Player sender, OfflinePlayer target, Account from, Account to, Locale senderLocale, double amount) {
+    public boolean transfer(Player sender, OfflinePlayer target, Account from, Account to, Locale senderLocale, Locale targetLocale, double amount) {
         if(!sender.hasPermission(Permissions.BALANCE_TRANSFER.getPermission())) return false;
         if(amount <= 0) {
             sender.sendMessage(messageManager.getMessage(CommandMessagesPaths.BALANCE_INVALID_AMOUNT, senderLocale, true));
             return false;
         }
         if(to == null) {
-            sender.sendMessage(api.getMessageManager().getDefaultMessage(ErrorMessagesPaths.TARGET_NO_ACCOUNT, true));
+            sender.sendMessage(api.getMessageManager().getMessage(ErrorMessagesPaths.TARGET_NO_ACCOUNT, senderLocale, true));
+            return true;
+        }
+        if(from.equals(to)) {
+            sender.sendMessage(api.getMessageManager().getMessage(ErrorMessagesPaths.SENDER_EQUALS_TARGET, senderLocale, true));
             return true;
         }
         AccountResponse response;
@@ -198,19 +201,13 @@ public class DioreAccountController implements AccountController {
             }
             case SUCCESS -> {
                 from.transfer(to, amount);
-                Transaction fromTransaction = Transaction.of(-amount, System.currentTimeMillis());
-                Transaction toTransaction = Transaction.of(amount, System.currentTimeMillis());
+                Transaction fromTransaction = Transaction.valueOf(-amount, System.currentTimeMillis(), Transaction.TransactionType.TRANSFER);
+                Transaction toTransaction = Transaction.valueOf(amount, System.currentTimeMillis(), Transaction.TransactionType.TRANSFER);
 
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            api.getDataBase().addRecentTransaction(from.getUuid(), fromTransaction);
-                            api.getDataBase().addRecentTransaction(to.getUuid(), toTransaction);
-                        } catch (SQLException ignored) {
-                        }
-                    }
-                }.runTaskAsynchronously(plugin);
+                saveTransactionsAsync(Map.of(
+                        from.getUuid(), List.of(fromTransaction),
+                        to.getUuid(), List.of(toTransaction)
+                ));
 
                 from.addRecentTransaction(fromTransaction);
                 to.addRecentTransaction(toTransaction);
@@ -222,13 +219,68 @@ public class DioreAccountController implements AccountController {
                     Player onlineTarget = target.getPlayer();
                     assert onlineTarget != null;
 
-                    Locale targetLocale = to.getLocale();
                     onlineTarget.sendMessage(messageManager.getMessage(CommandMessagesPaths.BALANCE_TRANSFER_RECEIVED, targetLocale, true,
                             Map.of("{amount}", api.getAccountInfoFormatter().getFormattedAmount(amount, targetLocale),
-                                    "{from}", sender.getName())));
+                                    "{sender}", sender.getName())));
                 }
                 yield true;
             }
+            default -> {
+                sender.sendMessage(messageManager.getMessage(ErrorMessagesPaths.UNKNOWN_ERROR, senderLocale, true));
+                yield false;
+            }
         };
     }
+
+    @Override
+    public boolean steal(Player killer, Player killed, Account killerAcc, Account killedAcc, Locale killerLocale, Locale killedLocale) {
+        double amount = killedAcc.getBalance() * (api.getMainConfig().stealPercentage() / 100);
+
+        if(amount < api.getMainConfig().minimumSteal()) {
+            return false;
+        }
+
+        killedAcc.transfer(killerAcc, amount);
+
+        Transaction killedTransaction = Transaction.valueOf(-amount, System.currentTimeMillis(), Transaction.TransactionType.STOLEN);
+        Transaction killerTransaction = Transaction.valueOf(amount, System.currentTimeMillis(), Transaction.TransactionType.STOLEN);
+
+        saveTransactionsAsync(Map.of(
+                killedAcc.getUuid(), List.of(killerTransaction),
+                killerAcc.getUuid(), List.of(killedTransaction)
+        ));
+
+        killedAcc.addRecentTransaction(killedTransaction);
+        killerAcc.addRecentTransaction(killerTransaction);
+
+        killed.sendMessage(messageManager.getMessage(CommandMessagesPaths.KILLED_STOLE, killedLocale, true, Map.of(
+                "{amount}", api.getAccountInfoFormatter().getFormattedAmount(-amount, killedLocale),
+                "{killer}", killer.getDisplayName()
+        )));
+        killer.sendMessage(messageManager.getMessage(CommandMessagesPaths.KILLER_STOLE, killerLocale, true, Map.of(
+                "{amount}", api.getAccountInfoFormatter().getFormattedAmount(amount, killerLocale),
+                "{killed}", killed.getDisplayName()
+        )));
+
+        return true;
+    }
+
+    private void saveTransactionsAsync(Map<UUID, List<Transaction>> transactionsMap) {
+        DataBase dataBase = api.getDataBase();
+
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                    for(UUID uuid : transactionsMap.keySet()) {
+                        transactionsMap.get(uuid).forEach(transaction -> {
+                            try {
+                                dataBase.addRecentTransaction(uuid, transaction);
+                            } catch (SQLException ignored) {
+                            }
+                        });
+                    }
+            }
+        }.runTaskAsynchronously(plugin);
+    }
+
 }

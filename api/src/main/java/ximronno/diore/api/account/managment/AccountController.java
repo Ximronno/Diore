@@ -16,6 +16,8 @@ public interface AccountController {
 
     boolean deposit(Player p, Account acc, Locale locale, double amount);
 
-    boolean transfer(Player sender, OfflinePlayer target, Account from, Account to, Locale senderLocale, double amount);
+    boolean transfer(Player sender, OfflinePlayer target, Account from, Account to, Locale senderLocale, Locale targetLocale, double amount);
+
+    boolean steal(Player killer, Player killed, Account killerAcc, Account killedAcc, Locale killerLocale, Locale killedLocale);
 
 }

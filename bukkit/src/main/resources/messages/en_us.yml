@@ -1,4 +1,6 @@
 commands:
+  killer_stole: "&bYou stole {amount} from {killed}"
+  killed_stole: "&b{killer} stole from you {amount}"
   balance:
     help_title: "&b----/Balance Help:----"
     help_description: "&bGets all of /balance subcommands"
@@ -25,6 +27,14 @@ commands:
     leaderboard_description: "&bShows top 5 richest players"
     leaderboard_header: "&bLeaderboard:"
     leaderboard_format: "&b{i}: {target_name} -> {balance}"
+    admin:
+      help_title: "&bAdmin subcommands:"
+      add_description: "&bAdd selected amount to another account"
+      help_description: "&bShows all subcommands of /balance admin"
+      add_send_format: "&bYou added {amount} to {target}"
+      add_format: "&b{sender} added to your account {amount}"
+      set_send_format: "&bYou successfully set {target} balance to {amount}"
+      set_format: "&b{sender} set your balance to {amount}"
   issues_link: "&b&oClick here to open GitHub Issues"
 format:
     amount_format: "&a{amount} &bores"
@@ -40,10 +50,12 @@ language:
   name: "&bEnglish"
   flag_url: "https://textures.minecraft.net/texture/4cac9774da1217248532ce147f7831f67a12fdcca1cf0cb4b3848de6bc94b4"
 error:
-  no_account: "&bAccount does not exist"
-  locale_not_found: "&bLocale not found"
-  player_not_found: "&bPlayer not found"
-  sender_no_account: "&yYou don't have in-game account, please rejoin the server or contact admin!"
+  no_account: "&cAccount does not exist"
+  locale_not_found: "&cLocale not found"
+  player_not_found: "&cPlayer not found"
+  sender_no_account: "&cYou don't have in-game account, please rejoin the server or contact admin!"
+  sender_equals_target: "&cYou cannot transfer to yourself!"
+  unknown_error: "&bSomething went wrong, reverting"
 menu:
   main_menu:
     name: "Main Menu"
@@ -145,6 +157,7 @@ menu:
       recent_transactions:
         name: "&bRecent transactions:"
         format: "{formatted_amount}&b - {formatted_time}"
+        type: "&bTransaction type: {type}"
         no_recent_transactions: "&bYou don't have any transactions"
   deposit_menu:
     name: "Select amount to deposit"

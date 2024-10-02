@@ -5,10 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataType;
 import ximronno.bukkit.Diore;
 import ximronno.diore.api.DioreAPI;
 import ximronno.diore.api.DiorePlugin;
@@ -40,6 +38,13 @@ public class TransactionsListener implements Listener {
         if (p == null) return;
 
         double amount = e.getAmount();
+
+        if(amount > api.getMainConfig().getMaxWithdraw()) {
+            e.setResponse(AccountResponse.FAILURE);
+            e.setCancelled(true);
+            return;
+        }
+
         int nuggets = (int) ((amount * 10) % 10);
         int ores = (int) amount;
 

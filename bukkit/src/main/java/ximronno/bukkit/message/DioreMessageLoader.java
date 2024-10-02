@@ -5,8 +5,6 @@ import org.bukkit.configuration.file.FileConfiguration;
 import ximronno.bukkit.message.type.DirectoriesPaths;
 import ximronno.bukkit.message.type.LanguagePath;
 import ximronno.bukkit.message.type.YmlPaths;
-import ximronno.bukkit.message.type.menu.MenuItemNamesPaths;
-import ximronno.bukkit.message.type.menu.MenuNamesPaths;
 import ximronno.diore.api.DioreAPI;
 import ximronno.diore.api.message.MessageLoader;
 import ximronno.diore.api.polyglot.LangLists;

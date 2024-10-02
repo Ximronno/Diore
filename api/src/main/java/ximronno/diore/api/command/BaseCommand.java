@@ -1,8 +1,9 @@
 package ximronno.diore.api.command;
 
-import org.bukkit.command.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +36,7 @@ public abstract class BaseCommand implements TabExecutor {
         }
         for(SubCommand subCommand : subCommands) {
             if(subCommand.getName().equalsIgnoreCase(strings[0])) {
-                if(!commandSender.hasPermission(subCommand.getSubCommandPermission())) {
+                if(!commandSender.hasPermission(subCommand.getPermission())) {
                     return true;
                 }
                 if(subCommand.perform(player, strings)) {
@@ -58,7 +59,9 @@ public abstract class BaseCommand implements TabExecutor {
         if(strings.length == 1) {
 
             for(SubCommand subCommand : subCommands) {
-                completions.add(subCommand.getName());
+                if(commandSender.hasPermission(subCommand.getPermission())) {
+                    completions.add(subCommand.getName());
+                }
             }
 
         }
@@ -66,7 +69,9 @@ public abstract class BaseCommand implements TabExecutor {
 
             for(SubCommand subCommand : subCommands) {
                 if(subCommand.getName().equalsIgnoreCase(strings[0])) {
-                   completions = subCommand.getCompletion((Player) commandSender, strings, completions);
+                    if(commandSender.hasPermission(subCommand.getPermission())) {
+                        completions = subCommand.getCompletion((Player) commandSender, strings, completions);
+                    }
                 }
             }
 
@@ -79,7 +84,5 @@ public abstract class BaseCommand implements TabExecutor {
     public ArrayList<SubCommand> getSubCommands() {
         return subCommands;
     }
-
-
 
 }

@@ -29,7 +29,19 @@ public enum CommandMessagesPaths implements Path {
     BALANCE_TRANSFER_RECEIVED(Commands.BALANCE, "transfer_received"),
     BALANCE_LEADERBOARD_DESCRIPTION(Commands.BALANCE, "leaderboard_description"),
     BALANCE_LEADERBOARD_HEADER(Commands.BALANCE, "leaderboard_header"),
-    BALANCE_LEADERBOARD_FORMAT(Commands.BALANCE, "leaderboard_format"),;
+    BALANCE_LEADERBOARD_FORMAT(Commands.BALANCE, "leaderboard_format"),
+    BALANCE_ADMIN_DESCRIPTION(Commands.BALANCE, "admin.description"),
+    BALANCE_ADMIN_HELP_TITLE(Commands.BALANCE, "admin.help_title"),
+    BALANCE_ADMIN_HELP_DESCRIPTION(Commands.BALANCE, "admin.help_description"),
+    BALANCE_ADMIN_ADD_DESCRIPTION(Commands.BALANCE, "admin.add_description"),
+    BALANCE_ADMIN_ADD_FORMAT(Commands.BALANCE, "admin.add_format"),
+    BALANCE_ADMIN_ADD_SEND_FORMAT(Commands.BALANCE, "admin.add_send_format"),
+    BAlANCE_ADMIN_SET_DESCRIPTION(Commands.BALANCE, "admin.set_description"),
+    BALANCE_ADMIN_SET_FORMAT(Commands.BALANCE, "admin.set_format"),
+    BALANCE_ADMIN_SET_SEND_FORMAT(Commands.BALANCE, "admin.set_send_format"),
+    KILLER_STOLE,
+    KILLED_STOLE,;
+
 
 
     private final String path;

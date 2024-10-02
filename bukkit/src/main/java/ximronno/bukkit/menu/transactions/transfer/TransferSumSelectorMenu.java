@@ -13,7 +13,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.profile.PlayerProfile;
 import ximronno.bukkit.menu.DioreDataMenu;
-import ximronno.bukkit.menu.transactions.DepositMenu;
 import ximronno.bukkit.message.type.CommandMessagesPaths;
 import ximronno.bukkit.message.type.menu.MenuItemLorePaths;
 import ximronno.bukkit.message.type.menu.MenuItemNamesPaths;
@@ -23,7 +22,6 @@ import ximronno.diore.api.account.Account;
 import ximronno.diore.api.item.ItemBuilder;
 import ximronno.diore.api.menu.Menu;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;

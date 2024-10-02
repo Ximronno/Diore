@@ -25,7 +25,7 @@ public class BalanceInfo extends DioreSubcommand {
     }
 
     @Override
-    public Permission getSubCommandPermission() {
+    public Permission getPermission() {
         return Permissions.BALANCE.getPermission();
     }
 
