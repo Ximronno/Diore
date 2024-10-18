@@ -26,6 +26,7 @@ public enum MainConfigPaths implements Path {
     HOOKS_USE_PLACEHOLDERAPI(MainConfigCategories.HOOKS, "placeholderapi.enabled"),
     GENERAL_MAX_WITHDRAW(MainConfigCategories.GENERAL, "max_withdraw"),
     GENERAL_DEFAULT_BALANCE(MainConfigCategories.GENERAL, "default_balance"),
+    ENABLE_GUI(MainConfigCategories.GENERAL, "enable_gui"),
     STEAL_ON_KILL(MainConfigCategories.ON_DEATH, "killer_steal"),
     STEAL_PERCENTAGE(MainConfigCategories.ON_DEATH, "steal_perc"),
     MINIMUM_STEAL(MainConfigCategories.ON_DEATH, "min_amount_to_steal"),

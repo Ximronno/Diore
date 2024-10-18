@@ -6,6 +6,7 @@ use_diamond_nuggets: true #Use diamonds nuggets instead of regular diamonds, doe
 general:
   max_withdraw: 25000
   default_balance: 0.0
+  enable_gui: true
 on_death:
   killer_steal: false
   steal_perc: 33

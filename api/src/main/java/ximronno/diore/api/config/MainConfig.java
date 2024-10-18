@@ -38,6 +38,8 @@ public interface MainConfig {
 
     boolean stealOnKill();
 
+    boolean enableGui();
+
     HooksConfig getHooksConfig();
 
 }

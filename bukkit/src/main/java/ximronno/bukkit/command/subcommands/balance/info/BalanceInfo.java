@@ -47,7 +47,9 @@ public class BalanceInfo extends DioreSubcommand {
             p.sendMessage(string);
         }
 
-        new MainMenu().open(p);
+        if(api.getMainConfig().enableGui()) {
+            new MainMenu().open(p);
+        }
 
         return true;
     }

@@ -6,7 +6,7 @@
 
     <groupId>lv.ximronno</groupId>
     <artifactId>bukkit</artifactId>
-    <version>0.4</version>
+    <version>0.4.1</version>
     <packaging>jar</packaging>
 
     <name>DioreBukkit</name>
@@ -94,7 +94,7 @@
         <dependency>
             <groupId>lv.ximronno</groupId>
             <artifactId>api</artifactId>
-            <version>0.1</version>
+            <version>0.1.1</version>
         </dependency>
         <dependency>
             <groupId>com.jeff_media</groupId>

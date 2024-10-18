@@ -114,6 +114,11 @@ public class DioreMainConfig implements MainConfig {
     }
 
     @Override
+    public boolean enableGui() {
+        return plugin.getConfig().getBoolean(MainConfigPaths.ENABLE_GUI.path());
+    }
+
+    @Override
     public boolean useDiamondsNuggets() {
         return plugin.getConfig().getBoolean(MainConfigPaths.USE_DIAMOND_NUGGETS.path());
     }
